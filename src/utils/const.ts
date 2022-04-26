@@ -1,5 +1,12 @@
 export const COUPONS = ['light-333', 'medium-444', 'height-555'];
 
+export const enum AppRoute {
+  Main = '/',
+  Product = '/product',
+  Card = '/card',
+  NotFound = '*',
+}
+
 export const enum HttpCode {
   BadRequest = 400,
   NotFound = 404,
@@ -17,4 +24,12 @@ export enum FetchStatus {
   Pending = 'Pending',
   Fulfilled = 'Fulfilled',
   Rejected = 'Rejected',
+}
+
+export const enum NameSpace {
+  App = 'App',
+  Guitars = 'Guitars',
+  Comments = 'Comments',
+  Coupon = 'Coupon',
+  Order = 'Order',
 }

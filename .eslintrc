@@ -1,7 +1,6 @@
 {
-  "extends": ["react-app", "prettier"],
+  "extends": ["react-app"],
   "rules": {
-    "jsx-quotes": [1, "prefer-double"],
     "no-console": "off"
   }
 }
