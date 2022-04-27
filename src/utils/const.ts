@@ -1,8 +1,21 @@
 export const COUPONS = ['light-333', 'medium-444', 'height-555'];
 
+export const enum GuitarTypeFromTheServer {
+  Electric = 'electric',
+  Ukulele = 'ukulele',
+  Acoustic = 'acoustic',
+}
+
+export const enum GuitarTypeForClient {
+  Electric = 'Электрогитара',
+  Ukulele = 'Укулеле',
+  Acoustic = 'Акустическая гитара',
+  Unknown = 'Неизвестный тип',
+}
+
 export const enum AppRoute {
-  Main = '/',
-  Product = '/product',
+  Catalog = '/catalog',
+  Guitars = '/guitars',
   Card = '/card',
   NotFound = '*',
 }
@@ -13,7 +26,7 @@ export const enum HttpCode {
 }
 
 export const enum APIRoute {
-  Guitar = '/guitars',
+  Guitars = '/guitars',
   Comment = '/comments',
   Coupon = '/coupons',
   Order = '/orders',

@@ -7,9 +7,12 @@ import HistoryRouter from './components/history-router/history-router';
 import { browserHistory } from './browser-history';
 
 import App from './components/app/app';
+import { fetchGuitarsAction } from './store/guitars-slice/guitars-slice';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);
+
+store.dispatch(fetchGuitarsAction());
 
 root.render(
   <React.StrictMode>
