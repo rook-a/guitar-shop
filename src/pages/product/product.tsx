@@ -3,11 +3,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import Footer from '../../components/footer/footer';
 import Header from '../../components/header/header';
 import Rating from '../../components/rating/rating';
+import Tabs from '../../components/tabs/tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { fetchCommentsAction } from '../../store/comments-slice/comments-slice';
 import { fetchGuitarAction, selectGuitar } from '../../store/guitars-slice/guitars-slice';
 import { AppRoute } from '../../utils/const';
-import { adaptTypeToClient } from '../../utils/utils';
 
 function Product(): JSX.Element | null {
   const { id } = useParams();
@@ -65,33 +65,7 @@ function Product(): JSX.Element | null {
 
               <Rating rating={rating} className={'product-container__rating'} isSmall={false} />
 
-              <div className="tabs">
-                <a className="button button--medium tabs__button" href="#characteristics">
-                  Характеристики
-                </a>
-                <a className="button button--black-border button--medium tabs__button" href="#description">
-                  Описание
-                </a>
-                <div className="tabs__content" id="characteristics">
-                  <table className="tabs__table">
-                    <tbody>
-                      <tr className="tabs__table-row">
-                        <td className="tabs__title">Артикул:</td>
-                        <td className="tabs__value">{vendorCode}</td>
-                      </tr>
-                      <tr className="tabs__table-row">
-                        <td className="tabs__title">Тип:</td>
-                        <td className="tabs__value">{adaptTypeToClient(type)}</td>
-                      </tr>
-                      <tr className="tabs__table-row">
-                        <td className="tabs__title">Количество струн:</td>
-                        <td className="tabs__value">{stringCount} струнная</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <p className="tabs__product-description hidden">{description}</p>
-                </div>
-              </div>
+              <Tabs vendorCode={vendorCode} type={type} stringCount={stringCount} description={description} />
             </div>
             <div className="product-container__price-wrapper">
               <p className="product-container__price-info product-container__price-info--title">Цена:</p>
