@@ -1,17 +1,15 @@
 import { useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import Rating from '../../components/rating/rating';
 import Reviews from '../../components/reviews/reviews';
 import Tabs from '../../components/tabs/tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { fetchCommentsAction, selectComments } from '../../store/comments-slice/comments-slice';
 import { fetchGuitarAction, selectGuitar } from '../../store/guitars-slice/guitars-slice';
-import { AppRoute } from '../../utils/const';
 
 function Product(): JSX.Element | null {
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const guitar = useAppSelector(selectGuitar);
   const comments = useAppSelector(selectComments);
 
@@ -38,13 +36,7 @@ function Product(): JSX.Element | null {
           </Link>
         </li>
         <li className="breadcrumbs__item">
-          <Link
-            onClick={(evt) => {
-              evt.preventDefault();
-              navigate(`${AppRoute.Main}`);
-            }}
-            className="link"
-            to="/">
+          <Link className="link" to="/">
             Каталог
           </Link>
         </li>

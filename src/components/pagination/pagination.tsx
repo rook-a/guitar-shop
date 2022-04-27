@@ -15,8 +15,8 @@ function Pagination(): JSX.Element {
 
   const prevBtnValue = currentPageNumber - 1;
   const nextBtnValue = currentPageNumber + 1;
-  const prevPath = generatePath(AppRoute.Catalog, { number: `${prevBtnValue}` });
-  const nextPath = generatePath(AppRoute.Catalog, { number: `${nextBtnValue}` });
+  const prevPath = generatePath(`${AppRoute.Catalog}/page_:number`, { number: `${prevBtnValue}` });
+  const nextPath = generatePath(`${AppRoute.Catalog}/page_:number`, { number: `${nextBtnValue}` });
 
   return (
     <div className="pagination page-content__pagination">
@@ -35,7 +35,7 @@ function Pagination(): JSX.Element {
         )}
 
         {links.map((linkNumber) => {
-          const path = generatePath(AppRoute.Catalog, { number: `${linkNumber}` });
+          const path = generatePath(`${AppRoute.Catalog}/page_:number`, { number: `${linkNumber}` });
 
           return (
             <li

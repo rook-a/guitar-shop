@@ -17,8 +17,8 @@ export const enum GuitarTypeForClient {
 
 export const enum AppRoute {
   Root = '/',
-  Main = '/catalog/page_1',
-  Catalog = '/catalog/page_:number',
+  Main = '/catalog',
+  Catalog = '/catalog',
   Product = '/product',
   Card = '/card',
   NotFound = '*',
