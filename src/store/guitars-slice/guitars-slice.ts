@@ -8,7 +8,7 @@ import { APIRoute, FetchStatus, NameSpace } from '../../utils/const';
 import { AppDispatch, State } from '../../types/state';
 import { Guitar } from '../../types/guitar';
 import { Product } from '../../types/product';
-import { createQueryLimit } from '../../utils/utils';
+import { createQueryGuitarLimit } from '../../utils/utils';
 
 interface InitialState {
   guitars: Product[];
@@ -42,8 +42,8 @@ export const fetchGuitarsAction = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->('data/fetchGuitars', async (id: number, { dispatch, extra: api }) => {
-  const guitarsQueryLimit = createQueryLimit(id);
+>('data/fetchGuitars', async (pagePathNumber: number, { dispatch, extra: api }) => {
+  const guitarsQueryLimit = createQueryGuitarLimit(pagePathNumber);
 
   try {
     const { data, headers } = await api.get<Product[]>(`${APIRoute.Guitars}?${guitarsQueryLimit}&_embed=comments`);

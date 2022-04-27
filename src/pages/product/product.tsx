@@ -4,7 +4,7 @@ import Rating from '../../components/rating/rating';
 import Reviews from '../../components/reviews/reviews';
 import Tabs from '../../components/tabs/tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { fetchCommentsAction, selectComments } from '../../store/comments-slice/comments-slice';
+import { fetchCommentsAction, resetCommentsCounter, selectComments } from '../../store/comments-slice/comments-slice';
 import { fetchGuitarAction, selectGuitar } from '../../store/guitars-slice/guitars-slice';
 
 function Product(): JSX.Element | null {
@@ -16,6 +16,7 @@ function Product(): JSX.Element | null {
   const selectGuitarId = Number(id);
 
   useEffect(() => {
+    dispatch(resetCommentsCounter());
     dispatch(fetchGuitarAction(selectGuitarId));
     dispatch(fetchCommentsAction(selectGuitarId));
   }, [dispatch, selectGuitarId]);
@@ -69,7 +70,7 @@ function Product(): JSX.Element | null {
         </div>
       </div>
 
-      <Reviews comments={comments} />
+      <Reviews />
     </div>
   );
 }

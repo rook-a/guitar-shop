@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 
 import { handleError } from '../../services/handle-error';
 
-import { APIRoute, FetchStatus, NameSpace } from '../../utils/const';
+import { APIRoute, FetchStatus, NameSpace, START_COUNT_COMMENT } from '../../utils/const';
 
 import { AppDispatch, State } from '../../types/state';
 
@@ -13,12 +13,16 @@ interface InitialState {
   comments: Comment[];
   commentsStatus: FetchStatus;
   commentsError: boolean;
+
+  commentsCount: number;
 }
 
 const initialState: InitialState = {
   comments: [],
   commentsStatus: FetchStatus.Idle,
   commentsError: false,
+
+  commentsCount: START_COUNT_COMMENT,
 };
 
 export const fetchCommentsAction = createAsyncThunk<
@@ -43,7 +47,14 @@ export const fetchCommentsAction = createAsyncThunk<
 export const commentsSlice = createSlice({
   name: NameSpace.Comments,
   initialState,
-  reducers: {},
+  reducers: {
+    updateCommentsCounter: (state) => {
+      state.commentsCount += START_COUNT_COMMENT;
+    },
+    resetCommentsCounter: (state) => {
+      state.commentsCount = START_COUNT_COMMENT;
+    },
+  },
   extraReducers: (buider) => {
     buider
       .addCase(fetchCommentsAction.pending, (state) => {
@@ -60,6 +71,21 @@ export const commentsSlice = createSlice({
   },
 });
 
+export const { updateCommentsCounter, resetCommentsCounter } = commentsSlice.actions;
+
 const selectCommentsState = (state: State) => state[NameSpace.Comments];
 
 export const selectComments = (state: State) => selectCommentsState(state).comments;
+export const selectCommentsCount = (state: State) => selectCommentsState(state).commentsCount;
+
+export const selectCurrentComments = createSelector(selectComments, selectCommentsCount, (comments, count) => {
+  return comments
+    .slice()
+    .sort((a, b) => {
+      const dateA = Date.parse(a.createAt);
+      const dateB = Date.parse(b.createAt);
+
+      return dateB - dateA;
+    })
+    .slice(0, count);
+});

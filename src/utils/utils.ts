@@ -25,7 +25,7 @@ export const formatDate = (date: string) => {
   return `${getDay} ${getMonth}`;
 };
 
-export const createQueryLimit = (pageQuery: number) => {
+export const createQueryGuitarLimit = (pageQuery: number) => {
   const endLimit = pageQuery * MAX_NUMBER_OF_CARDS;
   const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
 

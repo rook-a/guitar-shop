@@ -1,26 +1,30 @@
-import { Comment } from '../../types/comment';
 import Review from '../review/review';
+import MoreButton from '../more-button/more-button';
+import SubmitButton from '../submit-button/submit-button';
+import UpButton from '../up-button/up-button';
 
-interface ReviewsProps {
-  comments: Comment[];
-}
+import { useAppSelector } from '../../hooks/hooks';
+import { selectComments, selectCommentsCount, selectCurrentComments } from '../../store/comments-slice/comments-slice';
 
-function Reviews({ comments }: ReviewsProps): JSX.Element {
+import { START_COUNT_COMMENT } from '../../utils/const';
+
+function Reviews(): JSX.Element {
+  const comments = useAppSelector(selectComments);
+  const commentsSort = useAppSelector(selectCurrentComments);
+  const commentsCount = useAppSelector(selectCommentsCount);
+
   return (
     <section className="reviews">
-      <h3 className="reviews__title title title--bigger">Отзывы</h3>
-      <a className="button button--red-border button--big reviews__sumbit-button" href="/">
-        Оставить отзыв
-      </a>
+      <h3 className="reviews__title title title--bigger">{comments.length !== 0 ? 'Отзывы' : 'Отзывов нет'}</h3>
+      <SubmitButton />
 
-      {comments.map((comment) => (
+      {commentsSort.map((comment) => (
         <Review currentComment={comment} key={comment.id} />
       ))}
 
-      <button className="button button--medium reviews__more-button">Показать еще отзывы</button>
-      <a className="button button--up button--red-border button--big reviews__up-button" href="#header">
-        Наверх
-      </a>
+      {comments.length > commentsCount && <MoreButton />}
+
+      {comments.length > START_COUNT_COMMENT && <UpButton />}
     </section>
   );
 }
