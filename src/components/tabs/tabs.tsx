@@ -31,7 +31,7 @@ function Tabs({ vendorCode, type, stringCount, description }: TabsProps): JSX.El
       });
     }
   };
-  console.log(activeTab);
+
   return (
     <div className="tabs">
       <a

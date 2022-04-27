@@ -17,7 +17,7 @@ function ProductCard({ guitar }: ProductCardProps): JSX.Element {
     <div className="product-card">
       <img src={previewImg} width="75" height="190" alt={name} />
       <div className="product-card__info">
-        <Rating rating={rating} className={'product-card__rate'} isSmall />
+        <Rating rating={rating} className={'product-card__rate'} currentPosition={'catalog'} />
 
         <p className="product-card__title">{name}</p>
         <p className="product-card__price">

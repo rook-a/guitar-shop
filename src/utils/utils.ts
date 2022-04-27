@@ -16,3 +16,11 @@ export const adaptTypeToClient = (type: string) => {
       return GuitarTypeForClient.Unknown;
   }
 };
+
+export const formatDate = (date: string) => {
+  const currentDate = new Date(date);
+  const getDay = currentDate.getDate();
+  const getMonth = currentDate.toLocaleString('ru', { month: 'long' });
+
+  return `${getDay} ${getMonth}`;
+};

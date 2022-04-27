@@ -14,6 +14,7 @@ export const enum GuitarTypeForClient {
 }
 
 export const enum AppRoute {
+  Main = '/',
   Catalog = '/catalog',
   Guitars = '/guitars',
   Card = '/card',

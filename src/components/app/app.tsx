@@ -12,7 +12,7 @@ function App(): JSX.Element {
   return (
     <Suspense>
       <Routes>
-        <Route path={AppRoute.Catalog} element={<Catalog />} />
+        <Route index element={<Catalog />} />
         <Route path={`${AppRoute.Guitars}/:id`} element={<Product />} />
         <Route path={AppRoute.Card} element={<Card />} />
         <Route path={AppRoute.NotFound} element={<p> 404. Not Found</p>} />

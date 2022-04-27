@@ -1,30 +1,42 @@
+import { Comment } from '../../types/comment';
 import { checkIsFull, stars } from '../../utils/utils';
 
 interface RatingProps {
   rating: number;
   className: string;
-  isSmall: boolean;
+  currentPosition: string;
+  comments?: Comment[];
 }
 
-function Rating({ rating, className, isSmall }: RatingProps): JSX.Element {
-  const star = {
-    width: isSmall ? 12 : 14,
-    height: isSmall ? 11 : 14,
+interface StarSize {
+  [key: string]: { width: number; height: number };
+}
+
+function Rating({ rating, className, currentPosition, comments }: RatingProps): JSX.Element {
+  const starSize: StarSize = {
+    catalog: { width: 12, height: 11 },
+    product: { width: 14, height: 14 },
+    reviews: { width: 16, height: 16 },
   };
 
   return (
     <div className={`rate ${className}`}>
       {stars.map((number) => {
         return (
-          <svg width={star.width} height={star.height} aria-hidden="true" key={number}>
+          <svg
+            width={starSize[currentPosition].width}
+            height={starSize[currentPosition].height}
+            aria-hidden="true"
+            key={number}>
             <use xlinkHref={checkIsFull(rating, number)}></use>
           </svg>
         );
       })}
       <p className="visually-hidden">Рейтинг: Хорошо</p>
-      {isSmall && (
+      {(currentPosition === 'product' || currentPosition === 'catalog') && (
         <p className="rate__count">
-          <span className="visually-hidden">Всего оценок:</span>9
+          <span className="visually-hidden">Всего оценок:</span>
+          {comments?.length}
         </p>
       )}
     </div>
