@@ -1,12 +1,12 @@
 import { useAppSelector } from '../../hooks/hooks';
-import { selectCurrentGuitar } from '../../store/guitars-slice/guitars-slice';
+import { selectGuitars } from '../../store/guitars-slice/guitars-slice';
 import Filter from '../filter/filter';
 import Pagination from '../pagination/pagination';
 import ProductCard from '../product-card/product-card';
 import Sorting from '../sorting/sorting';
 
 function CatalogList(): JSX.Element {
-  const guitars = useAppSelector(selectCurrentGuitar);
+  const guitars = useAppSelector(selectGuitars);
 
   return (
     <div className="catalog">

@@ -1,4 +1,4 @@
-import { GuitarTypeFromTheServer, GuitarTypeForClient } from './const';
+import { GuitarTypeFromTheServer, GuitarTypeForClient, MAX_NUMBER_OF_CARDS } from './const';
 
 export const stars = Array.from({ length: 5 }, (v, k) => k + 1);
 
@@ -23,4 +23,11 @@ export const formatDate = (date: string) => {
   const getMonth = currentDate.toLocaleString('ru', { month: 'long' });
 
   return `${getDay} ${getMonth}`;
+};
+
+export const createQueryLimit = (pageQuery: number) => {
+  const endLimit = pageQuery * MAX_NUMBER_OF_CARDS;
+  const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
+
+  return `_start=${startLimit}&_end=${endLimit}`;
 };

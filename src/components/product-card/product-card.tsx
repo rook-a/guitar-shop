@@ -1,23 +1,23 @@
 import { Link } from 'react-router-dom';
 import { generatePath } from 'react-router-dom';
 
-import { Guitar } from '../../types/guitar';
+import { Product } from '../../types/product';
 import Rating from '../rating/rating';
 
 interface ProductCardProps {
-  guitar: Guitar;
+  guitar: Product;
 }
 
 function ProductCard({ guitar }: ProductCardProps): JSX.Element {
   const link = generatePath('/product/:id', { id: `${guitar.id}` });
 
-  const { name, rating, price, previewImg } = guitar;
+  const { name, rating, price, previewImg, comments } = guitar;
 
   return (
     <div className="product-card">
       <img src={`../../${previewImg}`} width="75" height="190" alt={name} />
       <div className="product-card__info">
-        <Rating rating={rating} className={'product-card__rate'} currentPosition={'catalog'} />
+        <Rating rating={rating} className={'product-card__rate'} currentPosition={'catalog'} comments={comments} />
 
         <p className="product-card__title">{name}</p>
         <p className="product-card__price">

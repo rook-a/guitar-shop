@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 
 import { handleError } from '../../services/handle-error';
@@ -7,11 +7,15 @@ import { APIRoute, FetchStatus, NameSpace } from '../../utils/const';
 
 import { AppDispatch, State } from '../../types/state';
 import { Guitar } from '../../types/guitar';
+import { Product } from '../../types/product';
+import { createQueryLimit } from '../../utils/utils';
 
 interface InitialState {
-  guitars: Guitar[];
+  guitars: Product[];
   guitarsStatus: FetchStatus;
   guitarsError: boolean;
+
+  totalProductCount: number | null;
 
   guitar: Guitar | null;
   guitarStatus: FetchStatus;
@@ -23,23 +27,27 @@ const initialState: InitialState = {
   guitarsStatus: FetchStatus.Idle,
   guitarsError: false,
 
+  totalProductCount: null,
+
   guitar: null,
   guitarStatus: FetchStatus.Idle,
   guitarError: false,
 };
 
 export const fetchGuitarsAction = createAsyncThunk<
-  Guitar[],
-  undefined,
+  Product[],
+  number,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
->('data/fetchGuitars', async (_arg, { dispatch, extra: api }) => {
-  try {
-    const { data } = await api.get<Guitar[]>(APIRoute.Guitars);
+>('data/fetchGuitars', async (id: number, { dispatch, extra: api }) => {
+  const guitarsQueryLimit = createQueryLimit(id);
 
+  try {
+    const { data, headers } = await api.get<Product[]>(`${APIRoute.Guitars}?${guitarsQueryLimit}&_embed=comments`);
+    dispatch(getTotalProductCount(headers['x-total-count']));
     return data;
   } catch (error) {
     handleError(error);
@@ -69,7 +77,11 @@ export const fetchGuitarAction = createAsyncThunk<
 export const guitarsSlice = createSlice({
   name: NameSpace.Guitars,
   initialState,
-  reducers: {},
+  reducers: {
+    getTotalProductCount: (state, action) => {
+      state.totalProductCount = action.payload;
+    },
+  },
   extraReducers: (buider) => {
     buider
       .addCase(fetchGuitarsAction.pending, (state) => {
@@ -97,11 +109,10 @@ export const guitarsSlice = createSlice({
   },
 });
 
+export const { getTotalProductCount } = guitarsSlice.actions;
+
 const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
 export const selectGuitars = (state: State) => selectGuitarsState(state).guitars;
 export const selectGuitar = (state: State) => selectGuitarsState(state).guitar;
-
-export const selectCurrentGuitar = createSelector(selectGuitars, (guitars) => {
-  return guitars.slice(0, 9);
-});
+export const selectTotalProductCount = (state: State) => selectGuitarsState(state).totalProductCount;
