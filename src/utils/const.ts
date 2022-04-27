@@ -1,4 +1,6 @@
 export const COUPONS = ['light-333', 'medium-444', 'height-555'];
+export const MAX_NUMBER_OF_CARDS = 9;
+export const START_PAGE_NUMBER = 1;
 
 export const enum GuitarTypeFromTheServer {
   Electric = 'electric',
@@ -14,9 +16,10 @@ export const enum GuitarTypeForClient {
 }
 
 export const enum AppRoute {
-  Main = '/',
-  Catalog = '/catalog',
-  Guitars = '/guitars',
+  Root = '/',
+  Main = '/catalog/page_1',
+  Catalog = '/catalog/page_:number',
+  Product = '/product',
   Card = '/card',
   NotFound = '*',
 }

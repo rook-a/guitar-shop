@@ -9,13 +9,13 @@ interface ProductCardProps {
 }
 
 function ProductCard({ guitar }: ProductCardProps): JSX.Element {
-  const link = generatePath('/guitars/:id', { id: `${guitar.id}` });
+  const link = generatePath('/product/:id', { id: `${guitar.id}` });
 
   const { name, rating, price, previewImg } = guitar;
 
   return (
     <div className="product-card">
-      <img src={previewImg} width="75" height="190" alt={name} />
+      <img src={`../../${previewImg}`} width="75" height="190" alt={name} />
       <div className="product-card__info">
         <Rating rating={rating} className={'product-card__rate'} currentPosition={'catalog'} />
 

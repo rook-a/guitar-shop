@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 
 import { handleError } from '../../services/handle-error';
@@ -101,3 +101,7 @@ const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
 export const selectGuitars = (state: State) => selectGuitarsState(state).guitars;
 export const selectGuitar = (state: State) => selectGuitarsState(state).guitar;
+
+export const selectCurrentGuitar = createSelector(selectGuitars, (guitars) => {
+  return guitars.slice(0, 9);
+});
