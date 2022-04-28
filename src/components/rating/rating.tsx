@@ -1,4 +1,5 @@
 import { Comment } from '../../types/comment';
+import { RatingLabelMap } from '../../utils/const';
 import { checkIsFull, stars } from '../../utils/utils';
 
 interface RatingProps {
@@ -32,7 +33,7 @@ function Rating({ rating, className, currentPosition, comments }: RatingProps): 
           </svg>
         );
       })}
-      <p className="visually-hidden">Рейтинг: Хорошо</p>
+      <p className="visually-hidden">{`Рейтинг: ${RatingLabelMap[Math.ceil(rating)]}`}</p>
       {(currentPosition === 'product' || currentPosition === 'catalog') && (
         <p className="rate__count">
           <span className="visually-hidden">Всего оценок:</span>

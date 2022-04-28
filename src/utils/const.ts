@@ -3,6 +3,18 @@ export const MAX_NUMBER_OF_CARDS = 9;
 export const START_PAGE_NUMBER = 1;
 export const START_COUNT_COMMENT = 3;
 
+interface RatingLabel {
+  [key: number]: string;
+}
+
+export const RatingLabelMap: RatingLabel = {
+  5: 'Отлично',
+  4: 'Хорошо',
+  3: 'Нормально',
+  2: 'Плохо',
+  1: 'Ужасно',
+} as const;
+
 export const enum GuitarTypeFromTheServer {
   Electric = 'electric',
   Ukulele = 'ukulele',

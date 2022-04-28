@@ -5,18 +5,29 @@ import MoreButton from '../more-button/more-button';
 import SubmitButton from '../submit-button/submit-button';
 import UpButton from '../up-button/up-button';
 
-import { useAppSelector } from '../../hooks/hooks';
-import { selectComments, selectCommentsCount, selectCurrentComments } from '../../store/comments-slice/comments-slice';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import {
+  fetchCommentsAction,
+  selectComments,
+  selectCommentsCount,
+  selectCurrentComments,
+  selectSendCommentStatus,
+} from '../../store/comments-slice/comments-slice';
 
-import { START_COUNT_COMMENT } from '../../utils/const';
+import { FetchStatus, START_COUNT_COMMENT } from '../../utils/const';
 import ReviewsModal from '../reviews-modal/reviews-modal';
+import { selectGuitar } from '../../store/guitars-slice/guitars-slice';
 
 function Reviews(): JSX.Element {
+  const dispatch = useAppDispatch();
   const [isModalActive, setisModalActive] = useState(false);
 
   const comments = useAppSelector(selectComments);
+  const guitar = useAppSelector(selectGuitar);
   const commentsSort = useAppSelector(selectCurrentComments);
   const commentsCount = useAppSelector(selectCommentsCount);
+  const sendCommentStatus = useAppSelector(selectSendCommentStatus);
+  const isCommentSendFulfilled = sendCommentStatus === FetchStatus.Fulfilled;
 
   useEffect(() => {
     const handleModalCloseKeydowm = (evt: KeyboardEvent) => {
@@ -26,12 +37,19 @@ function Reviews(): JSX.Element {
       }
     };
 
+    if (isCommentSendFulfilled) {
+      setisModalActive(false);
+      document.body.style.overflow = 'auto';
+
+      dispatch(fetchCommentsAction(Number(guitar?.id)));
+    }
+
     document.addEventListener('keydown', handleModalCloseKeydowm);
 
     return () => {
       document.removeEventListener('keydown', handleModalCloseKeydowm);
     };
-  }, [isModalActive]);
+  }, [dispatch, guitar?.id, isCommentSendFulfilled, isModalActive]);
 
   const handleModalClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
