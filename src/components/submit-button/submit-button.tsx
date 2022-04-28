@@ -1,6 +1,10 @@
-function SubmitButton(): JSX.Element {
+interface SubmitButtonProps {
+  onModalClick: (evt: React.MouseEvent<HTMLAnchorElement>) => void;
+}
+
+function SubmitButton({ onModalClick }: SubmitButtonProps): JSX.Element {
   return (
-    <a className="button button--red-border button--big reviews__sumbit-button" href="/">
+    <a onClick={onModalClick} className="button button--red-border button--big reviews__sumbit-button" href="/">
       Оставить отзыв
     </a>
   );
