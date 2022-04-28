@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import Review from '../review/review';
 import MoreButton from '../more-button/more-button';
@@ -15,52 +15,43 @@ import {
 } from '../../store/comments-slice/comments-slice';
 
 import { FetchStatus, START_COUNT_COMMENT } from '../../utils/const';
-import ReviewsModal from '../reviews-modal/reviews-modal';
+import ReviewsModal from '../modals/reviews-modal/reviews-modal';
 import { selectGuitar } from '../../store/guitars-slice/guitars-slice';
+import ModalContainer from '../modal-container/modal-container';
+import {
+  changeReviewModalActive,
+  changeReviewSuccessModalActive,
+  selectReviewModalActive,
+  selectReviewSuccessModalActive,
+} from '../../store/app-slice/app-slice';
+import ReviewsModalSuccess from '../modals/reviews-modal-success/reviews-modal-success';
 
 function Reviews(): JSX.Element {
   const dispatch = useAppDispatch();
-  const [isModalActive, setisModalActive] = useState(false);
 
   const comments = useAppSelector(selectComments);
   const guitar = useAppSelector(selectGuitar);
   const commentsSort = useAppSelector(selectCurrentComments);
   const commentsCount = useAppSelector(selectCommentsCount);
   const sendCommentStatus = useAppSelector(selectSendCommentStatus);
+  const isReviewModalOpen = useAppSelector(selectReviewModalActive);
+  const isReviewSuccessModalOpen = useAppSelector(selectReviewSuccessModalActive);
   const isCommentSendFulfilled = sendCommentStatus === FetchStatus.Fulfilled;
 
   useEffect(() => {
-    const handleModalCloseKeydowm = (evt: KeyboardEvent) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        setisModalActive(false);
-        document.body.style.overflow = 'auto';
-      }
-    };
-
     if (isCommentSendFulfilled) {
-      setisModalActive(false);
-      document.body.style.overflow = 'auto';
-
       dispatch(fetchCommentsAction(Number(guitar?.id)));
+
+      dispatch(changeReviewModalActive(false));
+      dispatch(changeReviewSuccessModalActive(true));
     }
-
-    document.addEventListener('keydown', handleModalCloseKeydowm);
-
-    return () => {
-      document.removeEventListener('keydown', handleModalCloseKeydowm);
-    };
-  }, [dispatch, guitar?.id, isCommentSendFulfilled, isModalActive]);
+  }, [dispatch, guitar?.id, isCommentSendFulfilled]);
 
   const handleModalClick = (evt: React.MouseEvent<HTMLAnchorElement>) => {
     evt.preventDefault();
 
-    setisModalActive(!isModalActive);
+    dispatch(changeReviewModalActive(true));
     document.body.style.overflow = 'hidden';
-  };
-
-  const handleModalCloseClick = () => {
-    setisModalActive(!isModalActive);
-    document.body.style.overflow = 'auto';
   };
 
   return (
@@ -76,7 +67,8 @@ function Reviews(): JSX.Element {
 
       {comments.length > START_COUNT_COMMENT && <UpButton />}
 
-      {isModalActive && <ReviewsModal className={'is-active'} onModalCloseClick={handleModalCloseClick} />}
+      {isReviewModalOpen && <ModalContainer className={'modal--review'} children={<ReviewsModal />} />}
+      {isReviewSuccessModalOpen && <ModalContainer className={'modal--success'} children={<ReviewsModalSuccess />} />}
     </section>
   );
 }
