@@ -4,6 +4,7 @@ import { changeReviewModalActive } from '../../../store/app-slice/app-slice';
 import { selectSendCommentStatus, sendCommentAction } from '../../../store/comments-slice/comments-slice';
 import { selectGuitar } from '../../../store/guitars-slice/guitars-slice';
 import { FetchStatus, RatingLabelMap } from '../../../utils/const';
+import Spinner from '../../spinner/spinner';
 
 const REG_EXP_NAME = /^[аА-яЯaA-zZ'][аА-яЯaA-zZ -' ]+[аА-яЯaA-zZ']?$/i;
 const REG_EXP_RATING = /[1-5]/;
@@ -209,7 +210,7 @@ function ReviewsModal(): JSX.Element | null {
           className="button button--medium-20 form-review__button"
           type="submit"
           disabled={isValid || isFormDisabled}>
-          Отправить отзыв
+          {isFormDisabled ? <Spinner className="spinner--small" /> : 'Отправить отзыв'}
         </button>
       </form>
       <button onClick={handleModalClose} className="modal__close-btn button-cross" type="button" aria-label="Закрыть">
