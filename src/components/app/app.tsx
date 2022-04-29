@@ -8,6 +8,7 @@ import MainOutlet from '../main-outlet/main-outlet';
 const Catalog = lazy(() => import('../../pages/catalog/catalog'));
 const Product = lazy(() => import('../../pages/product/product'));
 const Card = lazy(() => import('../../pages/card/card'));
+const NotFound = lazy(() => import('../../pages/not-found/not-found'));
 
 function App(): JSX.Element {
   return (
@@ -23,7 +24,7 @@ function App(): JSX.Element {
           <Route path={`${AppRoute.Catalog}/page_:number`} element={<Catalog />} />
           <Route path={`${AppRoute.Product}/:id`} element={<Product />} />
           <Route path={AppRoute.Card} element={<Card />} />
-          <Route path={AppRoute.NotFound} element={<p> 404. Not Found</p>} />
+          <Route path={AppRoute.NotFound} element={<NotFound />} />
         </Route>
       </Routes>
     </Suspense>
