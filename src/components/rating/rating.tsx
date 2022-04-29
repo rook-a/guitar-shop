@@ -29,7 +29,7 @@ function Rating({ rating, className, currentPosition, comments }: RatingProps): 
             height={starSize[currentPosition].height}
             aria-hidden="true"
             key={number}>
-            <use xlinkHref={checkIsFull(rating, number)}></use>
+            <use xlinkHref={checkIsFull(rating, number)} />
           </svg>
         );
       })}

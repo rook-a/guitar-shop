@@ -1,8 +1,14 @@
+import { useEffect, useRef } from 'react';
 import { useAppDispatch } from '../../../hooks/hooks';
 import { changeReviewSuccessModalActive } from '../../../store/app-slice/app-slice';
 
 function ReviewsModalSuccess(): JSX.Element {
   const dispatch = useAppDispatch();
+  const buttonFocus = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    buttonFocus.current?.focus();
+  }, []);
 
   const handleClick = () => {
     dispatch(changeReviewSuccessModalActive(false));
@@ -16,7 +22,10 @@ function ReviewsModalSuccess(): JSX.Element {
       </svg>
       <p className="modal__message">Спасибо за ваш отзыв!</p>
       <div className="modal__button-container modal__button-container--review">
-        <button onClick={handleClick} className="button button--small modal__button modal__button--review">
+        <button
+          onClick={handleClick}
+          ref={buttonFocus}
+          className="button button--small modal__button modal__button--review">
           К покупкам!
         </button>
       </div>
