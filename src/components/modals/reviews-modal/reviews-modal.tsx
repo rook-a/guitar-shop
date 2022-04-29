@@ -1,10 +1,16 @@
 import { ChangeEvent, FormEvent, Fragment, useEffect, useRef, useState } from 'react';
+import cn from 'classnames';
+
+import Spinner from '../../spinner/spinner';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
+
 import { changeReviewModalActive } from '../../../store/app-slice/app-slice';
 import { selectSendCommentStatus, sendCommentAction } from '../../../store/comments-slice/comments-slice';
 import { selectGuitar } from '../../../store/guitars-slice/guitars-slice';
+
 import { FetchStatus, RatingLabelMap } from '../../../utils/const';
-import Spinner from '../../spinner/spinner';
+
+import styles from './reviews-modal.module.css';
 
 const REG_EXP_NAME = /^[аА-яЯaA-zZ'][аА-яЯaA-zZ -' ]+[аА-яЯaA-zZ']?$/i;
 const REG_EXP_RATING = /[1-5]/;
@@ -116,7 +122,7 @@ function ReviewsModal(): JSX.Element | null {
       <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
       <h3 className="modal__product-name title title--medium-20 title--uppercase">{name}</h3>
       <form className="form-review" onSubmit={handleSubmit}>
-        <div className="form-review__wrapper">
+        <div className={cn('form-review__wrapper', { [styles.input_mb]: !formState.name.error })}>
           <div className="form-review__name-wrapper">
             <label className="form-review__label form-review__label--required" htmlFor="user-name">
               Ваше Имя
@@ -163,7 +169,9 @@ function ReviewsModal(): JSX.Element | null {
         </label>
         <input
           onChange={handleChange}
-          className="form-review__input"
+          className={cn('form-review__input', [styles.input_mb], {
+            [styles.input_mb_error]: formState.advantage.error,
+          })}
           id="adv"
           type="text"
           autoComplete="off"
@@ -179,7 +187,9 @@ function ReviewsModal(): JSX.Element | null {
         </label>
         <input
           onChange={handleChange}
-          className="form-review__input"
+          className={cn('form-review__input', {
+            [styles.input_mb]: !formState.disadvantage.error,
+          })}
           id="disadv"
           type="text"
           autoComplete="off"
@@ -188,14 +198,20 @@ function ReviewsModal(): JSX.Element | null {
           required
           disabled={isFormDisabled}
         />
-        {formState.disadvantage.error && <p className="form-review__warning">{formState.disadvantage.errorText}</p>}
+        {formState.disadvantage.error && (
+          <p className={cn('form-review__warning', { [styles.input_mb_error]: formState.disadvantage.error })}>
+            {formState.disadvantage.errorText}
+          </p>
+        )}
 
         <label className="form-review__label form-review__label--required" htmlFor="comment">
           Комментарий
         </label>
         <textarea
           onChange={handleChange}
-          className="form-review__input form-review__input--textarea"
+          className={cn('form-review__input', 'form-review__input--textarea', {
+            [styles.input_mb]: !formState.comment.error,
+          })}
           id="comment"
           rows={10}
           autoComplete="off"
@@ -204,7 +220,11 @@ function ReviewsModal(): JSX.Element | null {
           required
           disabled={isFormDisabled}
         />
-        {formState.comment.error && <p className="form-review__warning">{formState.comment.errorText}</p>}
+        {formState.comment.error && (
+          <p className={cn('form-review__warning', { [styles.input_mb_error]: formState.comment.error })}>
+            {formState.comment.errorText}
+          </p>
+        )}
 
         <button
           className="button button--medium-20 form-review__button"
