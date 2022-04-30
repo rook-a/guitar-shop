@@ -10,8 +10,8 @@ function Pagination(): JSX.Element {
   const guitarsCount = useAppSelector(selectTotalProductCount);
   const currentPageNumber = Number(number);
 
-  const paginationLinks = Math.ceil(guitarsCount! / MAX_NUMBER_OF_CARDS);
-  const links = Array.from({ length: paginationLinks }, (v, k) => k + 1);
+  const numberOfPages = Math.ceil(guitarsCount! / MAX_NUMBER_OF_CARDS);
+  const paginationLinks = Array.from({ length: numberOfPages }, (v, k) => k + 1);
 
   const prevBtnValue = currentPageNumber - 1;
   const nextBtnValue = currentPageNumber + 1;
@@ -34,7 +34,7 @@ function Pagination(): JSX.Element {
           </li>
         )}
 
-        {links.map((linkNumber) => {
+        {paginationLinks.map((linkNumber) => {
           const path = generatePath(`${AppRoute.Catalog}/page_:number`, { number: `${linkNumber}` });
 
           return (
@@ -51,7 +51,7 @@ function Pagination(): JSX.Element {
           );
         })}
 
-        {paginationLinks !== currentPageNumber && (
+        {numberOfPages !== currentPageNumber && (
           <li className="pagination__page pagination__page--next" id="next">
             <Link
               className="link pagination__page-link"

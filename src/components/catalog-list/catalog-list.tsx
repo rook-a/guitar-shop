@@ -1,14 +1,24 @@
-import { useAppSelector } from '../../hooks/hooks';
-import { selectGuitars } from '../../store/guitars-slice/guitars-slice';
-import CatalogListEmpty from '../catalog-list-empty/catalog-list-empty';
+import { useEffect } from 'react';
+
 import Filter from '../filter/filter';
-import Pagination from '../pagination/pagination';
-import ProductCard from '../product-card/product-card';
 import Sorting from '../sorting/sorting';
+import ProductCard from '../product-card/product-card';
+import CatalogListEmpty from '../catalog-list-empty/catalog-list-empty';
+import Pagination from '../pagination/pagination';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { fetchGuitarsAction, selectGuitars } from '../../store/guitars-slice/guitars-slice';
+
+import { START_PAGE_NUMBER } from '../../utils/const';
 
 function CatalogList(): JSX.Element {
+  const dispatch = useAppDispatch();
   const guitars = useAppSelector(selectGuitars);
   const isEmpty = guitars.length === 0;
+
+  useEffect(() => {
+    dispatch(fetchGuitarsAction(START_PAGE_NUMBER));
+  }, [dispatch]);
 
   return (
     <div className="catalog">
