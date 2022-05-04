@@ -88,8 +88,8 @@ export const guitarsSlice = createSlice({
         state.guitarsStatus = FetchStatus.Pending;
       })
       .addCase(fetchGuitarsAction.fulfilled, (state, action) => {
-        state.guitars = action.payload;
         state.guitarsStatus = FetchStatus.Fulfilled;
+        state.guitars = action.payload;
       })
       .addCase(fetchGuitarsAction.rejected, (state) => {
         state.guitarsStatus = FetchStatus.Rejected;

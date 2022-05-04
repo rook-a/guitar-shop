@@ -18,6 +18,10 @@ export const adaptTypeToClient = (type: string) => {
 };
 
 export const formatDate = (date: string) => {
+  if (isNaN(Date.parse(date))) {
+    return 'Дата неизвестна';
+  }
+
   const currentDate = new Date(date);
   const getDay = currentDate.getDate();
   const getMonth = currentDate.toLocaleString('ru', { month: 'long' });
