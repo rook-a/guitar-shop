@@ -2,6 +2,7 @@ export const COUPONS = ['light-333', 'medium-444', 'height-555'];
 export const MAX_NUMBER_OF_CARDS = 9;
 export const START_PAGE_NUMBER = 1;
 export const START_COUNT_COMMENT = 3;
+export const FAKE_ARRAY_LENGTH = 5;
 
 interface RatingLabel {
   [key: number]: string;

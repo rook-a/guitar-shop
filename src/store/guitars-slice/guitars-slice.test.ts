@@ -6,12 +6,11 @@ import MockAdapter from 'axios-mock-adapter';
 import { fetchGuitarAction, fetchGuitarsAction, guitarsSlice } from './guitars-slice';
 import { createAPI } from '../../services/api';
 
-import { APIRoute, FetchStatus } from '../../utils/const';
+import { APIRoute, FAKE_ARRAY_LENGTH, FetchStatus } from '../../utils/const';
 import { State } from '../../types/state';
 import { mockGuitar, mockProduct } from '../../utils/mock';
+import { mockProducts } from '../../utils/utils';
 
-const fakeArrayLength = 5;
-const mockProducts = Array.from({ length: fakeArrayLength }, () => mockProduct);
 const api = createAPI();
 const mockAPI = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];
@@ -41,7 +40,7 @@ describe('Guitars slice', () => {
 
       mockAPI
         .onGet(`${APIRoute.Guitars}?${fakeQueryPath}&_embed=comments`)
-        .reply(200, mockProducts, { headers: fakeArrayLength });
+        .reply(200, mockProducts, { headers: FAKE_ARRAY_LENGTH });
 
       const store = mockStore();
 

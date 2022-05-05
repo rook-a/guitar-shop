@@ -121,7 +121,7 @@ function ReviewsModal(): JSX.Element | null {
     <div className="modal__content">
       <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
       <h3 className="modal__product-name title title--medium-20 title--uppercase">{name}</h3>
-      <form className="form-review" onSubmit={handleSubmit}>
+      <form className="form-review" name="form-review" onSubmit={handleSubmit}>
         <div className={cn('form-review__wrapper', { [styles.input_mb]: !formState.name.error })}>
           <div className="form-review__name-wrapper">
             <label className="form-review__label form-review__label--required" htmlFor="user-name">

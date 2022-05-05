@@ -1,6 +1,9 @@
-import { GuitarTypeFromTheServer, GuitarTypeForClient, MAX_NUMBER_OF_CARDS } from './const';
+import { GuitarTypeFromTheServer, GuitarTypeForClient, MAX_NUMBER_OF_CARDS, FAKE_ARRAY_LENGTH } from './const';
+import { mockProduct } from './mock';
 
 export const stars = Array.from({ length: 5 }, (v, k) => k + 1);
+
+export const mockProducts = Array.from({ length: FAKE_ARRAY_LENGTH }, () => mockProduct);
 
 export const checkIsFull = (rating: number, number: number) => (rating >= number ? '#icon-full-star' : '#icon-star');
 
