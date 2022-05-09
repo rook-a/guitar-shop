@@ -25,11 +25,7 @@ export const formatDate = (date: string) => {
     return 'Дата неизвестна';
   }
 
-  const currentDate = new Date(date);
-  const getDay = currentDate.getDate();
-  const getMonth = currentDate.toLocaleString('ru', { month: 'long' });
-
-  return `${getDay} ${getMonth}`;
+  return new Date(date).toLocaleString('ru', { month: 'long', day: 'numeric' });
 };
 
 export const createQueryGuitarLimit = (pageQuery: number) => {

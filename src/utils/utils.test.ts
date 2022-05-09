@@ -24,7 +24,7 @@ describe('Utils functions', () => {
 
   describe('check function formatDate', () => {
     it('function return formated date', () => {
-      expect(formatDate('2022-03-21T10:56:01.590Z')).toBe('21 март');
+      expect(formatDate('2022-03-21T10:56:01.590Z')).toBe('21 марта');
     });
 
     it('function return correct answer when date incorrect', () => {
