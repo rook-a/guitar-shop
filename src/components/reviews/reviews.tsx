@@ -4,8 +4,12 @@ import Review from '../review/review';
 import MoreButton from '../more-button/more-button';
 import SubmitButton from '../submit-button/submit-button';
 import UpButton from '../up-button/up-button';
+import ReviewsModalSuccess from '../modals/reviews-modal-success/reviews-modal-success';
+import ReviewsModal from '../modals/reviews-modal/reviews-modal';
+import ModalContainer from '../modal-container/modal-container';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { selectGuitar } from '../../store/guitars-slice/guitars-slice';
 import {
   fetchCommentsAction,
   selectComments,
@@ -13,18 +17,14 @@ import {
   selectCurrentComments,
   selectSendCommentStatus,
 } from '../../store/comments-slice/comments-slice';
-
-import { FetchStatus, START_COUNT_COMMENT } from '../../utils/const';
-import ReviewsModal from '../modals/reviews-modal/reviews-modal';
-import { selectGuitar } from '../../store/guitars-slice/guitars-slice';
-import ModalContainer from '../modal-container/modal-container';
 import {
   changeReviewModalActive,
   changeReviewSuccessModalActive,
   selectReviewModalActive,
   selectReviewSuccessModalActive,
 } from '../../store/app-slice/app-slice';
-import ReviewsModalSuccess from '../modals/reviews-modal-success/reviews-modal-success';
+
+import { FetchStatus, START_COUNT_COMMENT } from '../../utils/const';
 
 function Reviews(): JSX.Element {
   const dispatch = useAppDispatch();

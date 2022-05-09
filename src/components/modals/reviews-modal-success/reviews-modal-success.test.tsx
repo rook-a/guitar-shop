@@ -11,7 +11,6 @@ const mockStore = configureMockStore();
 
 const store = mockStore({
   App: {
-    // reviewModalActive: true,
     reviewSuccessModalActive: true,
   },
   Comments: { commentsCount: 5, sendCommentStatus: false },

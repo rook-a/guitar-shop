@@ -38,3 +38,5 @@ export const createQueryGuitarLimit = (pageQuery: number) => {
 
   return `_start=${startLimit}&_end=${endLimit}`;
 };
+
+export const priceWithSpace = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');

@@ -9,7 +9,6 @@ import { mockComment, mockGuitar } from '../../utils/mock';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-// const mockStore = configureMockStore();
 
 const store = mockStore({
   App: {},

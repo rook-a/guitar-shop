@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
 import { generatePath } from 'react-router-dom';
 
-import { Product } from '../../types/product';
 import Rating from '../rating/rating';
+
+import { Product } from '../../types/product';
+import { priceWithSpace } from '../../utils/utils';
 
 interface ProductCardProps {
   guitar: Product;
@@ -22,7 +24,7 @@ function ProductCard({ guitar }: ProductCardProps): JSX.Element {
         <p className="product-card__title">{name}</p>
         <p className="product-card__price">
           <span className="visually-hidden">Цена:</span>
-          {price} ₽
+          {priceWithSpace(price)} ₽
         </p>
       </div>
       <div className="product-card__buttons">

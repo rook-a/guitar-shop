@@ -1,4 +1,5 @@
 import request, { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
 import { HttpCode } from '../utils/const';
 
 export const handleError = (error: AxiosError): void => {
@@ -14,12 +15,10 @@ export const handleError = (error: AxiosError): void => {
         // toast.info(response.data.error);
         break;
       case HttpCode.NotFound:
-        // toast.error('Ресурс не найден. Попробуйте ещё раз!');
+        toast.error('Ресурс не найден. Попробуйте ещё раз!');
         break;
       default:
-      // toast.error(
-      //   'Ошибка сервера или неизвестная ошибка. Попробуйте ещё раз!',
-      // );
+        toast.error('Ошибка сервера или неизвестная ошибка. Попробуйте ещё раз!');
     }
   }
 };

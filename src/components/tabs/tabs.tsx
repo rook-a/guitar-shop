@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import cn from 'classnames';
+
 import { adaptTypeToClient } from '../../utils/utils';
 
 interface TabsProps {
@@ -36,14 +38,14 @@ function Tabs({ vendorCode, type, stringCount, description }: TabsProps): JSX.El
     <div className="tabs">
       <a
         onClick={handleClick}
-        className={`button button--medium tabs__button ${!activeTab.characteristics && 'button--black-border'}`}
+        className={cn('button button--medium', 'tabs__button', { 'button--black-border': !activeTab.characteristics })}
         href="/"
         id="characteristics">
         Характеристики
       </a>
       <a
         onClick={handleClick}
-        className={`button button--medium tabs__button ${!activeTab.description && 'button--black-border'}`}
+        className={cn('button button--medium', 'tabs__button', { 'button--black-border': !activeTab.description })}
         href="/"
         id="description">
         Описание

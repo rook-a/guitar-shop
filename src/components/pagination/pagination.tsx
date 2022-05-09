@@ -1,5 +1,7 @@
 import { generatePath, Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import cn from 'classnames';
+
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { fetchGuitarsAction, selectTotalProductCount } from '../../store/guitars-slice/guitars-slice';
 import { AppRoute, MAX_NUMBER_OF_CARDS, START_PAGE_NUMBER } from '../../utils/const';
@@ -39,7 +41,7 @@ function Pagination(): JSX.Element {
 
           return (
             <li
-              className={`pagination__page ${currentPageNumber === linkNumber && 'pagination__page--active'}`}
+              className={cn('pagination__page', { 'pagination__page--active': currentPageNumber === linkNumber })}
               key={linkNumber}>
               <Link
                 className="link pagination__page-link"
