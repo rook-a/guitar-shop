@@ -9,11 +9,11 @@ interface RatingLabel {
 }
 
 export const RatingLabelMap: RatingLabel = {
-  5: 'Отлично',
-  4: 'Хорошо',
-  3: 'Нормально',
-  2: 'Плохо',
   1: 'Ужасно',
+  2: 'Плохо',
+  3: 'Нормально',
+  4: 'Хорошо',
+  5: 'Отлично',
 } as const;
 
 export const enum GuitarTypeFromTheServer {

@@ -55,7 +55,7 @@ function Reviews(): JSX.Element {
   };
 
   return (
-    <section className="reviews">
+    <section className="reviews" style={{ marginBottom: '65px' }}>
       <h3 className="reviews__title title title--bigger">{comments.length !== 0 ? 'Отзывы' : 'Отзывов нет'}</h3>
       <SubmitButton onModalClick={handleModalClick} />
 

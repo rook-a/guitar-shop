@@ -74,6 +74,7 @@ function ReviewsModal(): JSX.Element | null {
 
   const { name, id } = guitar;
   const ratingLabelMapRevers: [string, string][] = Object.entries(RatingLabelMap).reverse();
+
   const isValid = Object.values(formState).some(({ error }) => error);
   const isFormDisabled = sendCommentStatus === FetchStatus.Pending;
 
@@ -144,22 +145,26 @@ function ReviewsModal(): JSX.Element | null {
           <div>
             <span className="form-review__label form-review__label--required">Ваша Оценка</span>
             <div className="rate rate--reverse">
-              {ratingLabelMapRevers.map(([value, title]) => (
-                <Fragment key={title}>
-                  <input
-                    onChange={handleChange}
-                    className="visually-hidden"
-                    id={`star-${value}`}
-                    name="rating"
-                    type="radio"
-                    value={value}
-                    checked={value === formState.rating.value}
-                    required
-                    disabled={isFormDisabled}
-                  />
-                  <label className="rate__label" htmlFor={`star-${value}`} title={title} />
-                </Fragment>
-              ))}
+              {ratingLabelMapRevers.map(([value, title]) => {
+                console.log('ratingLabelMapRevers map value', value);
+
+                return (
+                  <Fragment key={title}>
+                    <input
+                      onChange={handleChange}
+                      className="visually-hidden"
+                      id={`star-${value}`}
+                      name="rating"
+                      type="radio"
+                      value={value}
+                      checked={value === formState.rating.value}
+                      required
+                      disabled={isFormDisabled}
+                    />
+                    <label className="rate__label" htmlFor={`star-${value}`} title={title} />
+                  </Fragment>
+                );
+              })}
               {formState.rating.error && <p className="rate__message">{formState.rating.errorText}</p>}
             </div>
           </div>

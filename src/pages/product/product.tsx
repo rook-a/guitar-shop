@@ -10,6 +10,7 @@ import { fetchCommentsAction, resetCommentsCounter, selectComments } from '../..
 import { fetchGuitarAction, selectGuitar } from '../../store/guitars-slice/guitars-slice';
 
 import { priceWithSpace } from '../../utils/utils';
+import styles from './product.module.css';
 
 function Product(): JSX.Element | null {
   const { id } = useParams();
@@ -52,7 +53,9 @@ function Product(): JSX.Element | null {
         </li>
       </ul>
       <div className="product-container">
-        <img className="product-container__img" src={`../../${previewImg}`} width="90" height="235" alt={name} />
+        <div className={styles['img-container']}>
+          <img className="product-container__img" src={`../../${previewImg}`} width="90" height="235" alt={name} />
+        </div>
         <div className="product-container__info-wrapper">
           <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
 
