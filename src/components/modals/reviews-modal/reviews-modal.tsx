@@ -73,7 +73,8 @@ function ReviewsModal(): JSX.Element | null {
   }
 
   const { name, id } = guitar;
-  const ratingLabelMapRevers: [string, string][] = Object.entries(RatingLabelMap).reverse();
+  // const ratingLabelMapRevers: [string, string][] = Object.entries(RatingLabelMap).reverse();
+  const ratingLabelMapRevers: [string, string][] = Object.entries(RatingLabelMap);
 
   const isValid = Object.values(formState).some(({ error }) => error);
   const isFormDisabled = sendCommentStatus === FetchStatus.Pending;
@@ -144,12 +145,12 @@ function ReviewsModal(): JSX.Element | null {
           </div>
           <div>
             <span className="form-review__label form-review__label--required">Ваша Оценка</span>
-            <div className="rate rate--reverse">
+            <div className={styles['rate']}>
               {ratingLabelMapRevers.map(([value, title]) => (
                 <Fragment key={title}>
                   <input
                     onChange={handleChange}
-                    className="visually-hidden"
+                    className={`visually-hidden ${styles['rate__input']}`}
                     id={`star-${value}`}
                     name="rating"
                     type="radio"
@@ -158,10 +159,12 @@ function ReviewsModal(): JSX.Element | null {
                     required
                     disabled={isFormDisabled}
                   />
-                  <label className="rate__label" htmlFor={`star-${value}`} title={title} />
+                  <label className={styles['rate__label']} htmlFor={`star-${value}`} title={title} />
                 </Fragment>
               ))}
+
               {formState.rating.error && <p className="rate__message">{formState.rating.errorText}</p>}
+              <div className={styles['rate__focus']} />
             </div>
           </div>
         </div>
