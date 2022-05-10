@@ -12,7 +12,7 @@ export const handleError = (error: AxiosError): void => {
   if (response) {
     switch (response.status) {
       case HttpCode.BadRequest:
-        // toast.info(response.data.error);
+        toast.info('Неверный синтаксис запроса');
         break;
       case HttpCode.NotFound:
         toast.error('Ресурс не найден. Попробуйте ещё раз!');

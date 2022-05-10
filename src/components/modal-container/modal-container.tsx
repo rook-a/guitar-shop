@@ -1,4 +1,5 @@
 import { ReactNode, useEffect } from 'react';
+import FocusLock from 'react-focus-lock';
 import { useAppDispatch } from '../../hooks/hooks';
 import { closeAllModal } from '../../store/app-slice/app-slice';
 
@@ -34,7 +35,7 @@ function ModalContainer({ className, children }: ModalContainerProps): JSX.Eleme
     <div className={`modal is-active ${className}`}>
       <div className="modal__wrapper">
         <div className="modal__overlay" onClick={handleModalCloseClick} />
-        {children}
+        <FocusLock>{children}</FocusLock>
       </div>
     </div>
   );
