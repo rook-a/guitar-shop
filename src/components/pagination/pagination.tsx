@@ -3,14 +3,14 @@ import { useParams } from 'react-router-dom';
 import cn from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { selectTotalProductCount } from '../../store/guitars-slice/guitars-slice';
+import { selectFilteredGuitars } from '../../store/guitars-slice/guitars-slice';
 import { AppRoute, MAX_NUMBER_OF_CARDS, START_PAGE_NUMBER } from '../../utils/const';
 import { changeActivePageNumber } from '../../store/app-slice/app-slice';
 
 function Pagination(): JSX.Element {
   const { number } = useParams();
   const dispatch = useAppDispatch();
-  const guitarsCount = useAppSelector(selectTotalProductCount);
+  const guitarsCount = useAppSelector(selectFilteredGuitars).length;
   const currentPageNumber = Number(number);
 
   const numberOfPages = Math.ceil(guitarsCount! / MAX_NUMBER_OF_CARDS);

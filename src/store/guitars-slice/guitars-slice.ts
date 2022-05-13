@@ -113,22 +113,24 @@ const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
 export const selectGuitars = (state: State) => selectGuitarsState(state).guitars;
 export const selectGuitar = (state: State) => selectGuitarsState(state).guitar;
-export const selectTotalProductCount = (state: State) => selectGuitarsState(state).guitars.length;
+// export const selectTotalProductCount = (state: State) => selectGuitarsState(state).guitars.length;
 
-export const selectCurrentGuitars = createSelector(
-  selectGuitars,
+export const selectFilteredGuitars = createSelector(selectGuitars, (guitars) => {
+  return guitars.filter((guitar) => {
+    if ('name' in guitar) {
+      return true;
+    }
+    return false;
+  });
+});
+
+export const selectSortedGuitars = createSelector(
+  selectFilteredGuitars,
   selectActivePageNumber,
   (guitars, activePageNumber) => {
-    const checkGuitars = guitars.filter((guitar) => {
-      if ('name' in guitar) {
-        return true;
-      }
-      return false;
-    });
-
     const endLimit = activePageNumber * MAX_NUMBER_OF_CARDS;
     const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
 
-    return checkGuitars.slice(startLimit, endLimit);
+    return guitars.slice(startLimit, endLimit);
   },
 );
