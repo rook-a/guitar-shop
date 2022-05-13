@@ -47,6 +47,7 @@ export const fetchGuitarsAction = createAsyncThunk<
 
   try {
     const { data, headers } = await api.get<Product[]>(`${APIRoute.Guitars}?${guitarsQueryLimit}&_embed=comments`);
+
     dispatch(getTotalProductCount(headers['x-total-count']));
     return data;
   } catch (error) {
@@ -89,7 +90,14 @@ export const guitarsSlice = createSlice({
       })
       .addCase(fetchGuitarsAction.fulfilled, (state, action) => {
         state.guitarsStatus = FetchStatus.Fulfilled;
-        state.guitars = action.payload;
+        const checkGuitars = action.payload.filter((guitar) => {
+          if ('name' in guitar) {
+            return true;
+          }
+          return false;
+        });
+
+        state.guitars = checkGuitars;
       })
       .addCase(fetchGuitarsAction.rejected, (state) => {
         state.guitarsStatus = FetchStatus.Rejected;
