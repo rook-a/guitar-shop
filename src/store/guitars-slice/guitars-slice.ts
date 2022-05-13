@@ -113,7 +113,6 @@ const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
 export const selectGuitars = (state: State) => selectGuitarsState(state).guitars;
 export const selectGuitar = (state: State) => selectGuitarsState(state).guitar;
-// export const selectTotalProductCount = (state: State) => selectGuitarsState(state).guitars.length;
 
 export const selectFilteredGuitars = createSelector(selectGuitars, (guitars) => {
   return guitars.filter((guitar) => {
