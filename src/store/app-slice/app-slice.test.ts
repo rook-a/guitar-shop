@@ -1,6 +1,7 @@
 import { appSlice, changeReviewModalActive, changeReviewSuccessModalActive, closeAllModal } from './app-slice';
 
 const state = {
+  activePageNumber: 1,
   reviewModalActive: false,
   reviewSuccessModalActive: false,
 };

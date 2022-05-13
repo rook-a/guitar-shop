@@ -7,17 +7,15 @@ import CatalogListEmpty from '../catalog-list-empty/catalog-list-empty';
 import Pagination from '../pagination/pagination';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { fetchGuitarsAction, selectGuitars } from '../../store/guitars-slice/guitars-slice';
-
-import { START_PAGE_NUMBER } from '../../utils/const';
+import { fetchGuitarsAction, selectCurrentGuitars } from '../../store/guitars-slice/guitars-slice';
 
 function CatalogList(): JSX.Element {
   const dispatch = useAppDispatch();
-  const guitars = useAppSelector(selectGuitars);
+  const guitars = useAppSelector(selectCurrentGuitars);
   const isEmpty = guitars.length === 0;
 
   useEffect(() => {
-    dispatch(fetchGuitarsAction(START_PAGE_NUMBER));
+    dispatch(fetchGuitarsAction());
   }, [dispatch]);
 
   return (

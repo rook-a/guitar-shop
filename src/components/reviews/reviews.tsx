@@ -37,6 +37,7 @@ function Reviews(): JSX.Element {
   const isReviewModalOpen = useAppSelector(selectReviewModalActive);
   const isReviewSuccessModalOpen = useAppSelector(selectReviewSuccessModalActive);
   const isCommentSendFulfilled = sendCommentStatus === FetchStatus.Fulfilled;
+  console.log(commentsSort);
 
   useEffect(() => {
     if (isCommentSendFulfilled) {

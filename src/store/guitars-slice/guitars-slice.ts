@@ -1,14 +1,14 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 
 import { handleError } from '../../services/handle-error';
 
-import { APIRoute, FetchStatus, NameSpace } from '../../utils/const';
+import { APIRoute, FetchStatus, MAX_NUMBER_OF_CARDS, NameSpace } from '../../utils/const';
 
 import { AppDispatch, State } from '../../types/state';
 import { Guitar } from '../../types/guitar';
 import { Product } from '../../types/product';
-import { createQueryGuitarLimit } from '../../utils/utils';
+import { selectActivePageNumber } from '../app-slice/app-slice';
 
 interface InitialState {
   guitars: Product[];
@@ -36,19 +36,16 @@ const initialState: InitialState = {
 
 export const fetchGuitarsAction = createAsyncThunk<
   Product[],
-  number,
+  undefined,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
->('data/fetchGuitars', async (pagePathNumber: number, { dispatch, extra: api }) => {
-  const guitarsQueryLimit = createQueryGuitarLimit(pagePathNumber);
-
+>('data/fetchGuitars', async (_args, { dispatch, extra: api }) => {
   try {
-    const { data, headers } = await api.get<Product[]>(`${APIRoute.Guitars}?${guitarsQueryLimit}&_embed=comments`);
+    const { data } = await api.get<Product[]>(`${APIRoute.Guitars}?_embed=comments`);
 
-    dispatch(getTotalProductCount(headers['x-total-count']));
     return data;
   } catch (error) {
     handleError(error);
@@ -90,14 +87,7 @@ export const guitarsSlice = createSlice({
       })
       .addCase(fetchGuitarsAction.fulfilled, (state, action) => {
         state.guitarsStatus = FetchStatus.Fulfilled;
-        const checkGuitars = action.payload.filter((guitar) => {
-          if ('name' in guitar) {
-            return true;
-          }
-          return false;
-        });
-
-        state.guitars = checkGuitars;
+        state.guitars = action.payload;
       })
       .addCase(fetchGuitarsAction.rejected, (state) => {
         state.guitarsStatus = FetchStatus.Rejected;
@@ -123,4 +113,22 @@ const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
 export const selectGuitars = (state: State) => selectGuitarsState(state).guitars;
 export const selectGuitar = (state: State) => selectGuitarsState(state).guitar;
-export const selectTotalProductCount = (state: State) => selectGuitarsState(state).totalProductCount;
+export const selectTotalProductCount = (state: State) => selectGuitarsState(state).guitars.length;
+
+export const selectCurrentGuitars = createSelector(
+  selectGuitars,
+  selectActivePageNumber,
+  (guitars, activePageNumber) => {
+    const checkGuitars = guitars.filter((guitar) => {
+      if ('name' in guitar) {
+        return true;
+      }
+      return false;
+    });
+
+    const endLimit = activePageNumber * MAX_NUMBER_OF_CARDS;
+    const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
+
+    return checkGuitars.slice(startLimit, endLimit);
+  },
+);

@@ -6,9 +6,9 @@ import MockAdapter from 'axios-mock-adapter';
 import { fetchGuitarAction, fetchGuitarsAction, guitarsSlice } from './guitars-slice';
 import { createAPI } from '../../services/api';
 
-import { APIRoute, FAKE_ARRAY_LENGTH, FetchStatus } from '../../utils/const';
+import { APIRoute, FetchStatus } from '../../utils/const';
 import { State } from '../../types/state';
-import { mockGuitar, mockProduct } from '../../utils/mock';
+import { mockGuitar } from '../../utils/mock';
 import { mockProducts } from '../../utils/utils';
 
 const api = createAPI();
@@ -35,16 +35,11 @@ describe('Guitars slice', () => {
 
   describe('guitars async action', () => {
     it('should dispatch fetchGuitarsAction when GET /guitars with query parameters', async () => {
-      const fakePagePathNumber = 1;
-      const fakeQueryPath = '_start=0&_end=9';
-
-      mockAPI
-        .onGet(`${APIRoute.Guitars}?${fakeQueryPath}&_embed=comments`)
-        .reply(200, mockProducts, { headers: FAKE_ARRAY_LENGTH });
+      mockAPI.onGet(`${APIRoute.Guitars}?_embed=comments`).reply(200, mockProducts);
 
       const store = mockStore();
 
-      await store.dispatch(fetchGuitarsAction(fakePagePathNumber));
+      await store.dispatch(fetchGuitarsAction());
 
       const actions = store.getActions().map(({ type }) => type);
 
@@ -86,7 +81,7 @@ describe('Guitars slice', () => {
       const action = {
         type: fetchGuitarsAction.fulfilled.type,
         payload: {
-          mockProduct,
+          mockProducts,
         },
       };
 

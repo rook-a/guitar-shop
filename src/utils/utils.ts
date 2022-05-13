@@ -1,4 +1,4 @@
-import { GuitarTypeFromTheServer, GuitarTypeForClient, MAX_NUMBER_OF_CARDS, FAKE_ARRAY_LENGTH } from './const';
+import { GuitarTypeFromTheServer, GuitarTypeForClient, FAKE_ARRAY_LENGTH } from './const';
 import { mockProduct } from './mock';
 
 export const stars = Array.from({ length: 5 }, (v, k) => k + 1);
@@ -26,13 +26,6 @@ export const formatDate = (date: string) => {
   }
 
   return new Date(date).toLocaleString('ru', { month: 'long', day: 'numeric' });
-};
-
-export const createQueryGuitarLimit = (pageQuery: number) => {
-  const endLimit = pageQuery * MAX_NUMBER_OF_CARDS;
-  const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
-
-  return `_start=${startLimit}&_end=${endLimit}`;
 };
 
 export const priceWithSpace = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');

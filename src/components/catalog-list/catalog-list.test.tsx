@@ -12,7 +12,9 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 const store = mockStore({
-  App: {},
+  App: {
+    activePageNumber: 1,
+  },
   Comments: {},
   Guitars: {
     guitars: [mockProduct],

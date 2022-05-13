@@ -1,4 +1,4 @@
-import { checkIsFull, adaptTypeToClient, formatDate, createQueryGuitarLimit, priceWithSpace } from './utils';
+import { checkIsFull, adaptTypeToClient, formatDate, priceWithSpace } from './utils';
 import { GuitarTypeFromTheServer, GuitarTypeForClient } from './const';
 
 describe('Utils functions', () => {
@@ -29,12 +29,6 @@ describe('Utils functions', () => {
 
     it('function return correct answer when date incorrect', () => {
       expect(formatDate('bla-bla-bla')).toBe('Дата неизвестна');
-    });
-  });
-
-  describe('check function createQueryGuitarLimit', () => {
-    it('function return correct query string to pagination limit', () => {
-      expect(createQueryGuitarLimit(1)).toBe('_start=0&_end=9');
     });
   });
 
