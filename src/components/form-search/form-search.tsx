@@ -1,4 +1,5 @@
-import { ChangeEvent, useState, useTransition } from 'react';
+import { ChangeEvent, useRef, useState, useTransition } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
 import { useAppSelector } from '../../hooks/hooks';
@@ -12,6 +13,8 @@ function FormSearch(): JSX.Element {
   const [, startTransition] = useTransition();
   const [search, setSearch] = useState<string>('');
   const products = useAppSelector(selectFilteredGuitars);
+  const navigate = useNavigate();
+  const inputSearch = useRef<HTMLInputElement | null>(null);
 
   const filteredProducts = filteredBySearch(products, search);
   const isSearchEmpty = search.length === 0;
@@ -21,6 +24,14 @@ function FormSearch(): JSX.Element {
     startTransition(() => {
       setSearch(evt.target.value);
     });
+  };
+
+  const handleClick = (link: string): void => {
+    if (inputSearch.current !== null) {
+      inputSearch.current.value = '';
+    }
+    setSearch('');
+    navigate(link);
   };
 
   return (
@@ -35,6 +46,8 @@ function FormSearch(): JSX.Element {
         <input
           onChange={handleSearchChange}
           className="form-search__input"
+          ref={inputSearch}
+          defaultValue=""
           id="search"
           type="text"
           autoComplete="off"
@@ -46,11 +59,25 @@ function FormSearch(): JSX.Element {
       </form>
       <ul className={cn('form-search__select-list', { hidden: isSearchEmpty })}>
         {!isEmpty ? (
-          filteredProducts.map(({ name, id }) => (
-            <li className="form-search__select-item" tabIndex={0} key={id}>
-              {name}
-            </li>
-          ))
+          filteredProducts.map(({ name, id }) => {
+            const link = generatePath('/product/:id', { id: `${id}` });
+            return (
+              <li
+                className="form-search__select-item"
+                tabIndex={0}
+                key={id}
+                onClick={() => {
+                  handleClick(link);
+                }}
+                onKeyDown={(evt) => {
+                  if (evt.key === 'Enter') {
+                    handleClick(link);
+                  }
+                }}>
+                {name}
+              </li>
+            );
+          })
         ) : (
           <li className="form-search__select-item">Совпадений не найдено</li>
         )}
