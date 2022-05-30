@@ -1,4 +1,5 @@
 import { GuitarTypeFromTheServer, GuitarTypeForClient, FAKE_ARRAY_LENGTH } from './const';
+import { Product } from '../types/product';
 import { mockProduct } from './mock';
 
 export const stars = Array.from({ length: 5 }, (v, k) => k + 1);
@@ -29,3 +30,13 @@ export const formatDate = (date: string) => {
 };
 
 export const priceWithSpace = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
+export const filteredBySearch = (products: Product[], search: string): Product[] => {
+  if (!search) {
+    return [];
+  }
+
+  const searchLowerCase = search.toLowerCase();
+
+  return products.filter((guitar) => guitar.name.toLowerCase().includes(searchLowerCase));
+};
