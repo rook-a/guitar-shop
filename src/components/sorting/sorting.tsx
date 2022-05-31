@@ -1,22 +1,50 @@
+import cn from 'classnames';
+
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import {
+  changeOrderType,
+  changeSortType,
+  selectOrderType,
+  selectSortType,
+} from '../../store/guitars-slice/guitars-slice';
+import { OrderType, SortTypeMap } from '../../utils/const';
+
 function Sorting(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const sortType = useAppSelector(selectSortType);
+  const orderType = useAppSelector(selectOrderType);
+
   return (
     <div className="catalog-sort">
       <h2 className="catalog-sort__title">Сортировать:</h2>
       <div className="catalog-sort__type">
-        <button className="catalog-sort__type-button" aria-label="по цене">
-          по цене
-        </button>
-        <button className="catalog-sort__type-button" aria-label="по популярности">
-          по популярности
-        </button>
+        {SortTypeMap.map(({ type, label }) => (
+          <button
+            onClick={() => dispatch(changeSortType(type))}
+            className={cn('catalog-sort__type-button', {
+              'catalog-sort__type-button--active': sortType === type,
+            })}
+            aria-label={label}
+            key={type}>
+            {label}
+          </button>
+        ))}
       </div>
       <div className="catalog-sort__order">
         <button
-          className="catalog-sort__order-button catalog-sort__order-button--up"
-          aria-label="По возрастанию"></button>
+          onClick={() => dispatch(changeOrderType(OrderType.FromLowToHigh))}
+          className={cn('catalog-sort__order-button', 'catalog-sort__order-button--up', {
+            'catalog-sort__order-button--active': orderType === OrderType.FromLowToHigh,
+          })}
+          aria-label="По возрастанию"
+        />
         <button
-          className="catalog-sort__order-button catalog-sort__order-button--down"
-          aria-label="По убыванию"></button>
+          onClick={() => dispatch(changeOrderType(OrderType.FromHighToLow))}
+          className={cn('catalog-sort__order-button', 'catalog-sort__order-button--down', {
+            'catalog-sort__order-button--active': orderType === OrderType.FromHighToLow,
+          })}
+          aria-label="По убыванию"
+        />
       </div>
     </div>
   );

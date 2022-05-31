@@ -64,3 +64,29 @@ export const enum NameSpace {
   Coupon = 'Coupon',
   Order = 'Order',
 }
+
+export const enum SortType {
+  Price = 'price',
+  Rating = 'rating',
+}
+
+const enum SortLabel {
+  Price = 'по цене',
+  Rating = 'по популярности',
+}
+
+export const SortTypeMap = [
+  {
+    type: SortType.Price,
+    label: SortLabel.Price,
+  },
+  {
+    type: SortType.Rating,
+    label: SortLabel.Rating,
+  },
+];
+
+export const enum OrderType {
+  FromLowToHigh = 'FromLowToHigh',
+  FromHighToLow = 'FromHighToLow',
+}

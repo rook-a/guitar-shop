@@ -3,7 +3,7 @@ import { AxiosInstance } from 'axios';
 
 import { handleError } from '../../services/handle-error';
 
-import { APIRoute, FetchStatus, MAX_NUMBER_OF_CARDS, NameSpace } from '../../utils/const';
+import { APIRoute, FetchStatus, MAX_NUMBER_OF_CARDS, NameSpace, OrderType, SortType } from '../../utils/const';
 
 import { AppDispatch, State } from '../../types/state';
 import { Guitar } from '../../types/guitar';
@@ -20,6 +20,9 @@ interface InitialState {
   guitar: Guitar | null;
   guitarStatus: FetchStatus;
   guitarError: boolean;
+
+  sortType: SortType;
+  orderType: OrderType;
 }
 
 const initialState: InitialState = {
@@ -32,19 +35,22 @@ const initialState: InitialState = {
   guitar: null,
   guitarStatus: FetchStatus.Idle,
   guitarError: false,
+
+  sortType: SortType.Price,
+  orderType: OrderType.FromLowToHigh,
 };
 
 export const fetchGuitarsAction = createAsyncThunk<
   Product[],
-  undefined,
+  SortType,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
->('data/fetchGuitars', async (_args, { dispatch, extra: api }) => {
+>('data/fetchGuitars', async (sortType: string, { dispatch, extra: api }) => {
   try {
-    const { data } = await api.get<Product[]>(`${APIRoute.Guitars}?_embed=comments`);
+    const { data } = await api.get<Product[]>(`${APIRoute.Guitars}?_sort=${sortType}&_embed=comments`);
 
     return data;
   } catch (error) {
@@ -79,6 +85,12 @@ export const guitarsSlice = createSlice({
     getTotalProductCount: (state, action) => {
       state.totalProductCount = action.payload;
     },
+    changeSortType: (state, action) => {
+      state.sortType = action.payload;
+    },
+    changeOrderType: (state, action) => {
+      state.orderType = action.payload;
+    },
   },
   extraReducers: (buider) => {
     buider
@@ -107,12 +119,14 @@ export const guitarsSlice = createSlice({
   },
 });
 
-export const { getTotalProductCount } = guitarsSlice.actions;
+export const { getTotalProductCount, changeSortType, changeOrderType } = guitarsSlice.actions;
 
 const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
 export const selectGuitars = (state: State) => selectGuitarsState(state).guitars;
 export const selectGuitar = (state: State) => selectGuitarsState(state).guitar;
+export const selectSortType = (state: State) => selectGuitarsState(state).sortType;
+export const selectOrderType = (state: State) => selectGuitarsState(state).orderType;
 
 export const selectFilteredGuitars = createSelector(selectGuitars, (guitars) => {
   return guitars.filter((guitar) => {
@@ -125,11 +139,36 @@ export const selectFilteredGuitars = createSelector(selectGuitars, (guitars) => 
 
 export const selectSortedGuitars = createSelector(
   selectFilteredGuitars,
+  selectSortType,
+  selectOrderType,
   selectActivePageNumber,
-  (guitars, activePageNumber) => {
+  (guitars, selectSortType, selectOrderType, activePageNumber) => {
     const endLimit = activePageNumber * MAX_NUMBER_OF_CARDS;
     const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
+    const guitarsCopy: Product[] = guitars.slice();
 
-    return guitars.slice(startLimit, endLimit);
+    if (selectSortType === SortType.Price) {
+      switch (selectOrderType) {
+        case OrderType.FromLowToHigh:
+          return guitarsCopy.sort((a, b) => a.price - b.price).slice(startLimit, endLimit);
+
+        case OrderType.FromHighToLow:
+          return guitarsCopy.sort((a, b) => b.price - a.price).slice(startLimit, endLimit);
+
+        default:
+          return guitars.slice(startLimit, endLimit);
+      }
+    } else {
+      switch (selectOrderType) {
+        case OrderType.FromLowToHigh:
+          return guitarsCopy.sort((a, b) => a.rating - b.rating).slice(startLimit, endLimit);
+
+        case OrderType.FromHighToLow:
+          return guitarsCopy.sort((a, b) => b.rating - a.rating).slice(startLimit, endLimit);
+
+        default:
+          return guitars.slice(startLimit, endLimit);
+      }
+    }
   },
 );

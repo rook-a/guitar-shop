@@ -6,7 +6,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { fetchGuitarAction, fetchGuitarsAction, guitarsSlice } from './guitars-slice';
 import { createAPI } from '../../services/api';
 
-import { APIRoute, FetchStatus } from '../../utils/const';
+import { APIRoute, FetchStatus, OrderType, SortType } from '../../utils/const';
 import { State } from '../../types/state';
 import { mockGuitar } from '../../utils/mock';
 import { mockProducts } from '../../utils/utils';
@@ -26,6 +26,9 @@ const state = {
   guitar: null,
   guitarStatus: FetchStatus.Idle,
   guitarError: false,
+
+  sortType: SortType.Price,
+  orderType: OrderType.FromLowToHigh,
 };
 
 describe('Guitars slice', () => {
@@ -39,7 +42,7 @@ describe('Guitars slice', () => {
 
       const store = mockStore();
 
-      await store.dispatch(fetchGuitarsAction());
+      await store.dispatch(fetchGuitarsAction(SortType.Price));
 
       const actions = store.getActions().map(({ type }) => type);
 

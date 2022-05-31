@@ -7,16 +7,17 @@ import CatalogListEmpty from '../catalog-list-empty/catalog-list-empty';
 import Pagination from '../pagination/pagination';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { fetchGuitarsAction, selectSortedGuitars } from '../../store/guitars-slice/guitars-slice';
+import { fetchGuitarsAction, selectSortedGuitars, selectSortType } from '../../store/guitars-slice/guitars-slice';
 
 function CatalogList(): JSX.Element {
   const dispatch = useAppDispatch();
   const guitars = useAppSelector(selectSortedGuitars);
+  const sortType = useAppSelector(selectSortType);
   const isEmpty = guitars.length === 0;
 
   useEffect(() => {
-    dispatch(fetchGuitarsAction());
-  }, [dispatch]);
+    dispatch(fetchGuitarsAction(sortType));
+  }, [dispatch, sortType]);
 
   return (
     <div className="catalog">
