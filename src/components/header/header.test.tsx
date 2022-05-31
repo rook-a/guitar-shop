@@ -4,13 +4,16 @@ import { render, waitFor } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 
 import Header from './header';
+import { mockProduct } from '../../utils/mock';
 
 const mockStore = configureMockStore();
 
 const store = mockStore({
   App: {},
   Comments: {},
-  Guitars: {},
+  Guitars: {
+    guitars: [mockProduct],
+  },
 });
 
 const fakeComponent = (

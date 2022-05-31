@@ -38,7 +38,7 @@ describe('Guitars slice', () => {
 
   describe('guitars async action', () => {
     it('should dispatch fetchGuitarsAction when GET /guitars with query parameters', async () => {
-      mockAPI.onGet(`${APIRoute.Guitars}?_embed=comments`).reply(200, mockProducts);
+      mockAPI.onGet(`${APIRoute.Guitars}?_sort=${SortType.Price}&_embed=comments`).reply(200, mockProducts);
 
       const store = mockStore();
 
