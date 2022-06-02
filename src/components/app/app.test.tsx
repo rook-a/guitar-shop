@@ -23,6 +23,10 @@ const store = mockStore({
     guitars: [mockProduct],
     guitar: mockGuitar,
   },
+  Filter: {
+    priceMax: 0,
+    priceMin: 1,
+  },
 });
 
 const fakeComponent = (

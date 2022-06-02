@@ -88,8 +88,8 @@ export const commentsSlice = createSlice({
       state.commentsCount = START_COUNT_COMMENT;
     },
   },
-  extraReducers: (buider) => {
-    buider
+  extraReducers: (builder) => {
+    builder
       .addCase(fetchCommentsAction.pending, (state) => {
         state.commentsStatus = FetchStatus.Pending;
       })

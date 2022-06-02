@@ -2,13 +2,14 @@ import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit'
 import { AxiosInstance } from 'axios';
 
 import { handleError } from '../../services/handle-error';
+import { selectActivePageNumber } from '../app-slice/app-slice';
 
 import { APIRoute, FetchStatus, MAX_NUMBER_OF_CARDS, NameSpace, OrderType, SortType } from '../../utils/const';
 
 import { AppDispatch, State } from '../../types/state';
 import { Guitar } from '../../types/guitar';
 import { Product } from '../../types/product';
-import { selectActivePageNumber } from '../app-slice/app-slice';
+import { Query } from '../../types/query';
 
 interface InitialState {
   guitars: Product[];
@@ -42,13 +43,13 @@ const initialState: InitialState = {
 
 export const fetchGuitarsAction = createAsyncThunk<
   Product[],
-  SortType,
+  Query,
   {
     dispatch: AppDispatch;
     state: State;
     extra: AxiosInstance;
   }
->('data/fetchGuitars', async (sortType: string, { dispatch, extra: api }) => {
+>('data/fetchGuitars', async ({ sortType, min, max }: Query, { dispatch, extra: api }) => {
   try {
     const { data } = await api.get<Product[]>(`${APIRoute.Guitars}?_sort=${sortType}&_embed=comments`);
 
@@ -91,9 +92,12 @@ export const guitarsSlice = createSlice({
     changeOrderType: (state, action) => {
       state.orderType = action.payload;
     },
+    setFilteredGuitars: (state, action) => {
+      state.guitars = action.payload;
+    },
   },
-  extraReducers: (buider) => {
-    buider
+  extraReducers: (builder) => {
+    builder
       .addCase(fetchGuitarsAction.pending, (state) => {
         state.guitarsStatus = FetchStatus.Pending;
       })
@@ -119,7 +123,7 @@ export const guitarsSlice = createSlice({
   },
 });
 
-export const { getTotalProductCount, changeSortType, changeOrderType } = guitarsSlice.actions;
+export const { getTotalProductCount, changeSortType, changeOrderType, setFilteredGuitars } = guitarsSlice.actions;
 
 const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 

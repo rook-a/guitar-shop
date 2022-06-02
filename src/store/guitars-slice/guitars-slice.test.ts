@@ -42,7 +42,7 @@ describe('Guitars slice', () => {
 
       const store = mockStore();
 
-      await store.dispatch(fetchGuitarsAction(SortType.Price));
+      await store.dispatch(fetchGuitarsAction({ sortType: SortType.Price }));
 
       const actions = store.getActions().map(({ type }) => type);
 

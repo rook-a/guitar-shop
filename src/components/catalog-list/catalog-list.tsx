@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import Filter from '../filter/filter';
+import FilterForm from '../filter-form/filter-form';
 import Sorting from '../sorting/sorting';
 import ProductCard from '../product-card/product-card';
 import CatalogListEmpty from '../catalog-list-empty/catalog-list-empty';
@@ -8,6 +8,7 @@ import Pagination from '../pagination/pagination';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { fetchGuitarsAction, selectSortedGuitars, selectSortType } from '../../store/guitars-slice/guitars-slice';
+import { fetchMinPrice } from '../../store/filter-slice/filter-slice';
 
 function CatalogList(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -16,12 +17,13 @@ function CatalogList(): JSX.Element {
   const isEmpty = guitars.length === 0;
 
   useEffect(() => {
-    dispatch(fetchGuitarsAction(sortType));
+    dispatch(fetchGuitarsAction({ sortType }));
+    dispatch(fetchMinPrice());
   }, [dispatch, sortType]);
 
   return (
     <div className="catalog">
-      <Filter />
+      <FilterForm />
 
       <Sorting />
 
