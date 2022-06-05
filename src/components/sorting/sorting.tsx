@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import {
   changeOrderType,
   changeSortType,
+  fetchGuitarsAction,
   selectOrderType,
   selectSortType,
 } from '../../store/guitars-slice/guitars-slice';
@@ -12,7 +13,7 @@ import { OrderType, SortTypeMap } from '../../utils/const';
 function Sorting(): JSX.Element {
   const dispatch = useAppDispatch();
   const sortType = useAppSelector(selectSortType);
-  const orderType = useAppSelector(selectOrderType);
+  const currentOrderType = useAppSelector(selectOrderType);
 
   return (
     <div className="catalog-sort">
@@ -20,7 +21,10 @@ function Sorting(): JSX.Element {
       <div className="catalog-sort__type">
         {SortTypeMap.map(({ type, label }) => (
           <button
-            onClick={() => dispatch(changeSortType(type))}
+            onClick={() => {
+              dispatch(fetchGuitarsAction({ orderType: currentOrderType, sortType: type }));
+              dispatch(changeSortType(type));
+            }}
             className={cn('catalog-sort__type-button', {
               'catalog-sort__type-button--active': sortType === type,
             })}
@@ -32,16 +36,22 @@ function Sorting(): JSX.Element {
       </div>
       <div className="catalog-sort__order">
         <button
-          onClick={() => dispatch(changeOrderType(OrderType.FromLowToHigh))}
+          onClick={() => {
+            dispatch(fetchGuitarsAction({ sortType, orderType: OrderType.Asc }));
+            dispatch(changeOrderType(OrderType.Asc));
+          }}
           className={cn('catalog-sort__order-button', 'catalog-sort__order-button--up', {
-            'catalog-sort__order-button--active': orderType === OrderType.FromLowToHigh,
+            'catalog-sort__order-button--active': currentOrderType === OrderType.Asc,
           })}
           aria-label="По возрастанию"
         />
         <button
-          onClick={() => dispatch(changeOrderType(OrderType.FromHighToLow))}
+          onClick={() => {
+            dispatch(fetchGuitarsAction({ sortType, orderType: OrderType.Desc }));
+            dispatch(changeOrderType(OrderType.Desc));
+          }}
           className={cn('catalog-sort__order-button', 'catalog-sort__order-button--down', {
-            'catalog-sort__order-button--active': orderType === OrderType.FromHighToLow,
+            'catalog-sort__order-button--active': currentOrderType === OrderType.Desc,
           })}
           aria-label="По убыванию"
         />

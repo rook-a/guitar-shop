@@ -1,8 +1,8 @@
 import { ChangeEvent, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { selectPriceMin, selectPriceMax, fetchFilteredByPrice } from '../../store/filter-slice/filter-slice';
-import { selectSortType } from '../../store/guitars-slice/guitars-slice';
+import { selectPriceMin, selectPriceMax } from '../../store/filter-slice/filter-slice';
+import { fetchGuitarsAction, selectSortType } from '../../store/guitars-slice/guitars-slice';
 import { priceWithSpace } from '../../utils/utils';
 
 function FilterByPrice(): JSX.Element {
@@ -45,7 +45,7 @@ function FilterByPrice(): JSX.Element {
         price_min: `${price}`,
       });
 
-      dispatch(fetchFilteredByPrice({ sortType, min: price, max: `${guitarMaxPrice}` }));
+      dispatch(fetchGuitarsAction({ sortType, min: price, max: `${guitarMaxPrice}` }));
     } else {
       setSearchParams({});
     }
@@ -77,7 +77,7 @@ function FilterByPrice(): JSX.Element {
         price_max: price,
       });
 
-      dispatch(fetchFilteredByPrice({ sortType, max: price, min: currentMinPrice }));
+      dispatch(fetchGuitarsAction({ sortType, max: price, min: currentMinPrice }));
     } else {
       setSearchParams({});
     }

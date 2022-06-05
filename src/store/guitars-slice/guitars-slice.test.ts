@@ -21,6 +21,10 @@ const state = {
   guitarsStatus: FetchStatus.Idle,
   guitarsError: false,
 
+  guitarsSearch: [],
+  guitarsSearchStatus: FetchStatus.Idle,
+  guitarsSearchError: false,
+
   totalProductCount: null,
 
   guitar: null,
@@ -28,7 +32,7 @@ const state = {
   guitarError: false,
 
   sortType: SortType.Price,
-  orderType: OrderType.FromLowToHigh,
+  orderType: OrderType.Asc,
 };
 
 describe('Guitars slice', () => {

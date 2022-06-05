@@ -1,6 +1,7 @@
-import { GuitarTypeFromTheServer, GuitarTypeForClient, FAKE_ARRAY_LENGTH } from './const';
-import { Product } from '../types/product';
+import qs from 'query-string';
+import { GuitarTypeFromTheServer, GuitarTypeForClient, FAKE_ARRAY_LENGTH, MAX_NUMBER_OF_CARDS } from './const';
 import { mockProduct } from './mock';
+import { Query } from '../types/query';
 
 export const stars = Array.from({ length: 5 }, (v, k) => k + 1);
 
@@ -31,12 +32,50 @@ export const formatDate = (date: string) => {
 
 export const priceWithSpace = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
-export const filteredBySearch = (products: Product[], search: string): Product[] => {
-  if (!search) {
-    return [];
-  }
+const createQueryByPage = (activePageNumber?: number) => {
+  const endLimit = activePageNumber ? activePageNumber * MAX_NUMBER_OF_CARDS : MAX_NUMBER_OF_CARDS;
+  const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
 
-  const searchLowerCase = search.toLowerCase();
+  return qs.stringify(
+    {
+      _start: startLimit,
+      _end: endLimit,
+    },
+    { skipNull: true, skipEmptyString: true },
+  );
+};
 
-  return products.filter((guitar) => guitar.name.toLowerCase().includes(searchLowerCase));
+const createQueryBySort = (sortType: string | undefined, orderType: string | undefined) => {
+  return qs.stringify(
+    {
+      _sort: sortType,
+      _order: orderType,
+    },
+    { skipNull: true, skipEmptyString: true },
+  );
+};
+
+const createQueryByFilter = (
+  min: string | undefined,
+  max: string | undefined,
+  guitarType: string[] | undefined,
+  stringCount: number[] | undefined,
+) => {
+  return qs.stringify(
+    {
+      price_gte: min,
+      price_lte: max,
+      type: guitarType,
+      stringCount,
+    },
+    { skipNull: true, skipEmptyString: true },
+  );
+};
+
+export const createQuery = ({ activePageNumber, sortType, orderType, min, max, guitarType, stringCount }: Query) => {
+  const page = createQueryByPage(activePageNumber);
+  const sort = createQueryBySort(sortType, orderType);
+  const filter = createQueryByFilter(min, max, guitarType, stringCount);
+
+  return [page, sort, filter].filter((currentQuery) => currentQuery !== '').join('&');
 };

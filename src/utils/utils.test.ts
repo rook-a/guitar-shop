@@ -1,4 +1,4 @@
-import { checkIsFull, adaptTypeToClient, formatDate, priceWithSpace, mockProducts, filteredBySearch } from './utils';
+import { checkIsFull, adaptTypeToClient, formatDate, priceWithSpace } from './utils';
 import { GuitarTypeFromTheServer, GuitarTypeForClient } from './const';
 
 describe('Utils functions', () => {
@@ -35,12 +35,6 @@ describe('Utils functions', () => {
   describe('check function priceWithSpace', () => {
     it('function return correct price with space', () => {
       expect(priceWithSpace(100000)).toBe('100 000');
-    });
-  });
-
-  describe('check function filteredBySearch', () => {
-    it('function return empty array when no search matches', () => {
-      expect(filteredBySearch(mockProducts, '')).toEqual([]);
     });
   });
 });

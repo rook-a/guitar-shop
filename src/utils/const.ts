@@ -89,6 +89,6 @@ export const SortTypeMap = [
 ];
 
 export const enum OrderType {
-  FromLowToHigh = 'FromLowToHigh',
-  FromHighToLow = 'FromHighToLow',
+  Asc = 'asc',
+  Desc = 'desc',
 }

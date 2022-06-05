@@ -3,10 +3,8 @@ import { AxiosInstance } from 'axios';
 import { handleError } from '../../services/handle-error';
 
 import { Guitar } from '../../types/guitar';
-import { Query } from '../../types/query';
 import { AppDispatch, State } from '../../types/state';
 import { APIRoute, FetchStatus, INDEX_FIRST_GUITAR, NameSpace } from '../../utils/const';
-import { setFilteredGuitars } from '../guitars-slice/guitars-slice';
 
 interface InitialState {
   priceMax: number;
@@ -58,29 +56,6 @@ export const fetchMaxPrice = createAsyncThunk<
 >('filter/fetchMinPrice', async (total: number, { dispatch, extra: api }) => {
   try {
     const { data } = await api.get<Guitar[]>(`${APIRoute.Guitars}?_sort=price&_start=${total - 1}&_end=${total}`);
-
-    return data;
-  } catch (error) {
-    handleError(error);
-    throw error;
-  }
-});
-
-export const fetchFilteredByPrice = createAsyncThunk<
-  Guitar[],
-  Query,
-  {
-    dispatch: AppDispatch;
-    state: State;
-    extra: AxiosInstance;
-  }
->('filter/fetchFilteredByMinPrice', async ({ sortType, min, max }: Query, { dispatch, extra: api }) => {
-  try {
-    const { data } = await api.get<Guitar[]>(
-      `${APIRoute.Guitars}?_sort=${sortType}&price_gte=${min}&price_lte=${max}&_embed=comments`,
-    );
-
-    dispatch(setFilteredGuitars(data));
 
     return data;
   } catch (error) {

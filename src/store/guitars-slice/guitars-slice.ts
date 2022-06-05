@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice, createSelector } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
 
 import { handleError } from '../../services/handle-error';
-import { selectActivePageNumber } from '../app-slice/app-slice';
 
-import { APIRoute, FetchStatus, MAX_NUMBER_OF_CARDS, NameSpace, OrderType, SortType } from '../../utils/const';
+import { APIRoute, FetchStatus, NameSpace, OrderType, SortType } from '../../utils/const';
+import { createQuery } from '../../utils/utils';
 
 import { AppDispatch, State } from '../../types/state';
 import { Guitar } from '../../types/guitar';
@@ -15,6 +15,10 @@ interface InitialState {
   guitars: Product[];
   guitarsStatus: FetchStatus;
   guitarsError: boolean;
+
+  guitarsSearch: Guitar[];
+  guitarsSearchStatus: FetchStatus;
+  guitarsSearchError: boolean;
 
   totalProductCount: number | null;
 
@@ -31,6 +35,10 @@ const initialState: InitialState = {
   guitarsStatus: FetchStatus.Idle,
   guitarsError: false,
 
+  guitarsSearch: [],
+  guitarsSearchStatus: FetchStatus.Idle,
+  guitarsSearchError: false,
+
   totalProductCount: null,
 
   guitar: null,
@@ -38,7 +46,7 @@ const initialState: InitialState = {
   guitarError: false,
 
   sortType: SortType.Price,
-  orderType: OrderType.FromLowToHigh,
+  orderType: OrderType.Asc,
 };
 
 export const fetchGuitarsAction = createAsyncThunk<
@@ -49,16 +57,26 @@ export const fetchGuitarsAction = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->('data/fetchGuitars', async ({ sortType, min, max }: Query, { dispatch, extra: api }) => {
-  try {
-    const { data } = await api.get<Product[]>(`${APIRoute.Guitars}?_sort=${sortType}&_embed=comments`);
+>(
+  'data/fetchGuitars',
+  async (
+    { activePageNumber, sortType, orderType, min, max, guitarType, stringCount }: Query,
+    { dispatch, extra: api },
+  ) => {
+    const query = createQuery({ activePageNumber, sortType, orderType, min, max, guitarType, stringCount });
 
-    return data;
-  } catch (error) {
-    handleError(error);
-    throw error;
-  }
-});
+    try {
+      const { data, headers } = await api.get<Product[]>(`${APIRoute.Guitars}?${query}&_embed=comments`);
+
+      dispatch(getTotalProductCount(Number(headers['x-total-count'])));
+
+      return data;
+    } catch (error) {
+      handleError(error);
+      throw error;
+    }
+  },
+);
 
 export const fetchGuitarAction = createAsyncThunk<
   Guitar,
@@ -79,6 +97,25 @@ export const fetchGuitarAction = createAsyncThunk<
   }
 });
 
+export const fetchGuitarsSearch = createAsyncThunk<
+  Guitar[],
+  string,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>('data/fetchGuitarsSearch', async (value: string, { dispatch, extra: api }) => {
+  try {
+    const { data } = await api.get<Guitar[]>(`${APIRoute.Guitars}?name_like=${value}`);
+
+    return data;
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+});
+
 export const guitarsSlice = createSlice({
   name: NameSpace.Guitars,
   initialState,
@@ -91,9 +128,6 @@ export const guitarsSlice = createSlice({
     },
     changeOrderType: (state, action) => {
       state.orderType = action.payload;
-    },
-    setFilteredGuitars: (state, action) => {
-      state.guitars = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -119,11 +153,22 @@ export const guitarsSlice = createSlice({
       .addCase(fetchGuitarAction.rejected, (state) => {
         state.guitarStatus = FetchStatus.Rejected;
         state.guitarError = true;
+      })
+      .addCase(fetchGuitarsSearch.pending, (state) => {
+        state.guitarsSearchStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchGuitarsSearch.fulfilled, (state, action) => {
+        state.guitarsSearch = action.payload;
+        state.guitarsSearchStatus = FetchStatus.Fulfilled;
+      })
+      .addCase(fetchGuitarsSearch.rejected, (state) => {
+        state.guitarsSearchStatus = FetchStatus.Rejected;
+        state.guitarsSearchError = true;
       });
   },
 });
 
-export const { getTotalProductCount, changeSortType, changeOrderType, setFilteredGuitars } = guitarsSlice.actions;
+export const { getTotalProductCount, changeSortType, changeOrderType } = guitarsSlice.actions;
 
 const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
@@ -131,48 +176,5 @@ export const selectGuitars = (state: State) => selectGuitarsState(state).guitars
 export const selectGuitar = (state: State) => selectGuitarsState(state).guitar;
 export const selectSortType = (state: State) => selectGuitarsState(state).sortType;
 export const selectOrderType = (state: State) => selectGuitarsState(state).orderType;
-
-export const selectFilteredGuitars = createSelector(selectGuitars, (guitars) => {
-  return guitars.filter((guitar) => {
-    if ('name' in guitar) {
-      return true;
-    }
-    return false;
-  });
-});
-
-export const selectSortedGuitars = createSelector(
-  selectFilteredGuitars,
-  selectSortType,
-  selectOrderType,
-  selectActivePageNumber,
-  (guitars, selectSortType, selectOrderType, activePageNumber) => {
-    const endLimit = activePageNumber * MAX_NUMBER_OF_CARDS;
-    const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
-    const guitarsCopy: Product[] = guitars.slice();
-
-    if (selectSortType === SortType.Price) {
-      switch (selectOrderType) {
-        case OrderType.FromLowToHigh:
-          return guitarsCopy.sort((a, b) => a.price - b.price).slice(startLimit, endLimit);
-
-        case OrderType.FromHighToLow:
-          return guitarsCopy.sort((a, b) => b.price - a.price).slice(startLimit, endLimit);
-
-        default:
-          return guitars.slice(startLimit, endLimit);
-      }
-    } else {
-      switch (selectOrderType) {
-        case OrderType.FromLowToHigh:
-          return guitarsCopy.sort((a, b) => a.rating - b.rating).slice(startLimit, endLimit);
-
-        case OrderType.FromHighToLow:
-          return guitarsCopy.sort((a, b) => b.rating - a.rating).slice(startLimit, endLimit);
-
-        default:
-          return guitars.slice(startLimit, endLimit);
-      }
-    }
-  },
-);
+export const selectTotalProductCount = (state: State) => selectGuitarsState(state).totalProductCount;
+export const selectGuitarsSearch = (state: State) => selectGuitarsState(state).guitarsSearch;

@@ -2,28 +2,27 @@ import { ChangeEvent, useRef, useState, useTransition } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
-import { useAppSelector } from '../../hooks/hooks';
-import { selectFilteredGuitars } from '../../store/guitars-slice/guitars-slice';
-
-import { filteredBySearch } from '../../utils/utils';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { fetchGuitarsSearch, selectGuitarsSearch } from '../../store/guitars-slice/guitars-slice';
 
 import styles from './form-search.module.css';
 
 function FormSearch(): JSX.Element {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [, startTransition] = useTransition();
   const [search, setSearch] = useState<string>('');
-  const products = useAppSelector(selectFilteredGuitars);
-  const navigate = useNavigate();
+  const products = useAppSelector(selectGuitarsSearch);
   const inputSearch = useRef<HTMLInputElement | null>(null);
 
-  const filteredProducts = filteredBySearch(products, search);
   const isSearchEmpty = search.length === 0;
-  const isEmpty = filteredProducts.length === 0;
+  const isEmpty = products.length === 0;
 
   const handleSearchChange = (evt: ChangeEvent<HTMLInputElement>) => {
     startTransition(() => {
-      setSearch(evt.target.value);
+      dispatch(fetchGuitarsSearch(evt.target.value));
     });
+    setSearch(evt.target.value);
   };
 
   const handleClick = (link: string): void => {
@@ -59,7 +58,7 @@ function FormSearch(): JSX.Element {
       </form>
       <ul className={cn('form-search__select-list', { hidden: isSearchEmpty })}>
         {!isEmpty ? (
-          filteredProducts.map(({ name, id }) => {
+          products.map(({ name, id }) => {
             const link = generatePath('/product/:id', { id: `${id}` });
             return (
               <li

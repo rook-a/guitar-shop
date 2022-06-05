@@ -7,19 +7,27 @@ import CatalogListEmpty from '../catalog-list-empty/catalog-list-empty';
 import Pagination from '../pagination/pagination';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { fetchGuitarsAction, selectSortedGuitars, selectSortType } from '../../store/guitars-slice/guitars-slice';
+import {
+  fetchGuitarsAction,
+  selectGuitars,
+  selectOrderType,
+  selectSortType,
+} from '../../store/guitars-slice/guitars-slice';
 import { fetchMinPrice } from '../../store/filter-slice/filter-slice';
+
+import { START_PAGE_NUMBER } from '../../utils/const';
 
 function CatalogList(): JSX.Element {
   const dispatch = useAppDispatch();
-  const guitars = useAppSelector(selectSortedGuitars);
+  const guitars = useAppSelector(selectGuitars);
   const sortType = useAppSelector(selectSortType);
+  const orderType = useAppSelector(selectOrderType);
   const isEmpty = guitars.length === 0;
 
   useEffect(() => {
-    dispatch(fetchGuitarsAction({ sortType }));
+    dispatch(fetchGuitarsAction({ activePageNumber: START_PAGE_NUMBER, sortType, orderType }));
     dispatch(fetchMinPrice());
-  }, [dispatch, sortType]);
+  }, [dispatch, orderType, sortType]);
 
   return (
     <div className="catalog">
