@@ -1,9 +1,7 @@
-import { OrderType, SortType } from '../utils/const';
-
 export interface Query {
   activePageNumber?: number;
-  sortType?: SortType;
-  orderType?: OrderType;
+  sortType?: string;
+  orderType?: string;
   min?: string;
   max?: string;
   guitarType?: string[];

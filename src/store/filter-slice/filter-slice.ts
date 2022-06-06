@@ -67,7 +67,12 @@ export const fetchMaxPrice = createAsyncThunk<
 export const filterSlice = createSlice({
   name: NameSpace.Filter,
   initialState,
-  reducers: {},
+  reducers: {
+    setPrice: (state, action) => {
+      state.priceMin = action.payload.priceMin;
+      state.priceMax = action.payload.priceMax;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchMinPrice.pending, (state) => {
       state.priceMinStatus = FetchStatus.Pending;
@@ -91,6 +96,8 @@ export const filterSlice = createSlice({
     });
   },
 });
+
+export const { setPrice } = filterSlice.actions;
 
 const selectFilterState = (state: State) => state[NameSpace.Filter];
 

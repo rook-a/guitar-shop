@@ -129,6 +129,12 @@ export const guitarsSlice = createSlice({
     changeOrderType: (state, action) => {
       state.orderType = action.payload;
     },
+    setSortType: (state, action) => {
+      state.sortType = action.payload;
+    },
+    setorderType: (state, action) => {
+      state.orderType = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -168,7 +174,8 @@ export const guitarsSlice = createSlice({
   },
 });
 
-export const { getTotalProductCount, changeSortType, changeOrderType } = guitarsSlice.actions;
+export const { getTotalProductCount, changeSortType, changeOrderType, setSortType, setorderType } =
+  guitarsSlice.actions;
 
 const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
