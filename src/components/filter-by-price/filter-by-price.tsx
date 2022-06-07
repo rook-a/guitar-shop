@@ -1,81 +1,23 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import qs from 'query-string';
+import { ChangeEvent, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { selectPriceMin, selectPriceMax, setPrice } from '../../store/filter-slice/filter-slice';
-import {
-  fetchGuitarsAction,
-  selectOrderType,
-  selectSortType,
-  setSortType,
-  setorderType,
-} from '../../store/guitars-slice/guitars-slice';
+import { fetchGuitarsAction, selectOrderType, selectSortType } from '../../store/guitars-slice/guitars-slice';
 
 import { priceWithSpace } from '../../utils/utils';
 
 function FilterByPrice(): JSX.Element {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const isMounted = useRef<boolean>(false);
 
   const sortType = useAppSelector(selectSortType);
   const orderType = useAppSelector(selectOrderType);
   const guitarMinPrice = useAppSelector(selectPriceMin);
   const guitarMaxPrice = useAppSelector(selectPriceMax);
-  const placeholderPriceMin = priceWithSpace(guitarMinPrice);
-  const placeholderPriceMax = priceWithSpace(guitarMaxPrice);
+  const placeholderPriceMin = priceWithSpace(Number(guitarMinPrice));
+  const placeholderPriceMax = priceWithSpace(Number(guitarMaxPrice));
 
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
-
-  useEffect(() => {
-    if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1));
-      const { _sort, _order, price_gte, price_lte } = params;
-
-      dispatch(setSortType(_sort));
-      dispatch(setorderType(_order));
-
-      if (price_gte || price_lte) {
-        dispatch(
-          setPrice({
-            priceMin: price_gte || '',
-            priceMax: price_lte || '',
-          }),
-        );
-        setMinPrice(`${price_gte || ''}`);
-        setMaxPrice(`${price_lte || ''}`);
-      }
-
-      dispatch(
-        fetchGuitarsAction({
-          sortType: `${_sort}`,
-          orderType: `${_order}`,
-          min: `${price_gte}`,
-          max: `${price_lte}`,
-        }),
-      );
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (isMounted.current) {
-      const query = qs.stringify(
-        {
-          _sort: sortType,
-          _order: orderType,
-          price_gte: minPrice,
-          price_lte: maxPrice,
-        },
-        { skipNull: true, skipEmptyString: true },
-      );
-
-      navigate(`?${query}`);
-    }
-
-    isMounted.current = true;
-  }, [maxPrice, minPrice, navigate, orderType, sortType]);
 
   const handlePriceMinChange = (evt: ChangeEvent<HTMLInputElement>) => {
     let price = evt.target.value;
@@ -85,12 +27,12 @@ function FilterByPrice(): JSX.Element {
       return;
     }
 
-    if (Number(price) < guitarMinPrice) {
+    if (Number(price) < Number(guitarMinPrice)) {
       price = `${guitarMinPrice}`;
       setMinPrice(price);
     }
 
-    if (Number(price) > guitarMaxPrice) {
+    if (Number(price) > Number(guitarMaxPrice)) {
       price = `${guitarMaxPrice}`;
       setMinPrice(price);
     }
@@ -100,7 +42,7 @@ function FilterByPrice(): JSX.Element {
       dispatch(
         setPrice({
           priceMin: price,
-          priceMax: `${guitarMaxPrice}`,
+          priceMax: guitarMaxPrice,
         }),
       );
     }
@@ -108,14 +50,14 @@ function FilterByPrice(): JSX.Element {
 
   const handlePriceMaxChange = (evt: ChangeEvent<HTMLInputElement>) => {
     let price = evt.target.value;
-    const currentMinPrice = Number(minPrice) > guitarMinPrice ? minPrice : `${guitarMinPrice}`;
+    const currentMinPrice = Number(minPrice) > Number(guitarMinPrice) ? minPrice : `${guitarMinPrice}`;
 
     if (!price) {
       setMaxPrice('');
       return;
     }
 
-    if (Number(price) > guitarMaxPrice) {
+    if (Number(price) > Number(guitarMaxPrice)) {
       price = `${guitarMaxPrice}`;
       setMaxPrice(price);
     }

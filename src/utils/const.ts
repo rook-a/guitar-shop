@@ -92,3 +92,43 @@ export const enum OrderType {
   Asc = 'asc',
   Desc = 'desc',
 }
+
+export const GuitarsTypeMap = [
+  {
+    label: 'Акустические гитары',
+    type: GuitarTypeFromTheServer.Acoustic,
+  },
+  {
+    label: 'Электрогитары',
+    type: GuitarTypeFromTheServer.Electric,
+  },
+  {
+    label: 'Укулеле',
+    type: GuitarTypeFromTheServer.Ukulele,
+  },
+] as const;
+
+export const GuitarStringCountsMap = {
+  acoustic: ['6', '7', '12'],
+  electric: ['4', '6', '7'],
+  ukulele: ['4'],
+} as const;
+
+export const GuitarsStringMap = [
+  {
+    id: '4-strings',
+    stringCount: 4,
+  },
+  {
+    id: '6-strings',
+    stringCount: 6,
+  },
+  {
+    id: '7-strings',
+    stringCount: 7,
+  },
+  {
+    id: '12-strings',
+    stringCount: 12,
+  },
+] as const;

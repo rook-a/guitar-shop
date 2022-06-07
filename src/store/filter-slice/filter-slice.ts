@@ -7,19 +7,25 @@ import { AppDispatch, State } from '../../types/state';
 import { APIRoute, FetchStatus, INDEX_FIRST_GUITAR, NameSpace } from '../../utils/const';
 
 interface InitialState {
-  priceMax: number;
+  priceMax: string;
   priceMaxStatus: FetchStatus;
 
-  priceMin: number;
+  priceMin: string;
   priceMinStatus: FetchStatus;
+
+  guitarsType: string[];
+  guitarsStringCounts: string[];
 }
 
 const initialState: InitialState = {
-  priceMax: 0,
+  priceMax: '',
   priceMaxStatus: FetchStatus.Idle,
 
-  priceMin: 0,
+  priceMin: '',
   priceMinStatus: FetchStatus.Idle,
+
+  guitarsType: [],
+  guitarsStringCounts: [],
 };
 
 export const fetchMinPrice = createAsyncThunk<
@@ -68,9 +74,25 @@ export const filterSlice = createSlice({
   name: NameSpace.Filter,
   initialState,
   reducers: {
-    setPrice: (state, action) => {
+    setPrice: (state, action: PayloadAction<{ priceMin: string; priceMax: string }>) => {
       state.priceMin = action.payload.priceMin;
       state.priceMax = action.payload.priceMax;
+    },
+    setGuitarsType: (state, action: PayloadAction<string[]>) => {
+      state.guitarsType = action.payload;
+    },
+    setGuitarsStringCounts: (state, action: PayloadAction<string[]>) => {
+      state.guitarsStringCounts = action.payload;
+    },
+    resetFilter: (state) => {
+      state.priceMax = initialState.priceMax;
+      state.priceMaxStatus = initialState.priceMaxStatus;
+
+      state.priceMin = initialState.priceMin;
+      state.priceMinStatus = initialState.priceMinStatus;
+
+      state.guitarsType = initialState.guitarsType;
+      state.guitarsStringCounts = initialState.guitarsStringCounts;
     },
   },
   extraReducers: (builder) => {
@@ -79,7 +101,7 @@ export const filterSlice = createSlice({
     });
     builder.addCase(fetchMinPrice.fulfilled, (state, action: PayloadAction<Guitar[]>) => {
       state.priceMinStatus = FetchStatus.Fulfilled;
-      state.priceMin = action.payload[INDEX_FIRST_GUITAR].price;
+      state.priceMin = `${action.payload[INDEX_FIRST_GUITAR].price}`;
     });
     builder.addCase(fetchMinPrice.rejected, (state) => {
       state.priceMinStatus = FetchStatus.Rejected;
@@ -89,7 +111,7 @@ export const filterSlice = createSlice({
     });
     builder.addCase(fetchMaxPrice.fulfilled, (state, action: PayloadAction<Guitar[]>) => {
       state.priceMaxStatus = FetchStatus.Fulfilled;
-      state.priceMax = action.payload[INDEX_FIRST_GUITAR].price;
+      state.priceMax = `${action.payload[INDEX_FIRST_GUITAR].price}`;
     });
     builder.addCase(fetchMaxPrice.rejected, (state) => {
       state.priceMaxStatus = FetchStatus.Rejected;
@@ -97,9 +119,11 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setPrice } = filterSlice.actions;
+export const { setPrice, setGuitarsType, setGuitarsStringCounts, resetFilter } = filterSlice.actions;
 
 const selectFilterState = (state: State) => state[NameSpace.Filter];
 
 export const selectPriceMin = (state: State) => selectFilterState(state).priceMin;
 export const selectPriceMax = (state: State) => selectFilterState(state).priceMax;
+export const selectGuitarsType = (state: State) => selectFilterState(state).guitarsType;
+export const selectguitarsStringCounts = (state: State) => selectFilterState(state).guitarsStringCounts;

@@ -5,5 +5,5 @@ export interface Query {
   min?: string;
   max?: string;
   guitarType?: string[];
-  stringCount?: number[];
+  stringCount?: string[];
 }

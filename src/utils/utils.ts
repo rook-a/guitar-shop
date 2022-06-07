@@ -59,7 +59,7 @@ const createQueryByFilter = (
   min: string | undefined,
   max: string | undefined,
   guitarType: string[] | undefined,
-  stringCount: number[] | undefined,
+  stringCount: string[] | undefined,
 ) => {
   return qs.stringify(
     {

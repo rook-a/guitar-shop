@@ -1,4 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import qs from 'query-string';
 
 import FilterForm from '../filter-form/filter-form';
 import Sorting from '../sorting/sorting';
@@ -13,21 +15,84 @@ import {
   selectOrderType,
   selectSortType,
 } from '../../store/guitars-slice/guitars-slice';
-import { fetchMinPrice } from '../../store/filter-slice/filter-slice';
-
-import { START_PAGE_NUMBER } from '../../utils/const';
+import {
+  fetchMinPrice,
+  selectguitarsStringCounts,
+  selectGuitarsType,
+  selectPriceMax,
+  selectPriceMin,
+} from '../../store/filter-slice/filter-slice';
 
 function CatalogList(): JSX.Element {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const isMounted = useRef<boolean>(false);
+
   const guitars = useAppSelector(selectGuitars);
   const sortType = useAppSelector(selectSortType);
   const orderType = useAppSelector(selectOrderType);
+  const guitarMinPrice = useAppSelector(selectPriceMin);
+  const guitarMaxPrice = useAppSelector(selectPriceMax);
+  const guitarsType = useAppSelector(selectGuitarsType);
+  const guitarsStringCounts = useAppSelector(selectguitarsStringCounts);
+
   const isEmpty = guitars.length === 0;
 
   useEffect(() => {
-    dispatch(fetchGuitarsAction({ activePageNumber: START_PAGE_NUMBER, sortType, orderType }));
+    let filter = {};
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+      const { _sort, _order, price_gte, price_lte, type, stringCount } = params;
+
+      if (_sort !== '' && _sort !== null) {
+        filter = { ...filter, sortType: _sort };
+      }
+
+      if (_order !== '' && _order !== null) {
+        filter = { ...filter, orderType: _order };
+      }
+
+      if (price_gte !== '' && price_gte !== null) {
+        filter = { ...filter, priceMin: price_gte };
+      }
+
+      if (price_lte !== '' && price_lte !== null) {
+        filter = { ...filter, priceMax: price_lte };
+      }
+
+      if (type?.length !== 0 && type !== null) {
+        filter = { ...filter, guitarsType: type };
+      }
+
+      if (stringCount?.length !== 0 && stringCount !== null) {
+        filter = { ...filter, guitarsStringCounts: stringCount };
+      }
+    }
+
+    dispatch(fetchGuitarsAction({ activePageNumber: Number(id), ...filter }));
     dispatch(fetchMinPrice());
-  }, [dispatch, orderType, sortType]);
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    if (isMounted.current) {
+      const query = qs.stringify(
+        {
+          _sort: sortType,
+          _order: orderType,
+          price_gte: guitarMinPrice,
+          price_lte: guitarMaxPrice,
+          type: guitarsType,
+          stringCount: guitarsStringCounts,
+        },
+        { skipNull: true, skipEmptyString: true },
+      );
+
+      navigate(`?${query}`);
+    }
+
+    isMounted.current = true;
+  }, [guitarMaxPrice, guitarMinPrice, guitarsStringCounts, guitarsType, navigate, orderType, sortType]);
 
   return (
     <div className="catalog">
