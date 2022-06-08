@@ -3,7 +3,16 @@ import thunk, { ThunkDispatch } from 'redux-thunk';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 
-import { fetchGuitarAction, fetchGuitarsAction, guitarsSlice } from './guitars-slice';
+import {
+  guitarsSlice,
+  fetchGuitarAction,
+  fetchGuitarsAction,
+  fetchGuitarsSearch,
+  setTotalProductCount,
+  changeSortType,
+  changeOrderType,
+  resetSort,
+} from './guitars-slice';
 import { createAPI } from '../../services/api';
 
 import { APIRoute, FetchStatus, OrderType, SortType } from '../../utils/const';
@@ -38,6 +47,35 @@ const state = {
 describe('Guitars slice', () => {
   it('without additional parameters should return initial state', () => {
     expect(guitarsSlice.reducer(void 0, { type: 'UNKNOWN_ACTION' })).toEqual(state);
+  });
+
+  it('should return total product count', () => {
+    expect(guitarsSlice.reducer(state, setTotalProductCount(1))).toEqual({
+      ...state,
+      totalProductCount: 1,
+    });
+  });
+
+  it('should change sort type', () => {
+    expect(guitarsSlice.reducer(state, changeSortType(SortType.Rating))).toEqual({
+      ...state,
+      sortType: SortType.Rating,
+    });
+  });
+
+  it('should change order type', () => {
+    expect(guitarsSlice.reducer(state, changeOrderType(OrderType.Desc))).toEqual({
+      ...state,
+      orderType: OrderType.Desc,
+    });
+  });
+
+  it('should reset sort and order types', () => {
+    expect(guitarsSlice.reducer(state, resetSort())).toEqual({
+      ...state,
+      sortType: SortType.Price,
+      orderType: OrderType.Asc,
+    });
   });
 
   describe('guitars async action', () => {
@@ -77,6 +115,22 @@ describe('Guitars slice', () => {
       expect(actions).toContain(fetchGuitarAction.pending.type);
       expect(actions).toContain(fetchGuitarAction.fulfilled.type);
       expect(actions).not.toContain(fetchGuitarAction.rejected.type);
+    });
+
+    it('should dispatch fetchGuitarsSearch when GET /guitars?name_like=value', async () => {
+      const fakeSearchValue = 'some value';
+
+      mockAPI.onGet(`${APIRoute.Guitars}?name_like=${fakeSearchValue}`).reply(200, mockGuitar);
+
+      const store = mockStore();
+
+      await store.dispatch(fetchGuitarsSearch(fakeSearchValue));
+
+      const actions = store.getActions().map(({ type }) => type);
+
+      expect(actions).toContain(fetchGuitarsSearch.pending.type);
+      expect(actions).toContain(fetchGuitarsSearch.fulfilled.type);
+      expect(actions).not.toContain(fetchGuitarsSearch.rejected.type);
     });
   });
 
@@ -156,6 +210,44 @@ describe('Guitars slice', () => {
         ...state,
         guitarStatus: FetchStatus.Rejected,
         guitarError: true,
+      });
+    });
+  });
+
+  describe('fetch search', () => {
+    it('should be update fetch search state to pending', () => {
+      const action = {
+        type: fetchGuitarsSearch.pending.type,
+      };
+
+      expect(guitarsSlice.reducer(state, action)).toEqual({
+        ...state,
+        guitarsSearchStatus: FetchStatus.Pending,
+      });
+    });
+
+    it('should be update fetch search state to fulfilled', () => {
+      const action = {
+        type: fetchGuitarsSearch.fulfilled.type,
+        payload: ['value'],
+      };
+
+      expect(guitarsSlice.reducer(state, action)).toEqual({
+        ...state,
+        guitarsSearchStatus: FetchStatus.Fulfilled,
+        guitarsSearch: ['value'],
+      });
+    });
+
+    it('should be update fetch search state to rejected', () => {
+      const action = {
+        type: fetchGuitarsSearch.rejected.type,
+      };
+
+      expect(guitarsSlice.reducer(state, action)).toEqual({
+        ...state,
+        guitarsSearchStatus: FetchStatus.Rejected,
+        guitarsSearchError: true,
       });
     });
   });

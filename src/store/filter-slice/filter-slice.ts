@@ -36,7 +36,7 @@ export const fetchMinPrice = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->('filter/fetchMaxPrice', async (_args, { dispatch, extra: api }) => {
+>('filter/fetchMinPrice', async (_args, { dispatch, extra: api }) => {
   try {
     const { data, headers } = await api.get<Guitar[]>(
       `${APIRoute.Guitars}?_sort=price&_start=${INDEX_FIRST_GUITAR}&_end=${INDEX_FIRST_GUITAR + 1}`,
@@ -59,7 +59,7 @@ export const fetchMaxPrice = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->('filter/fetchMinPrice', async (total: number, { dispatch, extra: api }) => {
+>('filter/fetchMaxPrice', async (total: number, { dispatch, extra: api }) => {
   try {
     const { data } = await api.get<Guitar[]>(`${APIRoute.Guitars}?_sort=price&_start=${total - 1}&_end=${total}`);
 
@@ -96,26 +96,27 @@ export const filterSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchMinPrice.pending, (state) => {
-      state.priceMinStatus = FetchStatus.Pending;
-    });
-    builder.addCase(fetchMinPrice.fulfilled, (state, action: PayloadAction<Guitar[]>) => {
-      state.priceMinStatus = FetchStatus.Fulfilled;
-      state.priceMin = `${action.payload[INDEX_FIRST_GUITAR].price}`;
-    });
-    builder.addCase(fetchMinPrice.rejected, (state) => {
-      state.priceMinStatus = FetchStatus.Rejected;
-    });
-    builder.addCase(fetchMaxPrice.pending, (state) => {
-      state.priceMaxStatus = FetchStatus.Pending;
-    });
-    builder.addCase(fetchMaxPrice.fulfilled, (state, action: PayloadAction<Guitar[]>) => {
-      state.priceMaxStatus = FetchStatus.Fulfilled;
-      state.priceMax = `${action.payload[INDEX_FIRST_GUITAR].price}`;
-    });
-    builder.addCase(fetchMaxPrice.rejected, (state) => {
-      state.priceMaxStatus = FetchStatus.Rejected;
-    });
+    builder
+      .addCase(fetchMinPrice.pending, (state) => {
+        state.priceMinStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchMinPrice.fulfilled, (state, action: PayloadAction<Guitar[]>) => {
+        state.priceMinStatus = FetchStatus.Fulfilled;
+        state.priceMin = `${action.payload[INDEX_FIRST_GUITAR].price}`;
+      })
+      .addCase(fetchMinPrice.rejected, (state) => {
+        state.priceMinStatus = FetchStatus.Rejected;
+      })
+      .addCase(fetchMaxPrice.pending, (state) => {
+        state.priceMaxStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchMaxPrice.fulfilled, (state, action: PayloadAction<Guitar[]>) => {
+        state.priceMaxStatus = FetchStatus.Fulfilled;
+        state.priceMax = `${action.payload[INDEX_FIRST_GUITAR].price}`;
+      })
+      .addCase(fetchMaxPrice.rejected, (state) => {
+        state.priceMaxStatus = FetchStatus.Rejected;
+      });
   },
 });
 

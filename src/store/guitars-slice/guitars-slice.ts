@@ -68,7 +68,7 @@ export const fetchGuitarsAction = createAsyncThunk<
     try {
       const { data, headers } = await api.get<Product[]>(`${APIRoute.Guitars}?${query}&_embed=comments`);
 
-      dispatch(getTotalProductCount(Number(headers['x-total-count'])));
+      dispatch(setTotalProductCount(Number(headers['x-total-count'])));
 
       return data;
     } catch (error) {
@@ -120,19 +120,13 @@ export const guitarsSlice = createSlice({
   name: NameSpace.Guitars,
   initialState,
   reducers: {
-    getTotalProductCount: (state, action) => {
+    setTotalProductCount: (state, action) => {
       state.totalProductCount = action.payload;
     },
     changeSortType: (state, action) => {
       state.sortType = action.payload;
     },
     changeOrderType: (state, action) => {
-      state.orderType = action.payload;
-    },
-    setSortType: (state, action) => {
-      state.sortType = action.payload;
-    },
-    setorderType: (state, action) => {
       state.orderType = action.payload;
     },
     resetSort: (state) => {
@@ -178,8 +172,7 @@ export const guitarsSlice = createSlice({
   },
 });
 
-export const { getTotalProductCount, changeSortType, changeOrderType, setSortType, setorderType, resetSort } =
-  guitarsSlice.actions;
+export const { setTotalProductCount, changeSortType, changeOrderType, resetSort } = guitarsSlice.actions;
 
 const selectGuitarsState = (state: State) => state[NameSpace.Guitars];
 
