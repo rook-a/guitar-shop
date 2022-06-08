@@ -20,8 +20,8 @@ const store = mockStore({
     guitars: [mockProduct],
   },
   Filter: {
-    priceMax: 0,
-    priceMin: 1,
+    guitarsType: [],
+    guitarsStringCounts: [],
   },
 });
 

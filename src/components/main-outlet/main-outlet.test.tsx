@@ -15,6 +15,13 @@ const store = mockStore({
   Comments: {},
   Guitars: {
     guitars: [mockProduct],
+    guitarsSearch: [],
+    sortType: 'price',
+    orderType: 'asc',
+  },
+  Filter: {
+    guitarsType: [],
+    guitarsStringCounts: [],
   },
 });
 

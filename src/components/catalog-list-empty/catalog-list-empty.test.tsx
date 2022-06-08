@@ -1,12 +1,10 @@
-import { render, waitFor, cleanup } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 
 import CatalogListEmpty from './catalog-list-empty';
 
 const fakeComponent = <CatalogListEmpty />;
 
 describe('component: CatalogListEmpty', () => {
-  afterEach(cleanup);
-
   it('should render correctly', async () => {
     const { getByText } = render(fakeComponent);
 

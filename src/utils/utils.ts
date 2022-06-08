@@ -32,7 +32,7 @@ export const formatDate = (date: string) => {
 
 export const priceWithSpace = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
-const createQueryByPage = (activePageNumber?: number) => {
+export const createQueryByPage = (activePageNumber?: number) => {
   const endLimit = activePageNumber ? activePageNumber * MAX_NUMBER_OF_CARDS : MAX_NUMBER_OF_CARDS;
   const startLimit = endLimit - MAX_NUMBER_OF_CARDS;
 
@@ -45,7 +45,7 @@ const createQueryByPage = (activePageNumber?: number) => {
   );
 };
 
-const createQueryBySort = (sortType: string | undefined, orderType: string | undefined) => {
+export const createQueryBySort = (sortType: string | undefined, orderType: string | undefined) => {
   return qs.stringify(
     {
       _sort: sortType,
@@ -55,7 +55,7 @@ const createQueryBySort = (sortType: string | undefined, orderType: string | und
   );
 };
 
-const createQueryByFilter = (
+export const createQueryByFilter = (
   min: string | undefined,
   max: string | undefined,
   guitarType: string[] | undefined,

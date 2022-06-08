@@ -42,11 +42,19 @@ describe('Guitars slice', () => {
 
   describe('guitars async action', () => {
     it('should dispatch fetchGuitarsAction when GET /guitars with query parameters', async () => {
-      mockAPI.onGet(`${APIRoute.Guitars}?_sort=${SortType.Price}&_embed=comments`).reply(200, mockProducts);
+      const fakeParams = {
+        activePageNumber: 1,
+        sortType: SortType.Price,
+        orderType: OrderType.Desc,
+      };
+
+      mockAPI
+        .onGet(`${APIRoute.Guitars}?_end=9&_start=0&_order=desc&_sort=price&_embed=comments`)
+        .reply(200, mockProducts, { 'X-Total-Count': 5 });
 
       const store = mockStore();
 
-      await store.dispatch(fetchGuitarsAction({ sortType: SortType.Price }));
+      await store.dispatch(fetchGuitarsAction(fakeParams));
 
       const actions = store.getActions().map(({ type }) => type);
 

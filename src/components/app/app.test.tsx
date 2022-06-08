@@ -22,10 +22,13 @@ const store = mockStore({
   Guitars: {
     guitars: [mockProduct],
     guitar: mockGuitar,
+    guitarsSearch: [],
+    sortType: 'price',
+    orderType: 'asc',
   },
   Filter: {
-    priceMax: 0,
-    priceMin: 1,
+    guitarsType: [],
+    guitarsStringCounts: [],
   },
 });
 
@@ -40,8 +43,8 @@ const fakeComponent = (
 describe('App routing', () => {
   afterEach(cleanup);
 
-  it('should render Catalog page when user navigate to "/catalog/page_1"', async () => {
-    history.push(`${AppRoute.Catalog}/page_1`);
+  it('should render Catalog page when user navigate to "/catalog/page_1?_order=asc&_sort=price"', async () => {
+    history.push(`${AppRoute.Catalog}/page_1?_order=asc&_sort=price`);
 
     const { getByText } = render(fakeComponent);
 
