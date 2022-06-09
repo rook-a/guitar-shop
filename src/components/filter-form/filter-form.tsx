@@ -9,7 +9,7 @@ import { resetSort } from '../../store/guitars-slice/guitars-slice';
 function FilterForm(): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const handleClick = () => {
+  const handleResetButtonClick = () => {
     dispatch(resetFilter());
     dispatch(resetSort());
   };
@@ -23,7 +23,7 @@ function FilterForm(): JSX.Element {
       <FilterByStrings />
 
       <button
-        onClick={handleClick}
+        onClick={handleResetButtonClick}
         className="catalog-filter__reset-btn button button--black-border button--medium"
         type="reset">
         Очистить

@@ -25,7 +25,7 @@ function FormSearch(): JSX.Element {
     setSearch(evt.target.value);
   };
 
-  const handleClick = (link: string): void => {
+  const handleSearchSelectedItemClick = (link: string): void => {
     if (inputSearch.current !== null) {
       inputSearch.current.value = '';
     }
@@ -66,11 +66,11 @@ function FormSearch(): JSX.Element {
                 tabIndex={0}
                 key={id}
                 onClick={() => {
-                  handleClick(link);
+                  handleSearchSelectedItemClick(link);
                 }}
                 onKeyDown={(evt) => {
                   if (evt.key === 'Enter') {
-                    handleClick(link);
+                    handleSearchSelectedItemClick(link);
                   }
                 }}>
                 {name}

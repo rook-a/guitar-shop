@@ -10,7 +10,7 @@ function ReviewsModalSuccess(): JSX.Element {
     buttonFocus.current?.focus();
   }, []);
 
-  const handleClick = () => {
+  const handleButtonClick = () => {
     dispatch(changeReviewSuccessModalActive(false));
     document.body.style.overflow = 'auto';
   };
@@ -23,13 +23,13 @@ function ReviewsModalSuccess(): JSX.Element {
       <p className="modal__message">Спасибо за ваш отзыв!</p>
       <div className="modal__button-container modal__button-container--review">
         <button
-          onClick={handleClick}
+          onClick={handleButtonClick}
           ref={buttonFocus}
           className="button button--small modal__button modal__button--review">
           К покупкам!
         </button>
       </div>
-      <button onClick={handleClick} className="modal__close-btn button-cross" type="button" aria-label="Закрыть">
+      <button onClick={handleButtonClick} className="modal__close-btn button-cross" type="button" aria-label="Закрыть">
         <span className="button-cross__icon" />
         <span className="modal__close-btn-interactive-area" />
       </button>

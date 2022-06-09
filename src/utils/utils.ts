@@ -30,7 +30,7 @@ export const formatDate = (date: string) => {
   return new Date(date).toLocaleString('ru', { month: 'long', day: 'numeric' });
 };
 
-export const priceWithSpace = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+export const getPriceWithSpace = (number: number) => number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 
 export const createQueryByPage = (activePageNumber?: number) => {
   const endLimit = activePageNumber ? activePageNumber * MAX_NUMBER_OF_CARDS : MAX_NUMBER_OF_CARDS;

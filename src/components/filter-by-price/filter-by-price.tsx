@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { selectPriceMin, selectPriceMax, setPrice } from '../../store/filter-slice/filter-slice';
 import { fetchGuitarsAction, selectOrderType, selectSortType } from '../../store/guitars-slice/guitars-slice';
 
-import { priceWithSpace } from '../../utils/utils';
+import { getPriceWithSpace } from '../../utils/utils';
 
 function FilterByPrice(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -13,8 +13,8 @@ function FilterByPrice(): JSX.Element {
   const orderType = useAppSelector(selectOrderType);
   const guitarMinPrice = useAppSelector(selectPriceMin);
   const guitarMaxPrice = useAppSelector(selectPriceMax);
-  const placeholderPriceMin = priceWithSpace(Number(guitarMinPrice));
-  const placeholderPriceMax = priceWithSpace(Number(guitarMaxPrice));
+  const placeholderPriceMin = getPriceWithSpace(Number(guitarMinPrice));
+  const placeholderPriceMax = getPriceWithSpace(Number(guitarMaxPrice));
 
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');

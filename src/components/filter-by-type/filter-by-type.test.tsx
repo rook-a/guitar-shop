@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import HistoryRouter from '../history-router/history-router';
 
-import FilterForm from './filter-form';
+import FilterByType from './filter-by-type';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -24,21 +24,17 @@ const store = mockStore({
 const fakeComponent = (
   <Provider store={store}>
     <HistoryRouter history={history}>
-      <FilterForm />
+      <FilterByType />
     </HistoryRouter>
   </Provider>
 );
 
-describe('component: FilterForm', () => {
+describe('component: FilterByType', () => {
   it('should render correctly', async () => {
-    const { getByText, getByRole } = render(fakeComponent);
+    const { getByText } = render(fakeComponent);
 
     await waitFor(() => {
-      expect(getByText(/Фильтр/i));
-      expect(getByText(/Цена, ₽/i));
       expect(getByText(/Тип гитар/i));
-      expect(getByText(/Количество струн/i));
-      expect(getByRole('button')).toHaveTextContent(/Очистить/i);
     });
   });
 });

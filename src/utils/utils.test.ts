@@ -2,7 +2,7 @@ import {
   checkIsFull,
   adaptTypeToClient,
   formatDate,
-  priceWithSpace,
+  getPriceWithSpace,
   createQueryByPage,
   createQueryBySort,
   createQueryByFilter,
@@ -41,9 +41,9 @@ describe('Utils functions', () => {
     });
   });
 
-  describe('check function priceWithSpace', () => {
+  describe('check function getPriceWithSpace', () => {
     it('function return correct price with space', () => {
-      expect(priceWithSpace(100000)).toBe('100 000');
+      expect(getPriceWithSpace(100000)).toBe('100 000');
     });
   });
 

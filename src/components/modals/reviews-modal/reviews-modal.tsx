@@ -78,7 +78,7 @@ function ReviewsModal(): JSX.Element | null {
   const isValid = Object.values(formState).some(({ error }) => error);
   const isFormDisabled = sendCommentStatus === FetchStatus.Pending;
 
-  const handleChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (evt: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value, name } = evt.target;
 
     const regExp = formState[name].regexp;
@@ -99,7 +99,7 @@ function ReviewsModal(): JSX.Element | null {
     document.body.style.overflow = 'auto';
   };
 
-  const handleSubmit = (evt: FormEvent<HTMLFormElement>) => {
+  const handleFormReviewSubmit = (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
 
     if (formState.rating.value === '0') {
@@ -122,14 +122,14 @@ function ReviewsModal(): JSX.Element | null {
     <div className="modal__content">
       <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
       <h3 className="modal__product-name title title--medium-20 title--uppercase">{name}</h3>
-      <form className="form-review" name="form-review" onSubmit={handleSubmit}>
+      <form className="form-review" name="form-review" onSubmit={handleFormReviewSubmit}>
         <div className={cn('form-review__wrapper', { [styles.input_mb]: !formState.name.error })}>
           <div className="form-review__name-wrapper">
             <label className="form-review__label form-review__label--required" htmlFor="user-name">
               Ваше Имя
             </label>
             <input
-              onChange={handleChange}
+              onChange={handleInputChange}
               ref={inputFocus}
               className="form-review__input form-review__input--name"
               id="user-name"
@@ -148,7 +148,7 @@ function ReviewsModal(): JSX.Element | null {
               {ratingLabelMapRevers.map(([value, title]) => (
                 <Fragment key={title}>
                   <input
-                    onChange={handleChange}
+                    onChange={handleInputChange}
                     className={`visually-hidden ${styles['rate__input']}`}
                     id={`star-${value}`}
                     name="rating"
@@ -171,7 +171,7 @@ function ReviewsModal(): JSX.Element | null {
           Достоинства
         </label>
         <input
-          onChange={handleChange}
+          onChange={handleInputChange}
           className={cn('form-review__input', [styles.input_mb], {
             [styles.input_mb_error]: formState.advantage.error,
           })}
@@ -189,7 +189,7 @@ function ReviewsModal(): JSX.Element | null {
           Недостатки
         </label>
         <input
-          onChange={handleChange}
+          onChange={handleInputChange}
           className={cn('form-review__input', {
             [styles.input_mb]: !formState.disadvantage.error,
           })}
@@ -211,7 +211,7 @@ function ReviewsModal(): JSX.Element | null {
           Комментарий
         </label>
         <textarea
-          onChange={handleChange}
+          onChange={handleInputChange}
           className={cn('form-review__input', 'form-review__input--textarea', {
             [styles.input_mb]: !formState.comment.error,
           })}
