@@ -3,7 +3,7 @@ import FilterByType from '../filter-by-type/filter-by-type';
 import FilterByStrings from '../filter-by-strings/filter-by-strings';
 
 import { useAppDispatch } from '../../hooks/hooks';
-import { resetFilter } from '../../store/filter-slice/filter-slice';
+import { fetchMinPrice, resetFilter } from '../../store/filter-slice/filter-slice';
 import { resetSort } from '../../store/guitars-slice/guitars-slice';
 
 function FilterForm(): JSX.Element {
@@ -12,6 +12,7 @@ function FilterForm(): JSX.Element {
   const handleResetButtonClick = () => {
     dispatch(resetFilter());
     dispatch(resetSort());
+    dispatch(fetchMinPrice());
   };
 
   return (

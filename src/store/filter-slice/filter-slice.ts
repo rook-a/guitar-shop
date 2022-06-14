@@ -85,10 +85,8 @@ export const filterSlice = createSlice({
       state.guitarsStringCounts = action.payload;
     },
     resetFilter: (state) => {
-      state.priceMax = initialState.priceMax;
       state.priceMaxStatus = initialState.priceMaxStatus;
 
-      state.priceMin = initialState.priceMin;
       state.priceMinStatus = initialState.priceMinStatus;
 
       state.guitarsType = initialState.guitarsType;
