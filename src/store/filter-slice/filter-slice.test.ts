@@ -11,6 +11,7 @@ import {
   setGuitarsType,
   setGuitarsStringCounts,
   resetFilter,
+  changeResetFilterStatus,
 } from './filter-slice';
 import { createAPI } from '../../services/api';
 
@@ -32,6 +33,8 @@ const state = {
 
   guitarsType: [],
   guitarsStringCounts: [],
+
+  resetFilterStatus: false,
 };
 
 describe('Filter slice', () => {
@@ -62,7 +65,17 @@ describe('Filter slice', () => {
   });
 
   it('should reset all filters', () => {
-    expect(filterSlice.reducer(state, resetFilter())).toEqual(state);
+    expect(filterSlice.reducer(state, resetFilter())).toEqual({
+      ...state,
+      resetFilterStatus: true,
+    });
+  });
+
+  it('should change resetFilterStatus', () => {
+    expect(filterSlice.reducer(state, changeResetFilterStatus(true))).toEqual({
+      ...state,
+      resetFilterStatus: true,
+    });
   });
 
   describe('filter async action', () => {

@@ -15,6 +15,8 @@ interface InitialState {
 
   guitarsType: string[];
   guitarsStringCounts: string[];
+
+  resetFilterStatus: boolean;
 }
 
 const initialState: InitialState = {
@@ -26,6 +28,8 @@ const initialState: InitialState = {
 
   guitarsType: [],
   guitarsStringCounts: [],
+
+  resetFilterStatus: false,
 };
 
 export const fetchMinPrice = createAsyncThunk<
@@ -43,6 +47,7 @@ export const fetchMinPrice = createAsyncThunk<
     );
 
     dispatch(fetchMaxPrice(Number(headers['x-total-count'])));
+    dispatch(changeResetFilterStatus(false));
 
     return data;
   } catch (error) {
@@ -86,11 +91,15 @@ export const filterSlice = createSlice({
     },
     resetFilter: (state) => {
       state.priceMaxStatus = initialState.priceMaxStatus;
-
       state.priceMinStatus = initialState.priceMinStatus;
 
       state.guitarsType = initialState.guitarsType;
       state.guitarsStringCounts = initialState.guitarsStringCounts;
+
+      state.resetFilterStatus = true;
+    },
+    changeResetFilterStatus: (state, action: PayloadAction<boolean>) => {
+      state.resetFilterStatus = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -118,7 +127,8 @@ export const filterSlice = createSlice({
   },
 });
 
-export const { setPrice, setGuitarsType, setGuitarsStringCounts, resetFilter } = filterSlice.actions;
+export const { setPrice, setGuitarsType, setGuitarsStringCounts, resetFilter, changeResetFilterStatus } =
+  filterSlice.actions;
 
 const selectFilterState = (state: State) => state[NameSpace.Filter];
 
@@ -126,3 +136,4 @@ export const selectPriceMin = (state: State) => selectFilterState(state).priceMi
 export const selectPriceMax = (state: State) => selectFilterState(state).priceMax;
 export const selectGuitarsType = (state: State) => selectFilterState(state).guitarsType;
 export const selectguitarsStringCounts = (state: State) => selectFilterState(state).guitarsStringCounts;
+export const selectResetFilterStatus = (state: State) => selectFilterState(state).resetFilterStatus;

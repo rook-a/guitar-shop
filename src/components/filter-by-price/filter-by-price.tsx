@@ -1,7 +1,12 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { selectPriceMin, selectPriceMax, setPrice } from '../../store/filter-slice/filter-slice';
+import {
+  selectPriceMin,
+  selectPriceMax,
+  setPrice,
+  selectResetFilterStatus,
+} from '../../store/filter-slice/filter-slice';
 import { fetchGuitarsAction, selectOrderType, selectSortType } from '../../store/guitars-slice/guitars-slice';
 
 import { getPriceWithSpace } from '../../utils/utils';
@@ -13,11 +18,19 @@ function FilterByPrice(): JSX.Element {
   const orderType = useAppSelector(selectOrderType);
   const guitarMinPrice = useAppSelector(selectPriceMin);
   const guitarMaxPrice = useAppSelector(selectPriceMax);
+  const resetFilterStatus = useAppSelector(selectResetFilterStatus);
   const placeholderPriceMin = getPriceWithSpace(Number(guitarMinPrice));
   const placeholderPriceMax = getPriceWithSpace(Number(guitarMaxPrice));
 
   const [minPrice, setMinPrice] = useState<string>('');
   const [maxPrice, setMaxPrice] = useState<string>('');
+
+  useEffect(() => {
+    if (resetFilterStatus) {
+      setMinPrice('');
+      setMaxPrice('');
+    }
+  }, [resetFilterStatus]);
 
   const handlePriceMinChange = (evt: ChangeEvent<HTMLInputElement>) => {
     let price = evt.target.value;
