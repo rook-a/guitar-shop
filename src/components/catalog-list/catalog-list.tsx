@@ -10,6 +10,8 @@ import Pagination from '../pagination/pagination';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import {
+  changeOrderType,
+  changeSortType,
   fetchGuitarsAction,
   selectGuitars,
   selectOrderType,
@@ -21,6 +23,9 @@ import {
   selectGuitarsType,
   selectPriceMax,
   selectPriceMin,
+  setGuitarsStringCounts,
+  setGuitarsType,
+  setPrice,
 } from '../../store/filter-slice/filter-slice';
 
 function CatalogList(): JSX.Element {
@@ -45,34 +50,59 @@ function CatalogList(): JSX.Element {
       const params = qs.parse(window.location.search.substring(1));
       const { _sort, _order, price_gte, price_lte, type, stringCount } = params;
 
-      if (_sort !== '' && _sort !== null) {
+      if (_sort !== '' && typeof _sort === 'string') {
         filter = { ...filter, sortType: _sort };
+        dispatch(changeSortType(_sort));
       }
 
-      if (_order !== '' && _order !== null) {
+      if (_order !== '' && typeof _order === 'string') {
         filter = { ...filter, orderType: _order };
+        dispatch(changeOrderType(_order));
       }
 
-      if (price_gte !== '' && price_gte !== null) {
+      if (price_gte !== '' && typeof price_gte === 'string') {
         filter = { ...filter, priceMin: price_gte };
+        dispatch(
+          setPrice({
+            priceMin: price_gte,
+            priceMax: guitarMaxPrice,
+          }),
+        );
       }
 
-      if (price_lte !== '' && price_lte !== null) {
+      if (price_lte !== '' && typeof price_lte === 'string') {
         filter = { ...filter, priceMax: price_lte };
+        dispatch(
+          setPrice({
+            priceMin: guitarMinPrice,
+            priceMax: price_lte,
+          }),
+        );
       }
 
-      if (type?.length !== 0 && type !== null) {
+      if (type?.length !== 0 && (Array.isArray(type) || typeof type === 'string')) {
         filter = { ...filter, guitarsType: type };
+        if (typeof type === 'string') {
+          dispatch(setGuitarsType([type]));
+        } else {
+          dispatch(setGuitarsType(type as string[]));
+        }
       }
 
-      if (stringCount?.length !== 0 && stringCount !== null) {
+      if (stringCount?.length !== 0 && (Array.isArray(stringCount) || typeof stringCount === 'string')) {
         filter = { ...filter, guitarsStringCounts: stringCount };
-      }
-    }
 
-    dispatch(fetchGuitarsAction({ activePageNumber: Number(number), ...filter }));
-    dispatch(fetchMinPrice());
-  }, [dispatch, number]);
+        if (typeof stringCount === 'string') {
+          dispatch(setGuitarsStringCounts([stringCount]));
+        } else {
+          dispatch(setGuitarsStringCounts(stringCount as string[]));
+        }
+      }
+
+      dispatch(fetchGuitarsAction({ activePageNumber: Number(number), ...filter }));
+      dispatch(fetchMinPrice());
+    }
+  }, [dispatch, guitarMaxPrice, guitarMinPrice, number]);
 
   useEffect(() => {
     if (isMounted.current) {
