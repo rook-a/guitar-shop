@@ -1,6 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+
 import {
   selectPriceMin,
   selectPriceMax,
@@ -8,10 +10,13 @@ import {
   selectResetFilterStatus,
 } from '../../store/filter-slice/filter-slice';
 import { fetchGuitarsAction, selectOrderType, selectSortType } from '../../store/guitars-slice/guitars-slice';
+import { redirectToRoute } from '../../store/middlewares/redirect-action';
 
+import { START_PAGE_NUMBER, AppRoute } from '../../utils/const';
 import { getPriceWithSpace } from '../../utils/utils';
 
 function FilterByPrice(): JSX.Element {
+  const { number } = useParams();
   const dispatch = useAppDispatch();
 
   const sortType = useAppSelector(selectSortType);
@@ -51,13 +56,25 @@ function FilterByPrice(): JSX.Element {
     }
 
     if (price) {
-      dispatch(fetchGuitarsAction({ sortType, orderType, min: price, max: `${guitarMaxPrice}` }));
+      dispatch(
+        fetchGuitarsAction({
+          activePageNumber: Number(number),
+          sortType,
+          orderType,
+          min: price,
+          max: `${guitarMaxPrice}`,
+        }),
+      );
       dispatch(
         setPrice({
           priceMin: price,
           priceMax: guitarMaxPrice,
         }),
       );
+    }
+
+    if (Number(number) !== undefined && Number(number) !== START_PAGE_NUMBER) {
+      dispatch(redirectToRoute(AppRoute.Root));
     }
   };
 
@@ -81,13 +98,25 @@ function FilterByPrice(): JSX.Element {
     }
 
     if (price) {
-      dispatch(fetchGuitarsAction({ sortType, orderType, max: price, min: currentMinPrice }));
+      dispatch(
+        fetchGuitarsAction({
+          activePageNumber: Number(number),
+          sortType,
+          orderType,
+          max: price,
+          min: currentMinPrice,
+        }),
+      );
       dispatch(
         setPrice({
           priceMin: currentMinPrice,
           priceMax: price,
         }),
       );
+    }
+
+    if (Number(number) !== undefined && Number(number) !== START_PAGE_NUMBER) {
+      dispatch(redirectToRoute(AppRoute.Root));
     }
   };
 

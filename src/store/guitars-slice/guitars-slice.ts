@@ -78,6 +78,34 @@ export const fetchGuitarsAction = createAsyncThunk<
   },
 );
 
+export const fetchRangeGuitars = createAsyncThunk<
+  Product[],
+  Query,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>('data/fetchRangeGuitars', async ({ activePageNumber }: Query, { dispatch, getState, extra: api }) => {
+  const sortType = getState().Guitars.sortType;
+  const orderType = getState().Guitars.orderType;
+  const min = getState().Filter.priceMin;
+  const max = getState().Filter.priceMax;
+  const guitarType = getState().Filter.guitarsType;
+  const stringCount = getState().Filter.guitarsStringCounts;
+
+  const query = createQuery({ activePageNumber, sortType, orderType, min, max, guitarType, stringCount });
+
+  try {
+    const { data } = await api.get<Product[]>(`${APIRoute.Guitars}?${query}&_embed=comments`);
+
+    return data;
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+});
+
 export const fetchGuitarAction = createAsyncThunk<
   Guitar,
   number,
@@ -144,6 +172,17 @@ export const guitarsSlice = createSlice({
         state.guitars = action.payload;
       })
       .addCase(fetchGuitarsAction.rejected, (state) => {
+        state.guitarsStatus = FetchStatus.Rejected;
+        state.guitarsError = true;
+      })
+      .addCase(fetchRangeGuitars.pending, (state) => {
+        state.guitarsStatus = FetchStatus.Pending;
+      })
+      .addCase(fetchRangeGuitars.fulfilled, (state, action) => {
+        state.guitarsStatus = FetchStatus.Fulfilled;
+        state.guitars = action.payload;
+      })
+      .addCase(fetchRangeGuitars.rejected, (state) => {
         state.guitarsStatus = FetchStatus.Rejected;
         state.guitarsError = true;
       })

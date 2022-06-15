@@ -1,6 +1,8 @@
+import { useParams } from 'react-router-dom';
 import cn from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+
 import {
   changeOrderType,
   changeSortType,
@@ -8,12 +10,24 @@ import {
   selectOrderType,
   selectSortType,
 } from '../../store/guitars-slice/guitars-slice';
+import {
+  selectPriceMin,
+  selectPriceMax,
+  selectGuitarsType,
+  selectguitarsStringCounts,
+} from '../../store/filter-slice/filter-slice';
+
 import { OrderType, SortTypeMap } from '../../utils/const';
 
 function Sorting(): JSX.Element {
+  const { number } = useParams();
   const dispatch = useAppDispatch();
   const sortType = useAppSelector(selectSortType);
   const currentOrderType = useAppSelector(selectOrderType);
+  const priceMin = useAppSelector(selectPriceMin);
+  const priceMax = useAppSelector(selectPriceMax);
+  const guitarsType = useAppSelector(selectGuitarsType);
+  const guitarsStringCounts = useAppSelector(selectguitarsStringCounts);
 
   return (
     <div className="catalog-sort">
@@ -22,7 +36,17 @@ function Sorting(): JSX.Element {
         {SortTypeMap.map(({ type, label }) => (
           <button
             onClick={() => {
-              dispatch(fetchGuitarsAction({ orderType: currentOrderType, sortType: type }));
+              dispatch(
+                fetchGuitarsAction({
+                  activePageNumber: Number(number),
+                  orderType: currentOrderType,
+                  sortType: type,
+                  min: priceMin,
+                  max: priceMax,
+                  guitarType: guitarsType,
+                  stringCount: guitarsStringCounts,
+                }),
+              );
               dispatch(changeSortType(type));
             }}
             className={cn('catalog-sort__type-button', {
@@ -37,7 +61,17 @@ function Sorting(): JSX.Element {
       <div className="catalog-sort__order">
         <button
           onClick={() => {
-            dispatch(fetchGuitarsAction({ sortType, orderType: OrderType.Asc }));
+            dispatch(
+              fetchGuitarsAction({
+                activePageNumber: Number(number),
+                sortType,
+                orderType: OrderType.Asc,
+                min: priceMin,
+                max: priceMax,
+                guitarType: guitarsType,
+                stringCount: guitarsStringCounts,
+              }),
+            );
             dispatch(changeOrderType(OrderType.Asc));
           }}
           className={cn('catalog-sort__order-button', 'catalog-sort__order-button--up', {
@@ -47,7 +81,17 @@ function Sorting(): JSX.Element {
         />
         <button
           onClick={() => {
-            dispatch(fetchGuitarsAction({ sortType, orderType: OrderType.Desc }));
+            dispatch(
+              fetchGuitarsAction({
+                activePageNumber: Number(number),
+                sortType,
+                orderType: OrderType.Desc,
+                min: priceMin,
+                max: priceMax,
+                guitarType: guitarsType,
+                stringCount: guitarsStringCounts,
+              }),
+            );
             dispatch(changeOrderType(OrderType.Desc));
           }}
           className={cn('catalog-sort__order-button', 'catalog-sort__order-button--down', {

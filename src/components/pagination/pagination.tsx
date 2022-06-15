@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import cn from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { fetchGuitarsAction, selectTotalProductCount } from '../../store/guitars-slice/guitars-slice';
+import { fetchRangeGuitars, selectTotalProductCount } from '../../store/guitars-slice/guitars-slice';
 import { AppRoute, MAX_NUMBER_OF_CARDS, START_PAGE_NUMBER } from '../../utils/const';
 
 function Pagination(): JSX.Element {
@@ -29,7 +29,7 @@ function Pagination(): JSX.Element {
               className="link pagination__page-link"
               to={prevPath}
               onClick={() => {
-                dispatch(fetchGuitarsAction({ activePageNumber: prevBtnValue }));
+                dispatch(fetchRangeGuitars({ activePageNumber: prevBtnValue }));
               }}>
               Назад
             </Link>
@@ -46,7 +46,7 @@ function Pagination(): JSX.Element {
               <Link
                 className="link pagination__page-link"
                 to={path}
-                onClick={() => dispatch(fetchGuitarsAction({ activePageNumber: linkNumber }))}>
+                onClick={() => dispatch(fetchRangeGuitars({ activePageNumber: linkNumber }))}>
                 {linkNumber}
               </Link>
             </li>
@@ -59,7 +59,7 @@ function Pagination(): JSX.Element {
               className="link pagination__page-link"
               to={nextPath}
               onClick={() => {
-                dispatch(fetchGuitarsAction({ activePageNumber: nextBtnValue }));
+                dispatch(fetchRangeGuitars({ activePageNumber: nextBtnValue }));
               }}>
               Далее
             </Link>

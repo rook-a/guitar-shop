@@ -24,7 +24,7 @@ import {
 } from '../../store/filter-slice/filter-slice';
 
 function CatalogList(): JSX.Element {
-  const { id } = useParams();
+  const { number } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isMounted = useRef<boolean>(false);
@@ -70,9 +70,9 @@ function CatalogList(): JSX.Element {
       }
     }
 
-    dispatch(fetchGuitarsAction({ activePageNumber: Number(id), ...filter }));
+    dispatch(fetchGuitarsAction({ activePageNumber: Number(number), ...filter }));
     dispatch(fetchMinPrice());
-  }, [dispatch, id]);
+  }, [dispatch, number]);
 
   useEffect(() => {
     if (isMounted.current) {

@@ -1,13 +1,16 @@
 import { ChangeEvent } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 import { selectGuitarsType, setGuitarsStringCounts, setGuitarsType } from '../../store/filter-slice/filter-slice';
 import { fetchGuitarsAction } from '../../store/guitars-slice/guitars-slice';
+import { redirectToRoute } from '../../store/middlewares/redirect-action';
 
-import { GuitarStringCountsMap, GuitarsTypeMap } from '../../utils/const';
+import { AppRoute, GuitarStringCountsMap, GuitarsTypeMap, START_PAGE_NUMBER } from '../../utils/const';
 
 function FilterByType(): JSX.Element {
+  const { number } = useParams();
   const dispatch = useAppDispatch();
   const guitarsType = useAppSelector(selectGuitarsType);
 
@@ -21,10 +24,15 @@ function FilterByType(): JSX.Element {
     dispatch(setGuitarsStringCounts(stringCount));
     dispatch(
       fetchGuitarsAction({
+        activePageNumber: Number(number),
         guitarType: type,
         stringCount,
       }),
     );
+
+    if (Number(number) !== undefined && Number(number) !== START_PAGE_NUMBER) {
+      dispatch(redirectToRoute(AppRoute.Root));
+    }
   };
 
   return (
