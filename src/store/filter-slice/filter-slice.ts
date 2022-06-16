@@ -1,10 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AxiosInstance } from 'axios';
+
 import { handleError } from '../../services/handle-error';
+
+import { APIRoute, FetchStatus, INDEX_FIRST_GUITAR, NameSpace } from '../../utils/const';
 
 import { Guitar } from '../../types/guitar';
 import { AppDispatch, State } from '../../types/state';
-import { APIRoute, FetchStatus, INDEX_FIRST_GUITAR, NameSpace } from '../../utils/const';
+import { createQueryByFilter } from '../../utils/utils';
 
 interface InitialState {
   priceMax: string;
@@ -40,10 +43,17 @@ export const fetchMinPrice = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->('filter/fetchMinPrice', async (_args, { dispatch, extra: api }) => {
+>('filter/fetchMinPrice', async (_args, { dispatch, getState, extra: api }) => {
+  const guitarType = getState().Filter.guitarsType;
+  const stringCount = getState().Filter.guitarsStringCounts;
+  const min = '';
+  const max = '';
+
+  const query = createQueryByFilter(min, max, guitarType, stringCount);
+
   try {
     const { data, headers } = await api.get<Guitar[]>(
-      `${APIRoute.Guitars}?_sort=price&_start=${INDEX_FIRST_GUITAR}&_end=${INDEX_FIRST_GUITAR + 1}`,
+      `${APIRoute.Guitars}?_sort=price&_start=${INDEX_FIRST_GUITAR}&_end=${INDEX_FIRST_GUITAR + 1}&${query}`,
     );
 
     dispatch(fetchMaxPrice(Number(headers['x-total-count'])));
@@ -64,9 +74,18 @@ export const fetchMaxPrice = createAsyncThunk<
     state: State;
     extra: AxiosInstance;
   }
->('filter/fetchMaxPrice', async (total: number, { dispatch, extra: api }) => {
+>('filter/fetchMaxPrice', async (total: number, { dispatch, getState, extra: api }) => {
+  const guitarType = getState().Filter.guitarsType;
+  const stringCount = getState().Filter.guitarsStringCounts;
+  const min = '';
+  const max = '';
+
+  const query = createQueryByFilter(min, max, guitarType, stringCount);
+
   try {
-    const { data } = await api.get<Guitar[]>(`${APIRoute.Guitars}?_sort=price&_start=${total - 1}&_end=${total}`);
+    const { data } = await api.get<Guitar[]>(
+      `${APIRoute.Guitars}?_sort=price&_start=${total - 1}&_end=${total}&${query}`,
+    );
 
     return data;
   } catch (error) {

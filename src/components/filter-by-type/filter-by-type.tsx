@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 import {
+  fetchMinPrice,
   selectGuitarsType,
   selectPriceMax,
   selectPriceMin,
@@ -58,6 +59,7 @@ function FilterByType(): JSX.Element {
         max: priceMax,
       }),
     );
+    dispatch(fetchMinPrice());
 
     if (Number(number) !== undefined && Number(number) !== START_PAGE_NUMBER) {
       dispatch(redirectToRoute(AppRoute.Root));

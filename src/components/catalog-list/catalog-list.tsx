@@ -61,7 +61,7 @@ function CatalogList(): JSX.Element {
       }
 
       if (price_gte !== '' && price_lte !== '' && typeof price_gte === 'string' && typeof price_lte === 'string') {
-        filter = { ...filter, priceMin: price_gte };
+        filter = { ...filter, min: price_gte, max: price_lte };
 
         dispatch(
           setPrice({
@@ -81,7 +81,7 @@ function CatalogList(): JSX.Element {
       }
 
       if (stringCount?.length !== 0 && (Array.isArray(stringCount) || typeof stringCount === 'string')) {
-        filter = { ...filter, guitarsStringCounts: stringCount };
+        filter = { ...filter, stringCount };
 
         if (typeof stringCount === 'string') {
           dispatch(setGuitarsStringCounts([stringCount]));

@@ -10,6 +10,7 @@ import {
   selectResetFilterStatus,
   selectguitarsStringCounts,
   selectGuitarsType,
+  fetchMinPrice,
 } from '../../store/filter-slice/filter-slice';
 import { fetchGuitarsAction, selectOrderType, selectSortType } from '../../store/guitars-slice/guitars-slice';
 import { redirectToRoute } from '../../store/middlewares/redirect-action';
@@ -63,7 +64,6 @@ function FilterByPrice(): JSX.Element {
     if (price) {
       dispatch(
         fetchGuitarsAction({
-          activePageNumber: Number(number),
           sortType,
           orderType,
           min: price,
@@ -78,6 +78,7 @@ function FilterByPrice(): JSX.Element {
           priceMax: guitarMaxPrice,
         }),
       );
+      dispatch(fetchMinPrice());
     }
 
     if (Number(number) !== undefined && Number(number) !== START_PAGE_NUMBER) {
@@ -107,7 +108,6 @@ function FilterByPrice(): JSX.Element {
     if (price) {
       dispatch(
         fetchGuitarsAction({
-          activePageNumber: Number(number),
           sortType,
           orderType,
           max: price,
@@ -122,6 +122,7 @@ function FilterByPrice(): JSX.Element {
           priceMax: price,
         }),
       );
+      dispatch(fetchMinPrice());
     }
 
     if (Number(number) !== undefined && Number(number) !== START_PAGE_NUMBER) {
