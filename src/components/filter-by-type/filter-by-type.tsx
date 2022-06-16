@@ -3,8 +3,14 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
-import { selectGuitarsType, setGuitarsStringCounts, setGuitarsType } from '../../store/filter-slice/filter-slice';
-import { fetchGuitarsAction } from '../../store/guitars-slice/guitars-slice';
+import {
+  selectGuitarsType,
+  selectPriceMax,
+  selectPriceMin,
+  setGuitarsStringCounts,
+  setGuitarsType,
+} from '../../store/filter-slice/filter-slice';
+import { fetchGuitarsAction, selectOrderType, selectSortType } from '../../store/guitars-slice/guitars-slice';
 import { redirectToRoute } from '../../store/middlewares/redirect-action';
 
 import { AppRoute, GuitarStringCountsMap, GuitarsTypeMap, START_PAGE_NUMBER } from '../../utils/const';
@@ -12,6 +18,11 @@ import { AppRoute, GuitarStringCountsMap, GuitarsTypeMap, START_PAGE_NUMBER } fr
 function FilterByType(): JSX.Element {
   const { number } = useParams();
   const dispatch = useAppDispatch();
+  const sortType = useAppSelector(selectSortType);
+  const orderType = useAppSelector(selectOrderType);
+  const priceMin = useAppSelector(selectPriceMin);
+  const priceMax = useAppSelector(selectPriceMax);
+
   const guitarsType = useAppSelector(selectGuitarsType);
 
   const handleTypeChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +38,10 @@ function FilterByType(): JSX.Element {
         activePageNumber: Number(number),
         guitarType: type,
         stringCount,
+        sortType,
+        orderType,
+        min: priceMin,
+        max: priceMax,
       }),
     );
 

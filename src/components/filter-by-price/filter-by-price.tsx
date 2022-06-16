@@ -8,6 +8,8 @@ import {
   selectPriceMax,
   setPrice,
   selectResetFilterStatus,
+  selectguitarsStringCounts,
+  selectGuitarsType,
 } from '../../store/filter-slice/filter-slice';
 import { fetchGuitarsAction, selectOrderType, selectSortType } from '../../store/guitars-slice/guitars-slice';
 import { redirectToRoute } from '../../store/middlewares/redirect-action';
@@ -24,6 +26,9 @@ function FilterByPrice(): JSX.Element {
   const guitarMinPrice = useAppSelector(selectPriceMin);
   const guitarMaxPrice = useAppSelector(selectPriceMax);
   const resetFilterStatus = useAppSelector(selectResetFilterStatus);
+  const guitarType = useAppSelector(selectGuitarsType);
+  const guitarsStringCounts = useAppSelector(selectguitarsStringCounts);
+
   const placeholderPriceMin = getPriceWithSpace(Number(guitarMinPrice));
   const placeholderPriceMax = getPriceWithSpace(Number(guitarMaxPrice));
 
@@ -63,6 +68,8 @@ function FilterByPrice(): JSX.Element {
           orderType,
           min: price,
           max: `${guitarMaxPrice}`,
+          guitarType,
+          stringCount: guitarsStringCounts,
         }),
       );
       dispatch(
@@ -105,6 +112,8 @@ function FilterByPrice(): JSX.Element {
           orderType,
           max: price,
           min: currentMinPrice,
+          guitarType,
+          stringCount: guitarsStringCounts,
         }),
       );
       dispatch(

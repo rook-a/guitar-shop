@@ -6,9 +6,11 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import {
   selectguitarsStringCounts,
   selectGuitarsType,
+  selectPriceMax,
+  selectPriceMin,
   setGuitarsStringCounts,
 } from '../../store/filter-slice/filter-slice';
-import { fetchGuitarsAction } from '../../store/guitars-slice/guitars-slice';
+import { fetchGuitarsAction, selectOrderType, selectSortType } from '../../store/guitars-slice/guitars-slice';
 import { redirectToRoute } from '../../store/middlewares/redirect-action';
 
 import { AppRoute, GuitarsStringMap, START_PAGE_NUMBER } from '../../utils/const';
@@ -16,6 +18,11 @@ import { AppRoute, GuitarsStringMap, START_PAGE_NUMBER } from '../../utils/const
 function FilterByStrings(): JSX.Element {
   const { number } = useParams();
   const dispatch = useAppDispatch();
+  const sortType = useAppSelector(selectSortType);
+  const orderType = useAppSelector(selectOrderType);
+  const priceMin = useAppSelector(selectPriceMin);
+  const priceMax = useAppSelector(selectPriceMax);
+
   const guitarType = useAppSelector(selectGuitarsType);
   const guitarsStringCounts = useAppSelector(selectguitarsStringCounts);
 
@@ -40,6 +47,10 @@ function FilterByStrings(): JSX.Element {
         activePageNumber: Number(number),
         stringCount: stringCounts,
         guitarType,
+        sortType,
+        orderType,
+        min: priceMin,
+        max: priceMax,
       }),
     );
 
