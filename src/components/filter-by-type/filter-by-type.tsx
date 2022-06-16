@@ -25,19 +25,33 @@ function FilterByType(): JSX.Element {
 
   const guitarsType = useAppSelector(selectGuitarsType);
 
+  const getCurrentStringCounts = (types: string[]) => {
+    if (types.length === 0) {
+      return types;
+    }
+
+    const result = types.reduce((acc: string[], item) => {
+      const stringCounts = GuitarStringCountsMap[item as keyof typeof GuitarStringCountsMap];
+
+      return [...acc, ...stringCounts];
+    }, []);
+
+    return new Set(result);
+  };
+
   const handleTypeChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { name } = evt.target;
-    const stringCount = [...GuitarStringCountsMap[name as keyof typeof GuitarStringCountsMap]];
 
     const type = guitarsType.includes(name) ? guitarsType.filter((type) => type !== name) : [...guitarsType, name];
+    const stringCount = getCurrentStringCounts(type);
 
     dispatch(setGuitarsType(type));
-    dispatch(setGuitarsStringCounts(stringCount));
+    dispatch(setGuitarsStringCounts([...stringCount]));
     dispatch(
       fetchGuitarsAction({
         activePageNumber: Number(number),
         guitarType: type,
-        stringCount,
+        stringCount: [...stringCount],
         sortType,
         orderType,
         min: priceMin,

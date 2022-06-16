@@ -63,7 +63,6 @@ function CatalogList(): JSX.Element {
       if (price_gte !== '' && price_lte !== '' && typeof price_gte === 'string' && typeof price_lte === 'string') {
         filter = { ...filter, priceMin: price_gte };
 
-        console.log('catalog/price_gte&price_lte');
         dispatch(
           setPrice({
             priceMin: price_gte,
