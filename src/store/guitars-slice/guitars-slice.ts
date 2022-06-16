@@ -66,9 +66,7 @@ export const fetchGuitarsAction = createAsyncThunk<
     const query = createQuery({ activePageNumber, sortType, orderType, min, max, guitarType, stringCount });
 
     try {
-      const { data, headers } = await api.get<Product[]>(`${APIRoute.Guitars}?${query}&_embed=comments`);
-
-      dispatch(setTotalProductCount(Number(headers['x-total-count'])));
+      const { data } = await api.get<Product[]>(`${APIRoute.Guitars}?${query}&_embed=comments`);
 
       return data;
     } catch (error) {

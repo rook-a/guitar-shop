@@ -8,6 +8,7 @@ import { APIRoute, FetchStatus, INDEX_FIRST_GUITAR, NameSpace } from '../../util
 import { Guitar } from '../../types/guitar';
 import { AppDispatch, State } from '../../types/state';
 import { createQueryByFilter } from '../../utils/utils';
+import { setTotalProductCount } from '../guitars-slice/guitars-slice';
 
 interface InitialState {
   priceMax: string;
@@ -57,6 +58,7 @@ export const fetchMinPrice = createAsyncThunk<
     );
 
     dispatch(fetchMaxPrice(Number(headers['x-total-count'])));
+    dispatch(setTotalProductCount(Number(headers['x-total-count'])));
     dispatch(changeResetFilterStatus(false));
 
     return data;
