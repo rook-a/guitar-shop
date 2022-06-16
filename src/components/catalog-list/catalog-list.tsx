@@ -60,21 +60,13 @@ function CatalogList(): JSX.Element {
         dispatch(changeOrderType(_order));
       }
 
-      if (price_gte !== '' && typeof price_gte === 'string') {
+      if (price_gte !== '' && price_lte !== '' && typeof price_gte === 'string' && typeof price_lte === 'string') {
         filter = { ...filter, priceMin: price_gte };
+
+        console.log('catalog/price_gte&price_lte');
         dispatch(
           setPrice({
             priceMin: price_gte,
-            priceMax: guitarMaxPrice,
-          }),
-        );
-      }
-
-      if (price_lte !== '' && typeof price_lte === 'string') {
-        filter = { ...filter, priceMax: price_lte };
-        dispatch(
-          setPrice({
-            priceMin: guitarMinPrice,
             priceMax: price_lte,
           }),
         );
@@ -102,7 +94,7 @@ function CatalogList(): JSX.Element {
       dispatch(fetchGuitarsAction({ activePageNumber: Number(number), ...filter }));
       dispatch(fetchMinPrice());
     }
-  }, [dispatch, guitarMaxPrice, guitarMinPrice, number]);
+  }, [dispatch, number]);
 
   useEffect(() => {
     if (isMounted.current) {
