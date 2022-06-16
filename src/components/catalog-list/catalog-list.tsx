@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import qs from 'query-string';
 
@@ -32,7 +32,6 @@ function CatalogList(): JSX.Element {
   const { number } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const isMounted = useRef<boolean>(false);
 
   const guitars = useAppSelector(selectGuitars);
   const sortType = useAppSelector(selectSortType);
@@ -96,23 +95,19 @@ function CatalogList(): JSX.Element {
   }, [dispatch, number]);
 
   useEffect(() => {
-    if (isMounted.current) {
-      const query = qs.stringify(
-        {
-          _sort: sortType,
-          _order: orderType,
-          price_gte: guitarMinPrice,
-          price_lte: guitarMaxPrice,
-          type: guitarsType,
-          stringCount: guitarsStringCounts,
-        },
-        { skipNull: true, skipEmptyString: true },
-      );
+    const query = qs.stringify(
+      {
+        _sort: sortType,
+        _order: orderType,
+        price_gte: guitarMinPrice,
+        price_lte: guitarMaxPrice,
+        type: guitarsType,
+        stringCount: guitarsStringCounts,
+      },
+      { skipNull: true, skipEmptyString: true },
+    );
 
-      navigate(`?${query}`);
-    }
-
-    isMounted.current = true;
+    navigate(`?${query}`);
   }, [guitarMaxPrice, guitarMinPrice, guitarsStringCounts, guitarsType, navigate, orderType, sortType]);
 
   return (
