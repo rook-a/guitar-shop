@@ -21,7 +21,7 @@ const initialState: InitialState = {
   cardModalDelete: false,
 };
 
-export const appSlice = createSlice({
+export const modalSlice = createSlice({
   name: NameSpace.App,
   initialState,
   reducers: {
@@ -51,7 +51,7 @@ export const {
   changeCardModalAddSuccess,
   changeCardModalDelete,
   closeAllModal,
-} = appSlice.actions;
+} = modalSlice.actions;
 
 const selectAppState = (state: State) => state[NameSpace.App];
 

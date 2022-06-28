@@ -22,7 +22,7 @@ import {
   changeReviewSuccessModalActive,
   selectReviewModalActive,
   selectReviewSuccessModalActive,
-} from '../../store/app-slice/app-slice';
+} from '../../store/modal-slice/modal-slice';
 
 import { FetchStatus, START_COUNT_COMMENT } from '../../utils/const';
 

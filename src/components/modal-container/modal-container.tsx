@@ -1,7 +1,7 @@
 import { ReactNode, useEffect } from 'react';
 import FocusLock from 'react-focus-lock';
 import { useAppDispatch } from '../../hooks/hooks';
-import { closeAllModal } from '../../store/app-slice/app-slice';
+import { closeAllModal } from '../../store/modal-slice/modal-slice';
 
 interface ModalContainerProps {
   className: string;

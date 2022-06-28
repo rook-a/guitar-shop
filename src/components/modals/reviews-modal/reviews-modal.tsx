@@ -4,7 +4,7 @@ import cn from 'classnames';
 import Spinner from '../../spinner/spinner';
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 
-import { changeReviewModalActive } from '../../../store/app-slice/app-slice';
+import { changeReviewModalActive } from '../../../store/modal-slice/modal-slice';
 import { selectSendCommentStatus, sendCommentAction } from '../../../store/comments-slice/comments-slice';
 import { selectGuitar } from '../../../store/guitars-slice/guitars-slice';
 

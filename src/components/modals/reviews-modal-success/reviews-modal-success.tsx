@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAppDispatch } from '../../../hooks/hooks';
-import { changeReviewSuccessModalActive } from '../../../store/app-slice/app-slice';
+import { changeReviewSuccessModalActive } from '../../../store/modal-slice/modal-slice';
 
 function ReviewsModalSuccess(): JSX.Element {
   const dispatch = useAppDispatch();

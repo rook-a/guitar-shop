@@ -1,4 +1,4 @@
-import { appSlice, changeReviewModalActive, changeReviewSuccessModalActive, closeAllModal } from './app-slice';
+import { appSlice, changeReviewModalActive, changeReviewSuccessModalActive, closeAllModal } from './modal-slice';
 
 const state = {
   reviewModalActive: false,
