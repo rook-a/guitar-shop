@@ -1,22 +1,24 @@
+import { Link } from 'react-router-dom';
+
 function Card(): JSX.Element {
   return (
     <div className="container">
       <h1 className="title title--bigger page-content__title">Корзина</h1>
       <ul className="breadcrumbs page-content__breadcrumbs page-content__breadcrumbs--on-cart-page">
         <li className="breadcrumbs__item">
-          <a className="link" href="./main.html">
+          <Link className="link" to="/">
             Главная
-          </a>
+          </Link>
         </li>
         <li className="breadcrumbs__item">
-          <a className="link" href="./main.html">
+          <Link className="link" to="/">
             Каталог
-          </a>
+          </Link>
         </li>
         <li className="breadcrumbs__item">
-          <a className="link" href="/">
+          <Link className="link" to="/">
             Корзина
-          </a>
+          </Link>
         </li>
       </ul>
       <div className="cart">

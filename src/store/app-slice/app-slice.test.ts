@@ -3,6 +3,10 @@ import { appSlice, changeReviewModalActive, changeReviewSuccessModalActive, clos
 const state = {
   reviewModalActive: false,
   reviewSuccessModalActive: false,
+
+  cardModalAdd: false,
+  cardModalAddSuccess: false,
+  cardModalDelete: false,
 };
 
 describe('App slice', () => {
