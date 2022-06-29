@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../../hooks/hooks';
+import { changeCurrentPage } from '../../../store/app-slice/app-slice';
 import { changeCardAddSuccessModalActive } from '../../../store/modal-slice/modal-slice';
 
-import { AppRoute } from '../../../utils/const';
+import { AppRoute, MenuLabel } from '../../../utils/const';
 
 function CardAddSuccessModal(): JSX.Element {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ function CardAddSuccessModal(): JSX.Element {
           onClick={() => {
             navigate(AppRoute.Card);
             dispatch(changeCardAddSuccessModalActive(false));
+            dispatch(changeCurrentPage(MenuLabel.Card));
           }}
           className="button button--small modal__button">
           Перейти в корзину

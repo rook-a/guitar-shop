@@ -1,15 +1,16 @@
-import { Link } from 'react-router-dom';
-import { generatePath } from 'react-router-dom';
+import { generatePath, Link, useNavigate } from 'react-router-dom';
 
 import Rating from '../rating/rating';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
+import { changeCurrentPage } from '../../store/app-slice/app-slice';
 import { changeCardAddModalActive } from '../../store/modal-slice/modal-slice';
 import { selectProducts, setCurrentAddedProduct } from '../../store/order-slice/order-slice';
 
 import { Product } from '../../types/product';
 import { adaptTypeToClient, getPriceWithSpace } from '../../utils/utils';
+import { AppRoute, MenuLabel } from '../../utils/const';
 
 interface ProductCardProps {
   guitar: Product;
@@ -18,6 +19,8 @@ interface ProductCardProps {
 function ProductCard({ guitar }: ProductCardProps): JSX.Element {
   const link = generatePath('/product/:id', { id: `${guitar.id}` });
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const products = useAppSelector(selectProducts);
 
   const { id, name, rating, price, previewImg, type, comments } = guitar;
@@ -27,6 +30,11 @@ function ProductCard({ guitar }: ProductCardProps): JSX.Element {
   const handleButtonBuyClick = () => {
     dispatch(changeCardAddModalActive(true));
     dispatch(setCurrentAddedProduct(guitar));
+  };
+
+  const handleButtonInCartClick = () => {
+    navigate(AppRoute.Card);
+    dispatch(changeCurrentPage(MenuLabel.Card));
   };
 
   return (
@@ -47,7 +55,10 @@ function ProductCard({ guitar }: ProductCardProps): JSX.Element {
         </Link>
 
         {id in products ? (
-          <button className="button button--red-border button--mini button--in-cart" type="button">
+          <button
+            onClick={handleButtonInCartClick}
+            className="button button--red-border button--mini button--in-cart"
+            type="button">
             В Корзине
           </button>
         ) : (

@@ -138,6 +138,7 @@ export const enum MenuLabel {
   Catalog = 'Каталог',
   Services = 'Где купить?',
   About = 'О компании',
+  Card = 'Корзина',
 }
 
 export const MenuLinksMap = [

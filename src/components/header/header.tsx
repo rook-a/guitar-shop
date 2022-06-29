@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { changeCurrentPage, selectCurrentPage } from '../../store/app-slice/app-slice';
 import { selectNumberOfProducts } from '../../store/order-slice/order-slice';
 
-import { AppRoute, MenuLinksMap, START_PAGE_NUMBER as MIN_PRODUCTS_COUNT } from '../../utils/const';
+import { AppRoute, MenuLabel, MenuLinksMap, START_PAGE_NUMBER as MIN_PRODUCTS_COUNT } from '../../utils/const';
 
 function Header(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -37,7 +37,11 @@ function Header(): JSX.Element {
 
         <FormSearch />
 
-        <Link className="header__cart-link" to={AppRoute.Card} aria-label="Корзина">
+        <Link
+          onClick={() => dispatch(changeCurrentPage(MenuLabel.Card))}
+          className="header__cart-link"
+          to={AppRoute.Card}
+          aria-label="Корзина">
           <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
             <use xlinkHref="#icon-basket"></use>
           </svg>
