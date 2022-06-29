@@ -1,4 +1,3 @@
-export const COUPONS = ['light-333', 'medium-444', 'height-555'];
 export const MAX_NUMBER_OF_CARDS = 9;
 export const START_PAGE_NUMBER = 1;
 export const START_COUNT_COMMENT = 3;
@@ -37,6 +36,8 @@ export const enum AppRoute {
   Product = '/product',
   Card = '/card',
   NotFound = '*',
+  Services = '/services',
+  About = '/about',
 }
 
 export const enum HttpCode {
@@ -60,9 +61,9 @@ export enum FetchStatus {
 
 export const enum NameSpace {
   App = 'App',
+  Modal = 'Modal',
   Guitars = 'Guitars',
   Comments = 'Comments',
-  Coupon = 'Coupon',
   Order = 'Order',
   Filter = 'Filter',
 }
@@ -130,5 +131,26 @@ export const GuitarsStringMap = [
   {
     id: '12-strings',
     stringCount: 12,
+  },
+] as const;
+
+export const enum MenuLabel {
+  Catalog = 'Каталог',
+  Services = 'Где купить?',
+  About = 'О компании',
+}
+
+export const MenuLinksMap = [
+  {
+    label: MenuLabel.Catalog,
+    route: AppRoute.Root,
+  },
+  {
+    label: MenuLabel.Services,
+    route: AppRoute.Services,
+  },
+  {
+    label: MenuLabel.About,
+    route: AppRoute.About,
   },
 ] as const;

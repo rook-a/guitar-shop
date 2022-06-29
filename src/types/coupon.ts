@@ -1,3 +1,3 @@
 export interface Coupon {
-  coupon: string;
+  coupon: 'light-333' | 'medium-444' | 'height-555';
 }

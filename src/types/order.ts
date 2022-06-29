@@ -1,4 +1,6 @@
+import { Coupon } from './coupon';
+
 export interface Order {
   guitarsIds: number[];
-  coupon: string | null;
+  coupon: Coupon | null;
 }

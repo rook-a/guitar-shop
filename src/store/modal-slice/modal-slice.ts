@@ -22,7 +22,7 @@ const initialState: InitialState = {
 };
 
 export const modalSlice = createSlice({
-  name: NameSpace.App,
+  name: NameSpace.Modal,
   initialState,
   reducers: {
     changeReviewModalActive: (state, action: PayloadAction<boolean>) => {
@@ -53,10 +53,10 @@ export const {
   closeAllModal,
 } = modalSlice.actions;
 
-const selectAppState = (state: State) => state[NameSpace.App];
+const selectModalState = (state: State) => state[NameSpace.Modal];
 
-export const selectReviewModalActive = (state: State) => selectAppState(state).reviewModalActive;
-export const selectReviewSuccessModalActive = (state: State) => selectAppState(state).reviewSuccessModalActive;
-export const selectCardModalAdd = (state: State) => selectAppState(state).cardModalAdd;
-export const selectCardModalAddSuccess = (state: State) => selectAppState(state).cardModalAddSuccess;
-export const selectCardModalDelete = (state: State) => selectAppState(state).cardModalDelete;
+export const selectReviewModalActive = (state: State) => selectModalState(state).reviewModalActive;
+export const selectReviewSuccessModalActive = (state: State) => selectModalState(state).reviewSuccessModalActive;
+export const selectCardModalAdd = (state: State) => selectModalState(state).cardModalAdd;
+export const selectCardModalAddSuccess = (state: State) => selectModalState(state).cardModalAddSuccess;
+export const selectCardModalDelete = (state: State) => selectModalState(state).cardModalDelete;

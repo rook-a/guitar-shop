@@ -1,8 +1,16 @@
 import { Link } from 'react-router-dom';
-import { AppRoute } from '../../utils/const';
+import cn from 'classnames';
+
 import FormSearch from '../form-search/form-search';
 
+import { AppRoute, MenuLinksMap } from '../../utils/const';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { changeCurrentPage, selectCurrentPage } from '../../store/app-slice/app-slice';
+
 function Header(): JSX.Element {
+  const dispatch = useAppDispatch();
+  const currentPage = useAppSelector(selectCurrentPage);
+
   return (
     <header className="header" id="header">
       <div className="container header__wrapper">
@@ -11,21 +19,16 @@ function Header(): JSX.Element {
         </Link>
         <nav className="main-nav">
           <ul className="main-nav__list">
-            <li>
-              <Link className="link main-nav__link link--current" to={AppRoute.Root}>
-                Каталог
-              </Link>
-            </li>
-            <li>
-              <Link className="link main-nav__link" to="/">
-                Где купить?
-              </Link>
-            </li>
-            <li>
-              <Link className="link main-nav__link" to="/">
-                О компании
-              </Link>
-            </li>
+            {MenuLinksMap.map(({ label, route }) => (
+              <li>
+                <Link
+                  className={cn('link', 'main-nav__link', { 'link--current': label === currentPage })}
+                  to={route}
+                  onClick={() => dispatch(changeCurrentPage(label))}>
+                  {label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
 
