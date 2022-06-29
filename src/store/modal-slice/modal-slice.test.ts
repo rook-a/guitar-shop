@@ -4,9 +4,9 @@ const state = {
   reviewModalActive: false,
   reviewSuccessModalActive: false,
 
-  cardModalAdd: false,
-  cardModalAddSuccess: false,
-  cardModalDelete: false,
+  cardAddModalActive: false,
+  cardAddSuccessModalActive: false,
+  cardDeleteModalActive: false,
 };
 
 describe('App slice', () => {

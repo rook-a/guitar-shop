@@ -7,6 +7,9 @@ import Sorting from '../sorting/sorting';
 import ProductCard from '../product-card/product-card';
 import CatalogListEmpty from '../catalog-list-empty/catalog-list-empty';
 import Pagination from '../pagination/pagination';
+import ModalContainer from '../modal-container/modal-container';
+import CardAddModal from '../modals/card-add-modal/card-add-modal';
+import CardAddSuccessModal from '../modals/card-add-success-modal/card-add-success-modal';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import {
@@ -27,6 +30,7 @@ import {
   setGuitarsType,
   setPrice,
 } from '../../store/filter-slice/filter-slice';
+import { selectCardAddModalActive, selectCardAddSuccessModalActive } from '../../store/modal-slice/modal-slice';
 
 function CatalogList(): JSX.Element {
   const { number } = useParams();
@@ -40,6 +44,9 @@ function CatalogList(): JSX.Element {
   const guitarMaxPrice = useAppSelector(selectPriceMax);
   const guitarsType = useAppSelector(selectGuitarsType);
   const guitarsStringCounts = useAppSelector(selectguitarsStringCounts);
+
+  const isCardAddModalOpen = useAppSelector(selectCardAddModalActive);
+  const isCardAddSuccessModalOpen = useAppSelector(selectCardAddSuccessModalActive);
 
   const isEmpty = guitars.length === 0;
 
@@ -127,6 +134,9 @@ function CatalogList(): JSX.Element {
       )}
 
       <Pagination />
+
+      {isCardAddModalOpen && <ModalContainer children={<CardAddModal />} />}
+      {isCardAddSuccessModalOpen && <ModalContainer className="modal--success" children={<CardAddSuccessModal />} />}
     </div>
   );
 }

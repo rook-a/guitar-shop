@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../hooks/hooks';
 import { closeAllModal } from '../../store/modal-slice/modal-slice';
 
 interface ModalContainerProps {
-  className: string;
+  className?: string;
   children: ReactNode;
 }
 

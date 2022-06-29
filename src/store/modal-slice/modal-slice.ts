@@ -7,18 +7,18 @@ interface InitialState {
   reviewModalActive: boolean;
   reviewSuccessModalActive: boolean;
 
-  cardModalAdd: boolean;
-  cardModalAddSuccess: boolean;
-  cardModalDelete: boolean;
+  cardAddModalActive: boolean;
+  cardAddSuccessModalActive: boolean;
+  cardDeleteModalActive: boolean;
 }
 
 const initialState: InitialState = {
   reviewModalActive: false,
   reviewSuccessModalActive: false,
 
-  cardModalAdd: false,
-  cardModalAddSuccess: false,
-  cardModalDelete: false,
+  cardAddModalActive: false,
+  cardAddSuccessModalActive: false,
+  cardDeleteModalActive: false,
 };
 
 export const modalSlice = createSlice({
@@ -31,14 +31,14 @@ export const modalSlice = createSlice({
     changeReviewSuccessModalActive: (state, action: PayloadAction<boolean>) => {
       state.reviewSuccessModalActive = action.payload;
     },
-    changeCardModalAdd: (state, action: PayloadAction<boolean>) => {
-      state.cardModalAdd = action.payload;
+    changeCardAddModalActive: (state, action: PayloadAction<boolean>) => {
+      state.cardAddModalActive = action.payload;
     },
-    changeCardModalAddSuccess: (state, action: PayloadAction<boolean>) => {
-      state.cardModalAddSuccess = action.payload;
+    changeCardAddSuccessModalActive: (state, action: PayloadAction<boolean>) => {
+      state.cardAddSuccessModalActive = action.payload;
     },
-    changeCardModalDelete: (state, action: PayloadAction<boolean>) => {
-      state.cardModalDelete = action.payload;
+    changeCardDeleteModalActive: (state, action: PayloadAction<boolean>) => {
+      state.cardDeleteModalActive = action.payload;
     },
     closeAllModal: () => initialState,
   },
@@ -47,9 +47,9 @@ export const modalSlice = createSlice({
 export const {
   changeReviewModalActive,
   changeReviewSuccessModalActive,
-  changeCardModalAdd,
-  changeCardModalAddSuccess,
-  changeCardModalDelete,
+  changeCardAddModalActive,
+  changeCardAddSuccessModalActive,
+  changeCardDeleteModalActive,
   closeAllModal,
 } = modalSlice.actions;
 
@@ -57,6 +57,6 @@ const selectModalState = (state: State) => state[NameSpace.Modal];
 
 export const selectReviewModalActive = (state: State) => selectModalState(state).reviewModalActive;
 export const selectReviewSuccessModalActive = (state: State) => selectModalState(state).reviewSuccessModalActive;
-export const selectCardModalAdd = (state: State) => selectModalState(state).cardModalAdd;
-export const selectCardModalAddSuccess = (state: State) => selectModalState(state).cardModalAddSuccess;
-export const selectCardModalDelete = (state: State) => selectModalState(state).cardModalDelete;
+export const selectCardAddModalActive = (state: State) => selectModalState(state).cardAddModalActive;
+export const selectCardAddSuccessModalActive = (state: State) => selectModalState(state).cardAddSuccessModalActive;
+export const selectCardDeleteModalActive = (state: State) => selectModalState(state).cardDeleteModalActive;
