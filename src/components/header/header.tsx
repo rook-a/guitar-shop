@@ -3,13 +3,16 @@ import cn from 'classnames';
 
 import FormSearch from '../form-search/form-search';
 
-import { AppRoute, MenuLinksMap } from '../../utils/const';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { changeCurrentPage, selectCurrentPage } from '../../store/app-slice/app-slice';
+import { selectNumberOfProducts } from '../../store/order-slice/order-slice';
+
+import { AppRoute, MenuLinksMap, START_PAGE_NUMBER as MIN_PRODUCTS_COUNT } from '../../utils/const';
 
 function Header(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector(selectCurrentPage);
+  const numberOfProductsInCard = useAppSelector(selectNumberOfProducts);
 
   return (
     <header className="header" id="header">
@@ -20,7 +23,7 @@ function Header(): JSX.Element {
         <nav className="main-nav">
           <ul className="main-nav__list">
             {MenuLinksMap.map(({ label, route }) => (
-              <li>
+              <li key={label}>
                 <Link
                   className={cn('link', 'main-nav__link', { 'link--current': label === currentPage })}
                   to={route}
@@ -39,7 +42,9 @@ function Header(): JSX.Element {
             <use xlinkHref="#icon-basket"></use>
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          <span className="header__cart-count">2</span>
+          {numberOfProductsInCard >= MIN_PRODUCTS_COUNT && (
+            <span className="header__cart-count">{numberOfProductsInCard}</span>
+          )}
         </Link>
       </div>
     </header>
