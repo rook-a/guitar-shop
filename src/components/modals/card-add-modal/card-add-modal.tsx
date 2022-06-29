@@ -1,13 +1,19 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 
 import { changeCardAddModalActive, changeCardAddSuccessModalActive } from '../../../store/modal-slice/modal-slice';
-import { selectCurrentAddedProduct, setNewProducts } from '../../../store/order-slice/order-slice';
+import {
+  selectCurrentAddedProduct,
+  selectProducts,
+  setNewProducts,
+  setUpdateProducts,
+} from '../../../store/order-slice/order-slice';
 
 import { adaptTypeToClient, getPriceWithSpace } from '../../../utils/utils';
 
 function CardAddModal(): JSX.Element | null {
   const dispatch = useAppDispatch();
   const currentAddedProduct = useAppSelector(selectCurrentAddedProduct);
+  const products = useAppSelector(selectProducts);
 
   if (!currentAddedProduct) {
     return null;
@@ -18,6 +24,14 @@ function CardAddModal(): JSX.Element | null {
   const adaptedType = adaptTypeToClient(type);
 
   const handleAddButtonClick = () => {
+    if (id in products) {
+      dispatch(setUpdateProducts(currentAddedProduct));
+      dispatch(changeCardAddModalActive(false));
+      dispatch(changeCardAddSuccessModalActive(true));
+
+      return;
+    }
+
     dispatch(setNewProducts({ [id]: { ...currentAddedProduct, numberOfProducts: 1, totalPrice: price } }));
     dispatch(changeCardAddModalActive(false));
     dispatch(changeCardAddSuccessModalActive(true));

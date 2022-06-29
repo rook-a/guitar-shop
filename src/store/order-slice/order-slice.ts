@@ -34,13 +34,18 @@ export const orderSlice = createSlice({
     setNewProducts: (state, action: PayloadAction<Record<string, OrderProducts>>) => {
       state.products = { ...state.products, ...action.payload };
     },
+    setUpdateProducts: (state, action: PayloadAction<Product>) => {
+      const index = action.payload.id;
+      state.products[index].numberOfProducts = state.products[index].numberOfProducts + 1;
+      state.products[index].totalPrice = state.products[index].totalPrice + action.payload.price;
+    },
     setCurrentAddedProduct: (state, action: PayloadAction<Product>) => {
       state.currentAddedProduct = action.payload;
     },
   },
 });
 
-export const { setNewProducts, setCurrentAddedProduct } = orderSlice.actions;
+export const { setNewProducts, setUpdateProducts, setCurrentAddedProduct } = orderSlice.actions;
 
 const selectOrderState = (state: State) => state[NameSpace.Order];
 

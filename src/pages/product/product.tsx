@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import ModalContainer from '../../components/modal-container/modal-container';
+import CardAddModal from '../../components/modals/card-add-modal/card-add-modal';
+import CardAddSuccessModal from '../../components/modals/card-add-success-modal/card-add-success-modal';
 import Rating from '../../components/rating/rating';
 import Reviews from '../../components/reviews/reviews';
 import Tabs from '../../components/tabs/tabs';
@@ -8,6 +11,12 @@ import Tabs from '../../components/tabs/tabs';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { fetchCommentsAction, resetCommentsCounter, selectComments } from '../../store/comments-slice/comments-slice';
 import { fetchGuitarAction, selectGuitar } from '../../store/guitars-slice/guitars-slice';
+import {
+  changeCardAddModalActive,
+  selectCardAddModalActive,
+  selectCardAddSuccessModalActive,
+} from '../../store/modal-slice/modal-slice';
+import { setCurrentAddedProduct } from '../../store/order-slice/order-slice';
 
 import { getPriceWithSpace } from '../../utils/utils';
 import styles from './product.module.css';
@@ -17,6 +26,9 @@ function Product(): JSX.Element | null {
   const dispatch = useAppDispatch();
   const guitar = useAppSelector(selectGuitar);
   const comments = useAppSelector(selectComments);
+
+  const isCardAddModalOpen = useAppSelector(selectCardAddModalActive);
+  const isCardAddSuccessModalOpen = useAppSelector(selectCardAddSuccessModalActive);
 
   const selectGuitarId = Number(id);
 
@@ -31,6 +43,11 @@ function Product(): JSX.Element | null {
   }
 
   const { name, type, price, previewImg, rating, stringCount, vendorCode, description } = guitar;
+
+  const handleButtonAddClick = () => {
+    dispatch(setCurrentAddedProduct({ ...guitar, comments }));
+    dispatch(changeCardAddModalActive(true));
+  };
 
   return (
     <div className="container">
@@ -73,13 +90,19 @@ function Product(): JSX.Element | null {
           <p className="product-container__price-info product-container__price-info--value">
             {getPriceWithSpace(price)} ₽
           </p>
-          <a className="button button--red button--big product-container__button" href="/">
+          <button
+            onClick={handleButtonAddClick}
+            className="button button--red button--big product-container__button"
+            type="button">
             Добавить в корзину
-          </a>
+          </button>
         </div>
       </div>
 
       <Reviews />
+
+      {isCardAddModalOpen && <ModalContainer children={<CardAddModal />} />}
+      {isCardAddSuccessModalOpen && <ModalContainer className="modal--success" children={<CardAddSuccessModal />} />}
     </div>
   );
 }
