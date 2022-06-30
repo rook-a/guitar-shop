@@ -1,4 +1,4 @@
-function CardModalDelete(): JSX.Element {
+function CartModalDelete(): JSX.Element {
   return (
     <div className="modal__content">
       <h2 className="modal__header title title--medium title--red">Удалить этот товар?</h2>
@@ -35,4 +35,4 @@ function CardModalDelete(): JSX.Element {
   );
 }
 
-export default CardModalDelete;
+export default CartModalDelete;

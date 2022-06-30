@@ -2,23 +2,26 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import ModalContainer from '../../components/modal-container/modal-container';
-import CardAddModal from '../../components/modals/card-add-modal/card-add-modal';
-import CardAddSuccessModal from '../../components/modals/card-add-success-modal/card-add-success-modal';
+import CardAddModal from '../../components/modals/cart-add-modal/cart-add-modal';
+import CardAddSuccessModal from '../../components/modals/cart-add-success-modal/cart-add-success-modal';
 import Rating from '../../components/rating/rating';
 import Reviews from '../../components/reviews/reviews';
 import Tabs from '../../components/tabs/tabs';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { changeCurrentPage } from '../../store/app-slice/app-slice';
 import { fetchCommentsAction, resetCommentsCounter, selectComments } from '../../store/comments-slice/comments-slice';
 import { fetchGuitarAction, selectGuitar } from '../../store/guitars-slice/guitars-slice';
 import {
-  changeCardAddModalActive,
-  selectCardAddModalActive,
-  selectCardAddSuccessModalActive,
+  changeCartAddModalActive,
+  selectCartAddModalActive,
+  selectCartAddSuccessModalActive,
 } from '../../store/modal-slice/modal-slice';
 import { setCurrentAddedProduct } from '../../store/order-slice/order-slice';
 
+import { MenuLabel } from '../../utils/const';
 import { getPriceWithSpace } from '../../utils/utils';
+
 import styles from './product.module.css';
 
 function Product(): JSX.Element | null {
@@ -27,8 +30,8 @@ function Product(): JSX.Element | null {
   const guitar = useAppSelector(selectGuitar);
   const comments = useAppSelector(selectComments);
 
-  const isCardAddModalOpen = useAppSelector(selectCardAddModalActive);
-  const isCardAddSuccessModalOpen = useAppSelector(selectCardAddSuccessModalActive);
+  const isCardAddModalOpen = useAppSelector(selectCartAddModalActive);
+  const isCardAddSuccessModalOpen = useAppSelector(selectCartAddSuccessModalActive);
 
   const selectGuitarId = Number(id);
 
@@ -36,6 +39,7 @@ function Product(): JSX.Element | null {
     dispatch(resetCommentsCounter());
     dispatch(fetchGuitarAction(selectGuitarId));
     dispatch(fetchCommentsAction(selectGuitarId));
+    dispatch(changeCurrentPage(MenuLabel.Product));
   }, [dispatch, selectGuitarId]);
 
   if (!guitar) {
@@ -46,7 +50,7 @@ function Product(): JSX.Element | null {
 
   const handleButtonAddClick = () => {
     dispatch(setCurrentAddedProduct({ ...guitar, comments }));
-    dispatch(changeCardAddModalActive(true));
+    dispatch(changeCartAddModalActive(true));
   };
 
   return (

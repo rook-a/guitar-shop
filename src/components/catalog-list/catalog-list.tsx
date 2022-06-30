@@ -8,8 +8,8 @@ import ProductCard from '../product-card/product-card';
 import CatalogListEmpty from '../catalog-list-empty/catalog-list-empty';
 import Pagination from '../pagination/pagination';
 import ModalContainer from '../modal-container/modal-container';
-import CardAddModal from '../modals/card-add-modal/card-add-modal';
-import CardAddSuccessModal from '../modals/card-add-success-modal/card-add-success-modal';
+import CardAddModal from '../modals/cart-add-modal/cart-add-modal';
+import CardAddSuccessModal from '../modals/cart-add-success-modal/cart-add-success-modal';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import {
@@ -30,7 +30,7 @@ import {
   setGuitarsType,
   setPrice,
 } from '../../store/filter-slice/filter-slice';
-import { selectCardAddModalActive, selectCardAddSuccessModalActive } from '../../store/modal-slice/modal-slice';
+import { selectCartAddModalActive, selectCartAddSuccessModalActive } from '../../store/modal-slice/modal-slice';
 
 function CatalogList(): JSX.Element {
   const { number } = useParams();
@@ -45,8 +45,8 @@ function CatalogList(): JSX.Element {
   const guitarsType = useAppSelector(selectGuitarsType);
   const guitarsStringCounts = useAppSelector(selectguitarsStringCounts);
 
-  const isCardAddModalOpen = useAppSelector(selectCardAddModalActive);
-  const isCardAddSuccessModalOpen = useAppSelector(selectCardAddSuccessModalActive);
+  const isCardAddModalOpen = useAppSelector(selectCartAddModalActive);
+  const isCardAddSuccessModalOpen = useAppSelector(selectCartAddSuccessModalActive);
 
   const isEmpty = guitars.length === 0;
 

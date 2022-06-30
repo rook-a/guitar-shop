@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 
-import { changeCardAddModalActive, changeCardAddSuccessModalActive } from '../../../store/modal-slice/modal-slice';
+import { changeCartAddModalActive, changeCartAddSuccessModalActive } from '../../../store/modal-slice/modal-slice';
 import {
   selectCurrentAddedProduct,
   selectProducts,
@@ -10,7 +10,7 @@ import {
 
 import { adaptTypeToClient, getPriceWithSpace } from '../../../utils/utils';
 
-function CardAddModal(): JSX.Element | null {
+function CartAddModal(): JSX.Element | null {
   const dispatch = useAppDispatch();
   const currentAddedProduct = useAppSelector(selectCurrentAddedProduct);
   const products = useAppSelector(selectProducts);
@@ -26,15 +26,15 @@ function CardAddModal(): JSX.Element | null {
   const handleAddButtonClick = () => {
     if (id in products) {
       dispatch(setUpdateProducts(currentAddedProduct));
-      dispatch(changeCardAddModalActive(false));
-      dispatch(changeCardAddSuccessModalActive(true));
+      dispatch(changeCartAddModalActive(false));
+      dispatch(changeCartAddSuccessModalActive(true));
 
       return;
     }
 
     dispatch(setNewProducts({ [id]: { ...currentAddedProduct, numberOfProducts: 1, totalPrice: price } }));
-    dispatch(changeCardAddModalActive(false));
-    dispatch(changeCardAddSuccessModalActive(true));
+    dispatch(changeCartAddModalActive(false));
+    dispatch(changeCartAddSuccessModalActive(true));
   };
 
   return (
@@ -70,7 +70,7 @@ function CardAddModal(): JSX.Element | null {
         </button>
       </div>
       <button
-        onClick={() => dispatch(changeCardAddModalActive(false))}
+        onClick={() => dispatch(changeCartAddModalActive(false))}
         className="modal__close-btn button-cross"
         type="button"
         aria-label="Закрыть">
@@ -81,4 +81,4 @@ function CardAddModal(): JSX.Element | null {
   );
 }
 
-export default CardAddModal;
+export default CartAddModal;

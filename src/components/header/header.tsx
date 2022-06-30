@@ -38,7 +38,7 @@ function Header(): JSX.Element {
         <FormSearch />
 
         <Link
-          onClick={() => dispatch(changeCurrentPage(MenuLabel.Card))}
+          onClick={() => dispatch(changeCurrentPage(MenuLabel.Cart))}
           className="header__cart-link"
           to={AppRoute.Card}
           aria-label="Корзина">

@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, waitFor } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 
-import Card from './card';
+import Cart from './cart';
 
 const mockStore = configureMockStore();
 
@@ -16,7 +16,7 @@ const store = mockStore({
 const fakeComponent = (
   <Provider store={store}>
     <MemoryRouter>
-      <Card />
+      <Cart />
     </MemoryRouter>
   </Provider>
 );

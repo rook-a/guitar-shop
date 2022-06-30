@@ -2,16 +2,16 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAppDispatch } from '../../../hooks/hooks';
 import { changeCurrentPage } from '../../../store/app-slice/app-slice';
-import { changeCardAddSuccessModalActive } from '../../../store/modal-slice/modal-slice';
+import { changeCartAddSuccessModalActive } from '../../../store/modal-slice/modal-slice';
 
 import { AppRoute, MenuLabel } from '../../../utils/const';
 
-function CardAddSuccessModal(): JSX.Element {
+function CartAddSuccessModal(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const handleModalClose = () => {
-    dispatch(changeCardAddSuccessModalActive(false));
+    dispatch(changeCartAddSuccessModalActive(false));
   };
 
   return (
@@ -24,8 +24,8 @@ function CardAddSuccessModal(): JSX.Element {
         <button
           onClick={() => {
             navigate(AppRoute.Card);
-            dispatch(changeCardAddSuccessModalActive(false));
-            dispatch(changeCurrentPage(MenuLabel.Card));
+            dispatch(changeCartAddSuccessModalActive(false));
+            dispatch(changeCurrentPage(MenuLabel.Cart));
           }}
           className="button button--small modal__button">
           Перейти в корзину
@@ -44,4 +44,4 @@ function CardAddSuccessModal(): JSX.Element {
   );
 }
 
-export default CardAddSuccessModal;
+export default CartAddSuccessModal;

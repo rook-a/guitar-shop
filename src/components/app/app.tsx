@@ -8,7 +8,7 @@ import Spinner from '../spinner/spinner';
 
 const Catalog = lazy(() => import('../../pages/catalog/catalog'));
 const Product = lazy(() => import('../../pages/product/product'));
-const Card = lazy(() => import('../../pages/card/card'));
+const Cart = lazy(() => import('../../pages/cart/cart'));
 const NotFound = lazy(() => import('../../pages/not-found/not-found'));
 
 function App(): JSX.Element {
@@ -19,7 +19,7 @@ function App(): JSX.Element {
           <Route index element={<Navigate to={`${AppRoute.Main}/page_1`} replace />} />
           <Route path={`${AppRoute.Catalog}/page_:number`} element={<Catalog />} />
           <Route path={`${AppRoute.Product}/:id`} element={<Product />} />
-          <Route path={AppRoute.Card} element={<Card />} />
+          <Route path={AppRoute.Card} element={<Cart />} />
           <Route path={AppRoute.NotFound} element={<NotFound />} />
         </Route>
       </Routes>

@@ -5,7 +5,7 @@ import Rating from '../rating/rating';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 import { changeCurrentPage } from '../../store/app-slice/app-slice';
-import { changeCardAddModalActive } from '../../store/modal-slice/modal-slice';
+import { changeCartAddModalActive } from '../../store/modal-slice/modal-slice';
 import { selectProducts, setCurrentAddedProduct } from '../../store/order-slice/order-slice';
 
 import { Product } from '../../types/product';
@@ -28,13 +28,13 @@ function ProductCard({ guitar }: ProductCardProps): JSX.Element {
   const adaptedType = adaptTypeToClient(type);
 
   const handleButtonBuyClick = () => {
-    dispatch(changeCardAddModalActive(true));
+    dispatch(changeCartAddModalActive(true));
     dispatch(setCurrentAddedProduct(guitar));
   };
 
   const handleButtonInCartClick = () => {
     navigate(AppRoute.Card);
-    dispatch(changeCurrentPage(MenuLabel.Card));
+    dispatch(changeCurrentPage(MenuLabel.Cart));
   };
 
   return (
