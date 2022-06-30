@@ -7,13 +7,14 @@ import ProductQuantity from '../../components/product-quantity/product-quantity'
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { changeCartDeleteModalActive, selectCartDeleteModalActive } from '../../store/modal-slice/modal-slice';
 
-import { selectProducts, setCurrentAddedProduct } from '../../store/order-slice/order-slice';
+import { selectProducts, selectProductsTotalPrice, setCurrentAddedProduct } from '../../store/order-slice/order-slice';
 
 import { adaptTypeToClient, getPriceWithSpace } from '../../utils/utils';
 
 function Card(): JSX.Element {
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectProducts);
+  const productsTotalPrict = useAppSelector(selectProductsTotalPrice);
   const isCartDeleteModalOpen = useAppSelector(selectCartDeleteModalActive);
 
   return (
@@ -91,7 +92,7 @@ function Card(): JSX.Element {
           <div className="cart__total-info">
             <p className="cart__total-item">
               <span className="cart__total-value-name">Всего:</span>
-              <span className="cart__total-value">52 000 ₽</span>
+              <span className="cart__total-value">{getPriceWithSpace(productsTotalPrict)} ₽</span>
             </p>
             <p className="cart__total-item">
               <span className="cart__total-value-name">Скидка:</span>

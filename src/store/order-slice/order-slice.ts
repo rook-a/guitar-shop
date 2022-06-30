@@ -70,3 +70,15 @@ export const selectCurrentAddedProduct = (state: State) => selectOrderState(stat
 export const selectNumberOfProducts = createSelector(selectProducts, (products) => {
   return products ? Object.keys(products).length : 0;
 });
+
+export const selectProductsTotalPrice = createSelector(selectProducts, (products) => {
+  return Object.values(products).reduce((acc, product) => {
+    return (acc += product.totalPrice);
+  }, 0);
+});
+
+export const selectTotalNumberOfProducts = createSelector(selectProducts, (products) => {
+  return Object.values(products).reduce((acc, product) => {
+    return (acc += product.numberOfProducts);
+  }, 0);
+});
