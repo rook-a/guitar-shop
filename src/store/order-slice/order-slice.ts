@@ -1,9 +1,13 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AxiosInstance } from 'axios';
 
-import { State } from '../../types/state';
+import { handleError } from '../../services/handle-error';
+
+import { AppDispatch, State } from '../../types/state';
 import { Product } from '../../types/product';
-import { NameSpace } from '../../utils/const';
 import { OrderProducts } from '../../types/order-products';
+
+import { NameSpace, APIRoute, FetchStatus } from '../../utils/const';
 
 interface InitialState {
   products: Record<string, OrderProducts>;
@@ -12,6 +16,8 @@ interface InitialState {
   discountValue: number;
 
   currentAddedProduct: OrderProducts | null;
+
+  sendCouponStatus: FetchStatus;
 }
 
 const initialState: InitialState = {
@@ -21,7 +27,28 @@ const initialState: InitialState = {
   discountValue: 0,
 
   currentAddedProduct: null,
+
+  sendCouponStatus: FetchStatus.Idle,
 };
+
+export const sendCoupon = createAsyncThunk<
+  number,
+  string,
+  {
+    dispatch: AppDispatch;
+    state: State;
+    extra: AxiosInstance;
+  }
+>('order/sendCoupon', async (coupon, { dispatch, extra: api }) => {
+  try {
+    const { data } = await api.post<number>(APIRoute.Coupon, { coupon });
+
+    return data;
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
+});
 
 export const orderSlice = createSlice({
   name: NameSpace.Order,
@@ -51,6 +78,19 @@ export const orderSlice = createSlice({
       delete state.products[action.payload];
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(sendCoupon.pending, (state) => {
+        state.sendCouponStatus = FetchStatus.Pending;
+      })
+      .addCase(sendCoupon.fulfilled, (state, action: PayloadAction<number>) => {
+        state.sendCouponStatus = FetchStatus.Fulfilled;
+        state.discount = action.payload;
+      })
+      .addCase(sendCoupon.rejected, (state) => {
+        state.sendCouponStatus = FetchStatus.Rejected;
+      });
+  },
 });
 
 export const {
@@ -66,6 +106,8 @@ const selectOrderState = (state: State) => state[NameSpace.Order];
 
 export const selectProducts = (state: State) => selectOrderState(state).products;
 export const selectCurrentAddedProduct = (state: State) => selectOrderState(state).currentAddedProduct;
+export const selectSendCouponStatus = (state: State) => selectOrderState(state).sendCouponStatus;
+export const selectDiscount = (state: State) => selectOrderState(state).discount;
 
 export const selectNumberOfProducts = createSelector(selectProducts, (products) => {
   return products ? Object.keys(products).length : 0;
@@ -81,4 +123,8 @@ export const selectTotalNumberOfProducts = createSelector(selectProducts, (produ
   return Object.values(products).reduce((acc, product) => {
     return (acc += product.numberOfProducts);
   }, 0);
+});
+
+export const selectDiscountValue = createSelector(selectProductsTotalPrice, selectDiscount, (totalPrice, discount) => {
+  return (totalPrice * discount) / 100;
 });
