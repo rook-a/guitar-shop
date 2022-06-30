@@ -11,7 +11,7 @@ interface InitialState {
   discount: number;
   discountValue: number;
 
-  currentAddedProduct: Product | null;
+  currentAddedProduct: OrderProducts | null;
 }
 
 const initialState: InitialState = {
@@ -30,7 +30,10 @@ export const orderSlice = createSlice({
     setNewProducts: (state, action: PayloadAction<Record<string, OrderProducts>>) => {
       state.products = { ...state.products, ...action.payload };
     },
-    setUpdateProducts: (state, action) => {},
+    setUpdateProduct: (state, action: PayloadAction<OrderProducts>) => {
+      const index = action.payload.id;
+      state.products[index] = action.payload;
+    },
     setDecProducts: (state, action) => {
       const index = action.payload.id;
       state.products[index].numberOfProducts = state.products[index].numberOfProducts - 1;
@@ -41,13 +44,23 @@ export const orderSlice = createSlice({
       state.products[index].numberOfProducts = state.products[index].numberOfProducts + 1;
       state.products[index].totalPrice = state.products[index].totalPrice + action.payload.price;
     },
-    setCurrentAddedProduct: (state, action: PayloadAction<Product>) => {
+    setCurrentAddedProduct: (state, action: PayloadAction<OrderProducts>) => {
       state.currentAddedProduct = action.payload;
+    },
+    deleteCurrentProduct: (state, action: PayloadAction<number>) => {
+      delete state.products[action.payload];
     },
   },
 });
 
-export const { setNewProducts, setDecProducts, setIncProducts, setCurrentAddedProduct } = orderSlice.actions;
+export const {
+  setNewProducts,
+  setUpdateProduct,
+  setDecProducts,
+  setIncProducts,
+  deleteCurrentProduct,
+  setCurrentAddedProduct,
+} = orderSlice.actions;
 
 const selectOrderState = (state: State) => state[NameSpace.Order];
 

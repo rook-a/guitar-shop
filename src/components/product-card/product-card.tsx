@@ -9,8 +9,9 @@ import { changeCartAddModalActive } from '../../store/modal-slice/modal-slice';
 import { selectProducts, setCurrentAddedProduct } from '../../store/order-slice/order-slice';
 
 import { Product } from '../../types/product';
+
 import { adaptTypeToClient, getPriceWithSpace } from '../../utils/utils';
-import { AppRoute, MenuLabel } from '../../utils/const';
+import { AppRoute, MenuLabel, START_PAGE_NUMBER as MIN_NUMBER_OF_PRODUCT } from '../../utils/const';
 
 interface ProductCardProps {
   guitar: Product;
@@ -29,7 +30,7 @@ function ProductCard({ guitar }: ProductCardProps): JSX.Element {
 
   const handleButtonBuyClick = () => {
     dispatch(changeCartAddModalActive(true));
-    dispatch(setCurrentAddedProduct(guitar));
+    dispatch(setCurrentAddedProduct({ ...guitar, numberOfProducts: MIN_NUMBER_OF_PRODUCT, totalPrice: guitar.price }));
   };
 
   const handleButtonInCartClick = () => {

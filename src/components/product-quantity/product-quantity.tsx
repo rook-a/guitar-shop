@@ -3,7 +3,12 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks/hooks';
 
 import { changeCartDeleteModalActive } from '../../store/modal-slice/modal-slice';
-import { setCurrentAddedProduct, setDecProducts, setIncProducts } from '../../store/order-slice/order-slice';
+import {
+  setCurrentAddedProduct,
+  setDecProducts,
+  setIncProducts,
+  setUpdateProduct,
+} from '../../store/order-slice/order-slice';
 
 import { OrderProducts } from '../../types/order-products';
 import { START_PAGE_NUMBER as MIN_ADDED_PRODUCTS, MAX_ADDED_PRODUCTS } from '../../utils/const';
@@ -42,19 +47,34 @@ function ProductQuantity({ product }: ProductQuantityProps): JSX.Element {
     const currentQuantity = Number(value);
 
     if (currentQuantity < MIN_ADDED_PRODUCTS) {
+      setQuantity(MIN_ADDED_PRODUCTS);
+
       dispatch(changeCartDeleteModalActive(true));
       dispatch(setCurrentAddedProduct(product));
-      setQuantity(MIN_ADDED_PRODUCTS);
+
+      dispatch(setUpdateProduct({ ...product, numberOfProducts: MIN_ADDED_PRODUCTS, totalPrice: product.price }));
 
       return;
     }
 
     if (currentQuantity > MAX_ADDED_PRODUCTS) {
       setQuantity(MAX_ADDED_PRODUCTS);
+
+      dispatch(
+        setUpdateProduct({
+          ...product,
+          numberOfProducts: MAX_ADDED_PRODUCTS,
+          totalPrice: product.price * MAX_ADDED_PRODUCTS,
+        }),
+      );
+
       return;
     }
 
     setQuantity(currentQuantity);
+    dispatch(
+      setUpdateProduct({ ...product, numberOfProducts: currentQuantity, totalPrice: product.price * currentQuantity }),
+    );
   };
 
   return (
@@ -73,6 +93,7 @@ function ProductQuantity({ product }: ProductQuantityProps): JSX.Element {
         value={quantity}
         id="2-count"
         name="2-count"
+        min="1"
         max="99"
       />
 

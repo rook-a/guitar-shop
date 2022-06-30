@@ -19,7 +19,7 @@ import {
 } from '../../store/modal-slice/modal-slice';
 import { setCurrentAddedProduct } from '../../store/order-slice/order-slice';
 
-import { MenuLabel } from '../../utils/const';
+import { MenuLabel, START_PAGE_NUMBER as MIN_NUMBER_OF_PRODUCT } from '../../utils/const';
 import { getPriceWithSpace } from '../../utils/utils';
 
 import styles from './product.module.css';
@@ -49,7 +49,14 @@ function Product(): JSX.Element | null {
   const { name, type, price, previewImg, rating, stringCount, vendorCode, description } = guitar;
 
   const handleButtonAddClick = () => {
-    dispatch(setCurrentAddedProduct({ ...guitar, comments }));
+    dispatch(
+      setCurrentAddedProduct({
+        ...guitar,
+        comments,
+        numberOfProducts: MIN_NUMBER_OF_PRODUCT,
+        totalPrice: guitar.price,
+      }),
+    );
     dispatch(changeCartAddModalActive(true));
   };
 
