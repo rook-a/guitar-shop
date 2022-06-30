@@ -3,11 +3,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { State } from '../../types/state';
 import { Product } from '../../types/product';
 import { NameSpace } from '../../utils/const';
-
-interface OrderProducts extends Product {
-  numberOfProducts: number;
-  totalPrice: number;
-}
+import { OrderProducts } from '../../types/order-products';
 
 interface InitialState {
   products: Record<string, OrderProducts>;
@@ -34,7 +30,13 @@ export const orderSlice = createSlice({
     setNewProducts: (state, action: PayloadAction<Record<string, OrderProducts>>) => {
       state.products = { ...state.products, ...action.payload };
     },
-    setUpdateProducts: (state, action: PayloadAction<Product>) => {
+    setUpdateProducts: (state, action) => {},
+    setDecProducts: (state, action) => {
+      const index = action.payload.id;
+      state.products[index].numberOfProducts = state.products[index].numberOfProducts - 1;
+      state.products[index].totalPrice = state.products[index].totalPrice - action.payload.price;
+    },
+    setIncProducts: (state, action: PayloadAction<Product>) => {
       const index = action.payload.id;
       state.products[index].numberOfProducts = state.products[index].numberOfProducts + 1;
       state.products[index].totalPrice = state.products[index].totalPrice + action.payload.price;
@@ -45,7 +47,7 @@ export const orderSlice = createSlice({
   },
 });
 
-export const { setNewProducts, setUpdateProducts, setCurrentAddedProduct } = orderSlice.actions;
+export const { setNewProducts, setDecProducts, setIncProducts, setCurrentAddedProduct } = orderSlice.actions;
 
 const selectOrderState = (state: State) => state[NameSpace.Order];
 

@@ -5,7 +5,7 @@ import {
   selectCurrentAddedProduct,
   selectProducts,
   setNewProducts,
-  setUpdateProducts,
+  setIncProducts,
 } from '../../../store/order-slice/order-slice';
 
 import { adaptTypeToClient, getPriceWithSpace } from '../../../utils/utils';
@@ -25,7 +25,7 @@ function CartAddModal(): JSX.Element | null {
 
   const handleAddButtonClick = () => {
     if (id in products) {
-      dispatch(setUpdateProducts(currentAddedProduct));
+      dispatch(setIncProducts(currentAddedProduct));
       dispatch(changeCartAddModalActive(false));
       dispatch(changeCartAddSuccessModalActive(true));
 

@@ -21,7 +21,7 @@ const fakeComponent = (
   </Provider>
 );
 
-describe('page: Card', () => {
+describe('page: Cart', () => {
   it('should render correctly', async () => {
     const { getByText, getByRole, queryByText } = render(fakeComponent);
 

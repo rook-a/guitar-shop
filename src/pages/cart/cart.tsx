@@ -1,12 +1,20 @@
 import { Link } from 'react-router-dom';
 
-import { useAppSelector } from '../../hooks/hooks';
+import ModalContainer from '../../components/modal-container/modal-container';
+import CartDeleteModal from '../../components/modals/cart-delete-modal/cart-delete-modal';
+import ProductQuantity from '../../components/product-quantity/product-quantity';
 
-import { selectProducts } from '../../store/order-slice/order-slice';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
+import { changeCartDeleteModalActive, selectCartDeleteModalActive } from '../../store/modal-slice/modal-slice';
+
+import { selectProducts, setCurrentAddedProduct } from '../../store/order-slice/order-slice';
+
 import { adaptTypeToClient, getPriceWithSpace } from '../../utils/utils';
 
 function Card(): JSX.Element {
+  const dispatch = useAppDispatch();
   const products = useAppSelector(selectProducts);
+  const isCartDeleteModalOpen = useAppSelector(selectCartDeleteModalActive);
 
   return (
     <div className="container">
@@ -29,55 +37,43 @@ function Card(): JSX.Element {
         </li>
       </ul>
       <div className="cart">
-        {Object.values(products).map(
-          ({ id, previewImg, name, type, vendorCode, stringCount, price, totalPrice, numberOfProducts }) => {
-            const adaptedType = adaptTypeToClient(type);
+        {Object.values(products).map((product) => {
+          const { id, previewImg, name, type, vendorCode, stringCount, price, totalPrice } = product;
+          const adaptedType = adaptTypeToClient(type);
 
-            return (
-              <div className="cart-item" key={id}>
-                <button className="cart-item__close-button button-cross" type="button" aria-label="Удалить">
-                  <span className="button-cross__icon" />
-                  <span className="cart-item__close-button-interactive-area" />
-                </button>
-                <div className="cart-item__image">
-                  <img src={`../../${previewImg}`} width="55" height="130" alt={`${adaptedType} ${name}`} />
-                </div>
-                <div className="product-info cart-item__info">
-                  <p className="product-info__title">
-                    {adaptedType} {name}
-                  </p>
-                  <p className="product-info__info">Артикул: {vendorCode}</p>
-                  <p className="product-info__info">
-                    {adaptedType}, {stringCount} струнная
-                  </p>
-                </div>
-                <div className="cart-item__price">{getPriceWithSpace(price)} ₽</div>
-
-                <div className="quantity cart-item__quantity">
-                  <button className="quantity__button" aria-label="Уменьшить количество">
-                    <svg width="8" height="8" aria-hidden="true">
-                      <use xlinkHref="#icon-minus"></use>
-                    </svg>
-                  </button>
-                  <input
-                    className="quantity__input"
-                    type="number"
-                    placeholder={`${numberOfProducts}`}
-                    id="2-count"
-                    name="2-count"
-                    max="99"
-                  />
-                  <button className="quantity__button" aria-label="Увеличить количество">
-                    <svg width="8" height="8" aria-hidden="true">
-                      <use xlinkHref="#icon-plus"></use>
-                    </svg>
-                  </button>
-                </div>
-                <div className="cart-item__price-total">{getPriceWithSpace(totalPrice)} ₽</div>
+          return (
+            <div className="cart-item" key={id}>
+              <button
+                onClick={() => {
+                  dispatch(changeCartDeleteModalActive(true));
+                  dispatch(setCurrentAddedProduct(product));
+                }}
+                className="cart-item__close-button button-cross"
+                type="button"
+                aria-label="Удалить">
+                <span className="button-cross__icon" />
+                <span className="cart-item__close-button-interactive-area" />
+              </button>
+              <div className="cart-item__image">
+                <img src={`../../${previewImg}`} width="55" height="130" alt={`${adaptedType} ${name}`} />
               </div>
-            );
-          },
-        )}
+              <div className="product-info cart-item__info">
+                <p className="product-info__title">
+                  {adaptedType} {name}
+                </p>
+                <p className="product-info__info">Артикул: {vendorCode}</p>
+                <p className="product-info__info">
+                  {adaptedType}, {stringCount} струнная
+                </p>
+              </div>
+              <div className="cart-item__price">{getPriceWithSpace(price)} ₽</div>
+
+              <ProductQuantity product={product} />
+
+              <div className="cart-item__price-total">{getPriceWithSpace(totalPrice)} ₽</div>
+            </div>
+          );
+        })}
 
         <div className="cart__footer">
           <div className="cart__coupon coupon">
@@ -109,6 +105,8 @@ function Card(): JSX.Element {
           </div>
         </div>
       </div>
+
+      {isCartDeleteModalOpen && <ModalContainer children={<CartDeleteModal />} />}
     </div>
   );
 }
