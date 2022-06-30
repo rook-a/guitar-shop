@@ -5,14 +5,14 @@ import FormSearch from '../form-search/form-search';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { changeCurrentPage, selectCurrentPage } from '../../store/app-slice/app-slice';
-import { selectNumberOfProducts } from '../../store/order-slice/order-slice';
+import { selectTotalNumberOfProducts } from '../../store/order-slice/order-slice';
 
 import { AppRoute, MenuLabel, MenuLinksMap, START_PAGE_NUMBER as MIN_PRODUCTS_COUNT } from '../../utils/const';
 
 function Header(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector(selectCurrentPage);
-  const numberOfProductsInCard = useAppSelector(selectNumberOfProducts);
+  const numberOfProductsInCard = useAppSelector(selectTotalNumberOfProducts);
 
   return (
     <header className="header" id="header">
