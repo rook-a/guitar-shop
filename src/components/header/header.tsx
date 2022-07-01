@@ -12,7 +12,7 @@ import { AppRoute, MenuLabel, MenuLinksMap, START_PAGE_NUMBER as MIN_PRODUCTS_CO
 function Header(): JSX.Element {
   const dispatch = useAppDispatch();
   const currentPage = useAppSelector(selectCurrentPage);
-  const numberOfProductsInCard = useAppSelector(selectTotalNumberOfProducts);
+  const numberOfProductsInCart = useAppSelector(selectTotalNumberOfProducts);
 
   return (
     <header className="header" id="header">
@@ -46,8 +46,8 @@ function Header(): JSX.Element {
             <use xlinkHref="#icon-basket"></use>
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          {numberOfProductsInCard >= MIN_PRODUCTS_COUNT && (
-            <span className="header__cart-count">{numberOfProductsInCard}</span>
+          {numberOfProductsInCart >= MIN_PRODUCTS_COUNT && (
+            <span className="header__cart-count">{numberOfProductsInCart}</span>
           )}
         </Link>
       </div>
