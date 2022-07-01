@@ -18,6 +18,10 @@ const store = mockStore({
   Guitars: {
     guitar: mockGuitar,
   },
+  Modal: {
+    reviewModalActive: false,
+  },
+  Order: {},
 });
 
 const fakeComponent = (

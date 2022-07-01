@@ -1,6 +1,7 @@
 import { image, lorem, name } from 'faker';
 import { Comment, SendComment } from '../types/comment';
 import { Guitar } from '../types/guitar';
+import { OrderProducts } from '../types/order-products';
 import { Product } from '../types/product';
 
 export const mockGuitar: Guitar = {
@@ -46,4 +47,8 @@ export const mockProduct: Product = {
   rating: 5,
   price: 1234,
   comments: [mockComment],
+};
+
+export const mockOrderProduct: Record<string, OrderProducts> = {
+  1: { ...mockProduct, numberOfProducts: 1, totalPrice: 1234 },
 };

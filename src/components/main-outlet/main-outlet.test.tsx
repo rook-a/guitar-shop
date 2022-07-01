@@ -6,7 +6,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import MainOutlet from './main-outlet';
 
 import { AppRoute } from '../../utils/const';
-import { mockProduct } from '../../utils/mock';
+import { mockOrderProduct, mockProduct } from '../../utils/mock';
 
 const mockStore = configureMockStore();
 
@@ -22,6 +22,10 @@ const store = mockStore({
   Filter: {
     guitarsType: [],
     guitarsStringCounts: [],
+  },
+  Modal: {},
+  Order: {
+    products: mockOrderProduct,
   },
 });
 

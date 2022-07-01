@@ -4,6 +4,7 @@ import { render, waitFor } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 
 import CartContent from './cart-content';
+import { mockOrderProduct } from '../../utils/mock';
 
 const mockStore = configureMockStore();
 
@@ -11,6 +12,10 @@ const store = mockStore({
   App: {},
   Comments: {},
   Guitars: {},
+  Modal: {},
+  Order: {
+    products: mockOrderProduct,
+  },
 });
 
 const fakeComponent = (

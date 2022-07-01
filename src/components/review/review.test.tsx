@@ -12,6 +12,8 @@ const store = mockStore({
   App: {},
   Comments: {},
   Guitars: {},
+  Modal: {},
+  Order: {},
 });
 
 const fakeComponent = (

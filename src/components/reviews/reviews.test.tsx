@@ -14,6 +14,10 @@ const store = mockStore({
     comments: [mockComment],
   },
   Guitars: {},
+  Modal: {
+    reviewModalActive: false,
+  },
+  Order: {},
 });
 
 const fakeComponent = (

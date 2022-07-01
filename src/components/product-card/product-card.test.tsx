@@ -4,7 +4,7 @@ import { render, waitFor } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 
 import ProductCard from './product-card';
-import { mockProduct } from '../../utils/mock';
+import { mockOrderProduct, mockProduct } from '../../utils/mock';
 
 const mockStore = configureMockStore();
 
@@ -12,6 +12,10 @@ const store = mockStore({
   App: {},
   Comments: {},
   Guitars: {},
+  Modal: {},
+  Order: {
+    products: mockOrderProduct,
+  },
 });
 
 const fakeComponent = (
@@ -29,7 +33,7 @@ describe('component: ProductCatd', () => {
     await waitFor(() => {
       expect(getByText(/Цена:/i)).toBeInTheDocument();
       expect(getByText(/Подробнее/i)).toBeInTheDocument();
-      expect(getByText(/Купить/i)).toBeInTheDocument();
+      expect(getByText(/В Корзине/i)).toBeInTheDocument();
       expect(queryByText('Далее'));
       expect(container.firstChild).toHaveClass('product-card');
     });

@@ -5,7 +5,7 @@ import { render, waitFor } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 
 import Catalog from './catalog';
-import { mockGuitar } from '../../utils/mock';
+import { mockGuitar, mockOrderProduct } from '../../utils/mock';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -22,6 +22,13 @@ const store = mockStore({
   Filter: {
     guitarsType: [],
     guitarsStringCounts: [],
+  },
+  Modal: {
+    cartAddModalActive: false,
+    cartAddSuccessModalActive: false,
+  },
+  Order: {
+    products: mockOrderProduct,
   },
 });
 

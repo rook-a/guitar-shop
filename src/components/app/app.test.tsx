@@ -8,7 +8,7 @@ import App from './app';
 import HistoryRouter from '../history-router/history-router';
 
 import { AppRoute } from '../../utils/const';
-import { mockComment, mockGuitar, mockProduct } from '../../utils/mock';
+import { mockComment, mockGuitar, mockOrderProduct, mockProduct } from '../../utils/mock';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -29,6 +29,10 @@ const store = mockStore({
   Filter: {
     guitarsType: [],
     guitarsStringCounts: [],
+  },
+  Modal: {},
+  Order: {
+    products: mockOrderProduct,
   },
 });
 
@@ -64,6 +68,19 @@ describe('App routing', () => {
       expect(getByText(/Цена:/i)).toBeInTheDocument();
       expect(getByText(/₽/i)).toBeInTheDocument();
       expect(getByText(/Добавить в корзину/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should render Cart page when user navigate to "/cart"', async () => {
+    history.push(AppRoute.Card);
+
+    const { getByText, getByRole } = render(fakeComponent);
+
+    await waitFor(() => {
+      expect(getByRole('heading', { level: 1 })).toHaveTextContent(/Корзина/i);
+      expect(getByText(/Промокод на скидку/i)).toBeInTheDocument();
+      expect(getByText(/Введите свой промокод, если он у вас есть./i)).toBeInTheDocument();
+      expect(getByText(/Оформить заказ/i)).toBeInTheDocument();
     });
   });
 

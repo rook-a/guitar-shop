@@ -6,7 +6,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 
 import CatalogList from './catalog-list';
 
-import { mockProduct } from '../../utils/mock';
+import { mockOrderProduct, mockProduct } from '../../utils/mock';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -22,6 +22,10 @@ const store = mockStore({
   Filter: {
     guitarsType: [],
     guitarsStringCounts: [],
+  },
+  Modal: {},
+  Order: {
+    products: mockOrderProduct,
   },
 });
 
@@ -39,7 +43,7 @@ describe('component: CatalogList', () => {
 
     await waitFor(() => {
       expect(getByText(/Подробнее/i).closest('a')).toHaveAttribute('href', '/product/1');
-      expect(getByText(/Купить/i).closest('a')).toHaveAttribute('href', '/');
+      expect(getByText(/В Корзине/i)).toBeInTheDocument();
     });
   });
 });

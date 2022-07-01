@@ -18,11 +18,14 @@ import { createAPI } from '../../services/api';
 import { APIRoute, FetchStatus } from '../../utils/const';
 import { State } from '../../types/state';
 import { mockGuitar } from '../../utils/mock';
+import { createQueryByFilter } from '../../utils/utils';
 
 const api = createAPI();
 const mockAPI = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore<State, Action, ThunkDispatch<State, typeof api, Action>>(middlewares);
+
+jest.mock('../../utils/utils');
 
 const state = {
   priceMax: '',
@@ -80,11 +83,23 @@ describe('Filter slice', () => {
 
   describe('filter async action', () => {
     it('should dispatch fetchMinPrice', async () => {
-      mockAPI
-        .onGet(`${APIRoute.Guitars}?_sort=price&_start=0&_end=1`)
-        .reply(200, [mockGuitar, mockGuitar], { 'X-Total-Count': 5 });
+      const store = mockStore({
+        Filter: {
+          guitarsType: [],
+          guitarsStringCounts: [],
+        },
+      });
 
-      const store = mockStore();
+      const guitarType = store.getState().Filter?.guitarsType as string[] | undefined;
+      const stringCount = store.getState().Filter?.guitarsStringCounts as string[] | undefined;
+      const min = '';
+      const max = '';
+
+      const query = createQueryByFilter(min, max, guitarType, stringCount);
+
+      mockAPI
+        .onGet(`${APIRoute.Guitars}?_sort=price&_start=0&_end=1&${query}`)
+        .reply(200, [mockGuitar, mockGuitar], { 'X-Total-Count': 5 });
 
       await store.dispatch(fetchMinPrice());
 
@@ -95,10 +110,22 @@ describe('Filter slice', () => {
       expect(actions).not.toContain(fetchMinPrice.rejected.type);
     });
 
-    it('should dispatch fetchMinPrice', async () => {
-      mockAPI.onGet(`${APIRoute.Guitars}?_sort=price&_start=0&_end=1`).reply(200, [mockGuitar, mockGuitar]);
+    it('should dispatch fetchMaxPrice', async () => {
+      const store = mockStore({
+        Filter: {
+          guitarsType: [],
+          guitarsStringCounts: [],
+        },
+      });
 
-      const store = mockStore();
+      const guitarType = store.getState().Filter?.guitarsType as string[] | undefined;
+      const stringCount = store.getState().Filter?.guitarsStringCounts as string[] | undefined;
+      const min = '';
+      const max = '';
+
+      const query = createQueryByFilter(min, max, guitarType, stringCount);
+
+      mockAPI.onGet(`${APIRoute.Guitars}?_sort=price&_start=0&_end=1&${query}`).reply(200, [mockGuitar, mockGuitar]);
 
       await store.dispatch(fetchMaxPrice(1));
 
