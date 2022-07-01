@@ -8,6 +8,7 @@ import {
   fetchGuitarAction,
   fetchGuitarsAction,
   fetchGuitarsSearch,
+  fetchRangeGuitars,
   setTotalProductCount,
   changeSortType,
   changeOrderType,
@@ -18,12 +19,14 @@ import { createAPI } from '../../services/api';
 import { APIRoute, FetchStatus, OrderType, SortType } from '../../utils/const';
 import { State } from '../../types/state';
 import { mockGuitar } from '../../utils/mock';
-import { mockProducts } from '../../utils/utils';
+import { createQuery, mockProducts } from '../../utils/utils';
 
 const api = createAPI();
 const mockAPI = new MockAdapter(api);
 const middlewares = [thunk.withExtraArgument(api)];
 const mockStore = configureMockStore<State, Action, ThunkDispatch<State, typeof api, Action>>(middlewares);
+
+jest.mock('../../utils/utils');
 
 const state = {
   guitars: [],
@@ -83,14 +86,18 @@ describe('Guitars slice', () => {
       const fakeParams = {
         activePageNumber: 1,
         sortType: SortType.Price,
-        orderType: OrderType.Desc,
+        orderType: OrderType.Asc,
+        min: '',
+        max: '',
+        guitarType: [''],
+        stringCount: [''],
       };
 
-      mockAPI
-        .onGet(`${APIRoute.Guitars}?_end=9&_start=0&_order=desc&_sort=price&_embed=comments`)
-        .reply(200, mockProducts, { 'X-Total-Count': 5 });
-
       const store = mockStore();
+
+      const query = createQuery(fakeParams);
+
+      mockAPI.onGet(`${APIRoute.Guitars}?${query}&_embed=comments`).reply(200, mockProducts, { 'X-Total-Count': 5 });
 
       await store.dispatch(fetchGuitarsAction(fakeParams));
 
@@ -131,6 +138,49 @@ describe('Guitars slice', () => {
       expect(actions).toContain(fetchGuitarsSearch.pending.type);
       expect(actions).toContain(fetchGuitarsSearch.fulfilled.type);
       expect(actions).not.toContain(fetchGuitarsSearch.rejected.type);
+    });
+
+    it('should dispatch fetchRangeGuitars when GET /guitars?query-params&_embed=comments', async () => {
+      const fakeActivePageNumber = 1;
+      const store = mockStore({
+        Guitars: {
+          sortType: SortType.Price,
+          orderType: OrderType.Asc,
+        },
+        Filter: {
+          priceMin: '',
+          priceMax: '',
+          guitarsType: [''],
+          guitarsStringCounts: [''],
+        },
+      });
+
+      const sortType = store.getState().Guitars?.sortType as string | undefined;
+      const orderType = store.getState().Guitars?.orderType as string | undefined;
+      const min = store.getState().Filter?.priceMin as string | undefined;
+      const max = store.getState().Filter?.priceMax as string | undefined;
+      const guitarType = store.getState().Filter?.guitarsType as string[] | undefined;
+      const stringCount = store.getState().Filter?.guitarsStringCounts as string[] | undefined;
+
+      const query = createQuery({
+        activePageNumber: fakeActivePageNumber,
+        sortType,
+        orderType,
+        min,
+        max,
+        guitarType,
+        stringCount,
+      });
+
+      mockAPI.onGet(`${APIRoute.Guitars}?${query}&_embed=comments`).reply(200, mockProducts);
+
+      await store.dispatch(fetchRangeGuitars({ activePageNumber: fakeActivePageNumber }));
+
+      const actions = store.getActions().map(({ type }) => type);
+
+      expect(actions).toContain(fetchRangeGuitars.pending.type);
+      expect(actions).toContain(fetchRangeGuitars.fulfilled.type);
+      expect(actions).not.toContain(fetchRangeGuitars.rejected.type);
     });
   });
 

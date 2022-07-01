@@ -1,4 +1,12 @@
-import { changeReviewModalActive, changeReviewSuccessModalActive, closeAllModal, modalSlice } from './modal-slice';
+import {
+  changeReviewModalActive,
+  changeReviewSuccessModalActive,
+  changeCartAddModalActive,
+  changeCartAddSuccessModalActive,
+  changeCartDeleteModalActive,
+  closeAllModal,
+  modalSlice,
+} from './modal-slice';
 
 const state = {
   reviewModalActive: false,
@@ -28,6 +36,24 @@ describe('App slice', () => {
     });
   });
 
+  it('changeCartAddModalActive should be updated correctly', () => {
+    expect(modalSlice.reducer(state, changeCartAddModalActive(true))).toEqual({
+      ...state,
+      cartAddModalActive: true,
+    });
+  });
+  it('changeCartAddSuccessModalActive should be updated correctly', () => {
+    expect(modalSlice.reducer(state, changeCartAddSuccessModalActive(true))).toEqual({
+      ...state,
+      cartAddSuccessModalActive: true,
+    });
+  });
+  it('changeCartDeleteModalActive should be updated correctly', () => {
+    expect(modalSlice.reducer(state, changeCartDeleteModalActive(true))).toEqual({
+      ...state,
+      cartDeleteModalActive: true,
+    });
+  });
   it('closeAllModal should be return initial state', () => {
     expect(modalSlice.reducer(state, closeAllModal())).toEqual(state);
   });

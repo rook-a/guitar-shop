@@ -13,7 +13,6 @@ interface InitialState {
   products: Record<string, OrderProducts>;
 
   discount: number;
-  discountValue: number;
 
   currentAddedProduct: OrderProducts | null;
 
@@ -24,7 +23,6 @@ const initialState: InitialState = {
   products: {},
 
   discount: 0,
-  discountValue: 0,
 
   currentAddedProduct: null,
 
@@ -61,7 +59,7 @@ export const orderSlice = createSlice({
       const index = action.payload.id;
       state.products[index] = action.payload;
     },
-    setDecProducts: (state, action) => {
+    setDecProducts: (state, action: PayloadAction<Product>) => {
       const index = action.payload.id;
       state.products[index].numberOfProducts = state.products[index].numberOfProducts - 1;
       state.products[index].totalPrice = state.products[index].totalPrice - action.payload.price;

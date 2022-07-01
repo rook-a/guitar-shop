@@ -48,8 +48,6 @@ describe('Comments slice', () => {
     });
   });
 
-  it('', () => {});
-
   describe('comments async action', () => {
     const api = createAPI();
     const mockAPI = new MockAdapter(api);
