@@ -1,8 +1,9 @@
 import { Provider } from 'react-redux';
+import { MemoryRouter } from 'react-router-dom';
 import { render, waitFor } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 
-import ReviewsModalSuccess from './reviews-modal-success';
+import CartAddSuccessModal from './cart-add-success-modal';
 
 const mockStore = configureMockStore();
 
@@ -10,17 +11,20 @@ const store = mockStore();
 
 const fakeComponent = (
   <Provider store={store}>
-    <ReviewsModalSuccess />
+    <MemoryRouter>
+      <CartAddSuccessModal />
+    </MemoryRouter>
   </Provider>
 );
 
-describe('component: ReviewsModalSuccess', () => {
+describe('component: CartAddSuccessModal', () => {
   it('should render correctly', async () => {
     const { getByText, queryByText } = render(fakeComponent);
 
     await waitFor(() => {
-      expect(getByText(/Спасибо за ваш отзыв!/i));
-      expect(queryByText('К покупкам!'));
+      expect(getByText(/Товар успешно добавлен в корзину/i));
+      expect(queryByText(/Перейти в корзину/i));
+      expect(queryByText(/Продолжить покупки/i));
     });
   });
 });

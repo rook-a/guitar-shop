@@ -1,5 +1,4 @@
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import { render, waitFor } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 
@@ -10,9 +9,6 @@ import { mockGuitar } from '../../../utils/mock';
 const mockStore = configureMockStore();
 
 const store = mockStore({
-  App: {
-    reviewModalActive: true,
-  },
   Comments: { commentsCount: 5, sendCommentStatus: false },
   Guitars: {
     guitar: mockGuitar,
@@ -21,9 +17,7 @@ const store = mockStore({
 
 const fakeComponent = (
   <Provider store={store}>
-    <MemoryRouter>
-      <ReviewsModal />
-    </MemoryRouter>
+    <ReviewsModal />
   </Provider>
 );
 
