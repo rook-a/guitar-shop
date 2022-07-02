@@ -6,14 +6,18 @@ import CartDeleteModal from '../../components/modals/cart-delete-modal/cart-dele
 import CartContent from '../../components/cart-content/cart-content';
 import CartContentEmpty from '../../components/cart-content-empty/cart-content-empty';
 
-import { useAppSelector } from '../../hooks/hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 
 import { selectCartDeleteModalActive } from '../../store/modal-slice/modal-slice';
 import { selectTotalNumberOfProducts } from '../../store/order-slice/order-slice';
+import { changeCurrentPage } from '../../store/app-slice/app-slice';
+
+import { MenuLabel } from '../../utils/const';
 
 import styles from './cart.module.css';
 
 function Card(): JSX.Element {
+  const dispatch = useAppDispatch();
   const isCartDeleteModalOpen = useAppSelector(selectCartDeleteModalActive);
   const numberOfProductsInCart = useAppSelector(selectTotalNumberOfProducts);
 
@@ -30,7 +34,7 @@ function Card(): JSX.Element {
           </Link>
         </li>
         <li className="breadcrumbs__item">
-          <Link className="link" to="/">
+          <Link className="link" to="/" onClick={() => dispatch(changeCurrentPage(MenuLabel.Catalog))}>
             Каталог
           </Link>
         </li>

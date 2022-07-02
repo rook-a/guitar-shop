@@ -12,7 +12,6 @@ function ReviewsModalSuccess(): JSX.Element {
 
   const handleButtonClick = () => {
     dispatch(changeReviewSuccessModalActive(false));
-    document.body.style.overflow = 'auto';
   };
 
   return (

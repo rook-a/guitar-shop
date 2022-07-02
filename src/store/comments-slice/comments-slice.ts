@@ -87,6 +87,9 @@ export const commentsSlice = createSlice({
     resetCommentsCounter: (state) => {
       state.commentsCount = START_COUNT_COMMENT;
     },
+    resetSendCommentsStatus: (state) => {
+      state.sendCommentStatus = FetchStatus.Idle;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -113,7 +116,7 @@ export const commentsSlice = createSlice({
   },
 });
 
-export const { updateCommentsCounter, resetCommentsCounter } = commentsSlice.actions;
+export const { updateCommentsCounter, resetCommentsCounter, resetSendCommentsStatus } = commentsSlice.actions;
 
 const selectCommentsState = (state: State) => state[NameSpace.Comments];
 

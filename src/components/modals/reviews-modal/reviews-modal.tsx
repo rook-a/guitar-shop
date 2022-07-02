@@ -96,7 +96,6 @@ function ReviewsModal(): JSX.Element | null {
 
   const handleModalClose = () => {
     dispatch(changeReviewModalActive(false));
-    document.body.style.overflow = 'auto';
   };
 
   const handleFormReviewSubmit = (evt: FormEvent<HTMLFormElement>) => {

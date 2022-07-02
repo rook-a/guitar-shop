@@ -7,6 +7,7 @@ import {
   commentsSlice,
   fetchCommentsAction,
   resetCommentsCounter,
+  resetSendCommentsStatus,
   sendCommentAction,
   updateCommentsCounter,
 } from './comments-slice';
@@ -45,6 +46,18 @@ describe('Comments slice', () => {
     expect(commentsSlice.reducer(state, resetCommentsCounter())).toEqual({
       ...state,
       commentsCount: START_COUNT_COMMENT,
+    });
+  });
+
+  it('send comments status should be reseted correctly', () => {
+    const fakeState = {
+      ...state,
+      sendCommentStatus: FetchStatus.Fulfilled,
+    };
+
+    expect(commentsSlice.reducer(fakeState, resetSendCommentsStatus())).toEqual({
+      ...state,
+      sendCommentStatus: FetchStatus.Idle,
     });
   });
 

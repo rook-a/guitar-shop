@@ -19,9 +19,11 @@ function ModalContainer({ className, children }: ModalContainerProps): JSX.Eleme
       }
     };
 
+    document.body.style.overflow = 'hidden';
     document.addEventListener('keydown', handleModalCloseKeydowm);
 
     return () => {
+      document.body.style.overflow = 'auto';
       document.removeEventListener('keydown', handleModalCloseKeydowm);
     };
   }, [dispatch]);

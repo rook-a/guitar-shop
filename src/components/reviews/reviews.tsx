@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
 import { selectGuitar } from '../../store/guitars-slice/guitars-slice';
 import {
   fetchCommentsAction,
+  resetSendCommentsStatus,
   selectComments,
   selectCommentsCount,
   selectCurrentComments,
@@ -44,6 +45,7 @@ function Reviews(): JSX.Element {
 
       dispatch(changeReviewModalActive(false));
       dispatch(changeReviewSuccessModalActive(true));
+      dispatch(resetSendCommentsStatus());
     }
   }, [dispatch, guitar?.id, isCommentSendFulfilled]);
 
@@ -51,7 +53,6 @@ function Reviews(): JSX.Element {
     evt.preventDefault();
 
     dispatch(changeReviewModalActive(true));
-    document.body.style.overflow = 'hidden';
   };
 
   return (

@@ -7,7 +7,7 @@ import { createMemoryHistory } from 'history';
 import App from './app';
 import HistoryRouter from '../history-router/history-router';
 
-import { AppRoute } from '../../utils/const';
+import { AppRoute, MenuLabel } from '../../utils/const';
 import { mockComment, mockGuitar, mockOrderProduct, mockProduct } from '../../utils/mock';
 
 const middlewares = [thunk];
@@ -15,7 +15,9 @@ const mockStore = configureMockStore(middlewares);
 const history = createMemoryHistory();
 
 const store = mockStore({
-  App: {},
+  App: {
+    currentPage: MenuLabel.Catalog,
+  },
   Comments: {
     comments: [mockComment],
   },
