@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useAppDispatch } from '../../../hooks/hooks';
-import { changeCurrentPage } from '../../../store/app-slice/app-slice';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
+import { changeCurrentPage, selectCurrentPage } from '../../../store/app-slice/app-slice';
 import { changeCartAddSuccessModalActive } from '../../../store/modal-slice/modal-slice';
 
 import { AppRoute, MenuLabel } from '../../../utils/const';
@@ -9,8 +9,13 @@ import { AppRoute, MenuLabel } from '../../../utils/const';
 function CartAddSuccessModal(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const currentPage = useAppSelector(selectCurrentPage);
 
   const handleModalClose = () => {
+    if (currentPage === MenuLabel.Product) {
+      navigate(AppRoute.Root);
+    }
+
     dispatch(changeCartAddSuccessModalActive(false));
   };
 
