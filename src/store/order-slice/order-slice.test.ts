@@ -13,6 +13,7 @@ import {
   setIncProducts,
   setCurrentAddedProduct,
   deleteCurrentProduct,
+  resetSendCouponStatus,
   orderSlice,
 } from './order-slice';
 
@@ -113,6 +114,18 @@ describe('Order slice', () => {
     expect(orderSlice.reducer(state, deleteCurrentProduct(1))).toEqual({
       ...state,
       products: {},
+    });
+  });
+
+  it('should be reset sendCouponStatus ', () => {
+    const fakeState = {
+      ...state,
+      sendCouponStatus: FetchStatus.Fulfilled,
+    };
+
+    expect(orderSlice.reducer(fakeState, resetSendCouponStatus())).toEqual({
+      ...fakeState,
+      sendCouponStatus: FetchStatus.Idle,
     });
   });
 

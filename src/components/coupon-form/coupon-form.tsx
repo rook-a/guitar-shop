@@ -2,7 +2,7 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import cn from 'classnames';
 
 import { useAppDispatch, useAppSelector } from '../../hooks/hooks';
-import { selectSendCouponStatus, sendCoupon } from '../../store/order-slice/order-slice';
+import { resetSendCouponStatus, selectSendCouponStatus, sendCoupon } from '../../store/order-slice/order-slice';
 
 import { FetchStatus } from '../../utils/const';
 import { SendCouponMessage } from '../../types/coupon';
@@ -27,6 +27,10 @@ function CouponForm(): JSX.Element {
   const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target;
     const isValidValue = REG_EXP.test(value);
+
+    if (isFulfilled) {
+      dispatch(resetSendCouponStatus());
+    }
 
     setCoupon(value);
     setIsValid(!isValidValue);

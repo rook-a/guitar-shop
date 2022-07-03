@@ -75,6 +75,9 @@ export const orderSlice = createSlice({
     deleteCurrentProduct: (state, action: PayloadAction<number>) => {
       delete state.products[action.payload];
     },
+    resetSendCouponStatus: (state) => {
+      state.sendCouponStatus = FetchStatus.Idle;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -98,6 +101,7 @@ export const {
   setIncProducts,
   deleteCurrentProduct,
   setCurrentAddedProduct,
+  resetSendCouponStatus,
 } = orderSlice.actions;
 
 const selectOrderState = (state: State) => state[NameSpace.Order];
