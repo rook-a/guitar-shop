@@ -4,10 +4,15 @@ import { render, waitFor } from '@testing-library/react';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 
 import CartAddSuccessModal from './cart-add-success-modal';
+import { MenuLabel } from '../../../utils/const';
 
 const mockStore = configureMockStore();
 
-const store = mockStore();
+const store = mockStore({
+  App: {
+    currentPage: MenuLabel.Catalog,
+  },
+});
 
 const fakeComponent = (
   <Provider store={store}>
