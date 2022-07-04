@@ -41,7 +41,11 @@ function CartAddSuccessModal(): JSX.Element {
           Продолжить покупки
         </button>
       </div>
-      <button onClick={handleModalClose} className="modal__close-btn button-cross" type="button" aria-label="Закрыть">
+      <button
+        onClick={() => dispatch(changeCartAddSuccessModalActive(false))}
+        className="modal__close-btn button-cross"
+        type="button"
+        aria-label="Закрыть">
         <span className="button-cross__icon" />
         <span className="modal__close-btn-interactive-area" />
       </button>
