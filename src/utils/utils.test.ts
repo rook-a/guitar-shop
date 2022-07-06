@@ -68,7 +68,7 @@ describe('Utils functions', () => {
   });
 
   describe('check function createQuery', () => {
-    it('', () => {
+    it('function return correct created query', () => {
       const fakeParams = {
         activePageNumber: 1,
         sortType: 'price',

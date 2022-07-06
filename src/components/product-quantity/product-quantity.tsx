@@ -19,7 +19,7 @@ interface ProductQuantityProps {
 
 function ProductQuantity({ product }: ProductQuantityProps): JSX.Element {
   const dispatch = useAppDispatch();
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number | string>('');
   const { numberOfProducts } = product;
 
   useEffect(() => {
@@ -45,6 +45,11 @@ function ProductQuantity({ product }: ProductQuantityProps): JSX.Element {
   const handleInputChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const { value } = evt.target;
     const currentQuantity = Number(value);
+
+    if (value === '') {
+      setQuantity('');
+      return;
+    }
 
     if (currentQuantity < MIN_ADDED_PRODUCTS) {
       setQuantity(MIN_ADDED_PRODUCTS);
